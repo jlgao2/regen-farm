@@ -147,6 +147,20 @@ export function initAudio() {
     }
   });
 
+  // Autoplay on first user interaction (browsers require it)
+  const startOnInteraction = () => {
+    audio.play().then(() => {
+      userPlayed = true;
+      syncPlayPauseUI();
+    }).catch(() => {});
+    ['click', 'keydown', 'scroll', 'touchstart'].forEach(ev =>
+      window.removeEventListener(ev, startOnInteraction)
+    );
+  };
+  ['click', 'keydown', 'scroll', 'touchstart'].forEach(ev =>
+    window.addEventListener(ev, startOnInteraction, { once: true, passive: true })
+  );
+
   // Fade in player after a short delay
   setTimeout(() => player.classList.add('is-visible'), 1200);
 }
