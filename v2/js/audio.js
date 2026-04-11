@@ -12,10 +12,10 @@
    ============================================================ */
 
 const TRACKS = {
-  spring: '/assets/audio/vivaldi-spring.mp3',
-  summer: '/assets/audio/vivaldi-summer.mp3',
-  autumn: '/assets/audio/vivaldi-autumn.mp3',
-  winter: '/assets/audio/vivaldi-winter.mp3',
+  spring: '../../assets/audio/vivaldi-spring.mp3',
+  summer: '../../assets/audio/vivaldi-summer.mp3',
+  autumn: '../../assets/audio/vivaldi-autumn.mp3',
+  winter: '../../assets/audio/vivaldi-winter.mp3',
 };
 
 let audio        = null;
