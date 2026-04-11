@@ -146,6 +146,58 @@ body.custom-cursor * {
   background: color-mix(in srgb, var(--accent) 8%, transparent);
 }
 
+/* ── Seed trail ── */
+.seed-trail-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9998;
+  overflow: hidden;
+}
+
+.seed-particle {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  color: var(--accent);
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+/* Stage 0: seed drops and settles */
+@keyframes seed-sink {
+  0%   { opacity: 0; transform: translate(-50%, -60%) scale(0.6); }
+  40%  { opacity: 0.9; transform: translate(-50%, -46%) scale(1); }
+  100% { opacity: 0.9; transform: translate(-50%, -50%) scale(1); }
+}
+.seed-sinking {
+  animation: seed-sink 200ms ease-out forwards;
+}
+
+/* Stages 1–3: shoot grows upward */
+@keyframes seed-grow {
+  from { transform: translate(-50%, -50%) scaleY(0.85); }
+  to   { transform: translate(-50%, -50%) scaleY(1); }
+}
+.seed-growing {
+  opacity: 0.85;
+  animation: seed-grow 200ms var(--ease-out-expo) forwards;
+}
+
+/* Fade and drift slightly upward on exit */
+@keyframes seed-fade {
+  from { opacity: 0.85; transform: translate(-50%, -50%); }
+  to   { opacity: 0;    transform: translate(-50%, -80%); }
+}
+.seed-fading {
+  animation: seed-fade 800ms ease-in forwards;
+}
+
+.seedling-svg {
+  display: block;
+  filter: drop-shadow(0 0 3px color-mix(in srgb, var(--accent) 60%, transparent));
+  transition: filter 300ms ease;
+}
+
 /* ── Magnetic letter shift ── */
 .split-char.is-magnetic {
   transform: translate(var(--mag-x, 0), var(--mag-y, 0)) !important;
@@ -186,6 +238,121 @@ body.custom-cursor * {
     var(--text, #f0ede6) calc(100% - calc(var(--warmth, 0) * 12%)),
     #f5dfa0      calc(var(--warmth, 0) * 12%)
   );
+}
+
+/* ============================================================
+   AUDIO PLAYER
+   ============================================================ */
+
+.audio-player {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 1.5rem;
+  z-index: 9990;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 1rem;
+  background: color-mix(in srgb, var(--bg-tint) 85%, transparent);
+  border: 1px solid var(--border);
+  border-radius: 2rem;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--fg-dim);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 600ms ease, transform 600ms var(--ease-out-expo),
+              background 900ms cubic-bezier(0.16,1,0.3,1),
+              border-color 900ms cubic-bezier(0.16,1,0.3,1);
+  pointer-events: none;
+}
+
+.audio-player.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: all;
+}
+
+.audio-player.is-playing {
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+}
+
+.audio-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--fg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: border-color 300ms, color 300ms, background 300ms;
+  cursor: pointer;
+}
+.audio-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+}
+.audio-btn svg { width: 12px; height: 12px; pointer-events: none; }
+
+/* Play/pause icon swap */
+.audio-btn .icon-pause { display: none; }
+.audio-btn.is-playing .icon-play  { display: none; }
+.audio-btn.is-playing .icon-pause { display: block; }
+
+/* Mute icon swap */
+.audio-btn--mute .icon-muted { display: none; }
+.audio-btn--mute.is-muted .icon-vol   { display: none; }
+.audio-btn--mute.is-muted .icon-muted { display: block; }
+
+.audio-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.audio-title {
+  color: var(--fg);
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.audio-movement {
+  color: var(--accent);
+  font-size: 0.6rem;
+  white-space: nowrap;
+  transition: color 900ms cubic-bezier(0.16,1,0.3,1);
+}
+
+/* Volume slider */
+.audio-volume {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 64px;
+  height: 2px;
+  background: var(--border);
+  border-radius: 1px;
+  outline: none;
+  cursor: pointer;
+  transition: background 300ms;
+}
+.audio-volume:hover { background: color-mix(in srgb, var(--accent) 40%, var(--border)); }
+.audio-volume::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+  transition: background 900ms cubic-bezier(0.16,1,0.3,1);
 }
 
 /* ── Accent pulse on active nav ── */

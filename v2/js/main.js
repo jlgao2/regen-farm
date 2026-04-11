@@ -13,10 +13,12 @@ import {
 
 import {
   initCursor,
+  initSeedTrail,
   initMagneticLetters,
   initHoverShimmer,
   initProximityWarmth,
 } from './cursor.js';
+import { initAudio } from './audio.js';
 
 // ── Grain overlay ─────────────────────────────────────────────
 const grain = document.createElement('div');
@@ -56,10 +58,12 @@ animateLoader(() => {
   if (!('ontouchstart' in window)) {
     document.body.classList.add('custom-cursor');
     initCursor();
+    initSeedTrail();
     initMagneticLetters();
     initProximityWarmth();
   }
   initHoverShimmer(); // shimmer works on touch too (tap)
+  initAudio();
 });
 
 // ── Nav wiring ────────────────────────────────────────────────
