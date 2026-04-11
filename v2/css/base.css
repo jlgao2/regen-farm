@@ -1,0 +1,92 @@
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; scroll-behavior: smooth; }
+img, svg { display: block; max-width: 100%; }
+ul { list-style: none; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+button:focus-visible { outline: 1px solid var(--accent); outline-offset: 3px; }
+
+/* ── Custom Properties ── */
+:root {
+  --bg:        #18160f;          /* default (autumn) — warm dark earth */
+  --bg-tint:   #18160f;          /* season-specific background tint */
+  --fg:        #f0ede6;
+  --fg-dim:    rgba(240, 237, 230, 0.5);
+  --accent:    #c8722a;          /* autumn default */
+  --border:    rgba(240, 237, 230, 0.12);
+  --font-edit: 'Editorial New', Georgia, serif;
+  --font-mono: 'Courier New', Courier, monospace;
+  --nav-h:     56px;
+  --pad-x:     clamp(1.25rem, 5vw, 4rem);
+  --max-w:     1320px;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+body {
+  font-family: var(--font-edit);
+  background: var(--bg-tint);
+  color: var(--fg);
+  overflow-x: hidden;
+  transition: background 900ms cubic-bezier(0.16, 1, 0.3, 1),
+              color 600ms ease;
+}
+
+/* ── Typography ── */
+h1, h2, h3 { font-family: var(--font-edit); line-height: 1; font-weight: 400; }
+
+a { color: inherit; text-decoration: none; }
+a:hover { opacity: 0.7; }
+
+::selection { background: var(--accent); color: var(--bg); }
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--accent); }
+
+/* ── Loader ── */
+#loader {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+#loader.done {
+  opacity: 0;
+  transition: opacity 600ms ease;
+  pointer-events: none;
+}
+.loader-text {
+  display: flex;
+  gap: 0.6em;
+  font-size: clamp(2rem, 8vw, 6rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+}
+.loader-word {
+  display: inline-block;
+  overflow: hidden;
+}
+.loader-word .char {
+  display: inline-block;
+  transform: translateY(110%);
+}
+
+/* ── Utilities ── */
+.u-upper { text-transform: uppercase; }
+.u-mono  { font-family: var(--font-mono); }
+.u-dim   { color: var(--fg-dim); }
+.u-accent { color: var(--accent); }
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

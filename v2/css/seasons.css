@@ -1,0 +1,80 @@
+/* ── Season accent + background colours ── */
+
+/* Autumn — warm amber earth, like red-brown volcanic loam at dusk */
+[data-season="autumn"] {
+  --accent:    #c8722a;
+  --accent-dim: rgba(200,114,42,0.15);
+  --bg-tint:   #1a1209;   /* deep amber-brown */
+  --fg-dim:    rgba(240, 237, 230, 0.52);
+}
+
+/* Winter — cool blue-slate, like frost on Canterbury Plains */
+[data-season="winter"] {
+  --accent:    #6a9cc0;
+  --accent-dim: rgba(106,156,192,0.15);
+  --bg-tint:   #0e1318;   /* deep blue-grey */
+  --fg-dim:    rgba(220, 230, 240, 0.52);
+}
+
+/* Spring — green-tinged warmth, like basalt soil after rain */
+[data-season="spring"] {
+  --accent:    #5aaa72;
+  --accent-dim: rgba(90,170,114,0.15);
+  --bg-tint:   #0d1510;   /* deep forest green-black */
+  --fg-dim:    rgba(230, 242, 234, 0.52);
+}
+
+/* Summer — ochre warmth, like dry Hawke's Bay clay in January */
+[data-season="summer"] {
+  --accent:    #d4833a;
+  --accent-dim: rgba(212,131,58,0.15);
+  --bg-tint:   #1a1408;   /* warm ochre-black */
+  --fg-dim:    rgba(245, 238, 220, 0.52);
+}
+
+/* ── Season section visibility ── */
+.season-section { display: none; }
+.season-section.is-active { display: block; }
+
+/* ── Nav button active state ── */
+.nav-btn { position: relative; }
+.nav-btn::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0; right: 100%;
+  height: 1px;
+  background: var(--accent);
+  transition: right 300ms var(--ease-out-expo);
+}
+.nav-btn.is-active::after { right: 0; }
+.nav-btn.is-active { color: var(--accent); }
+
+/* ── Hero image overlay ── */
+.hero-image {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.18;
+  filter: grayscale(100%) contrast(1.2);
+  mix-blend-mode: luminosity;
+}
+[data-season="autumn"]  .hero-image { background-image: url('../../assets/images/au-autumn.jpg'); }
+[data-season="winter"]  .hero-image { background-image: url('../../assets/images/au-winter.jpg'); }
+[data-season="spring"]  .hero-image { background-image: url('../../assets/images/au-spring.jpg'); }
+[data-season="summer"]  .hero-image { background-image: url('../../assets/images/au-summer.jpg'); }
+
+/* ── Priority markers ── */
+.priority-high   { color: #e05a3a; }
+.priority-medium { color: #c8a228; }
+.priority-low    { color: var(--fg-dim); }
+
+/* ── Accent line ── */
+.accent-rule {
+  display: block;
+  width: 40px;
+  height: 1px;
+  background: var(--accent);
+  transition: background 500ms ease;
+}

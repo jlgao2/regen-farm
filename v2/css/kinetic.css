@@ -1,0 +1,214 @@
+/* ============================================================
+   KINETIC — All moving text, scroll-driven animation states
+   ============================================================ */
+
+/* ── Marquee ── */
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* Reverse marquee */
+@keyframes marquee-scroll-rev {
+  from { transform: translateX(-50%); }
+  to   { transform: translateX(0); }
+}
+
+.marquee-rev .marquee-track {
+  animation-name: marquee-scroll-rev;
+}
+
+/* ── Character split (hero title) ── */
+.split-char {
+  display: inline-block;
+  will-change: transform, opacity;
+}
+
+/* ── Scroll-reveal base state ── */
+.reveal-up {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 700ms var(--ease-out-expo), transform 700ms var(--ease-out-expo);
+  transition-delay: calc(var(--d, 0) * 1ms);
+}
+.reveal-up.in-view {
+  opacity: 1;
+  transform: none;
+}
+
+/* Big word parallax element */
+.big-word-wrap {
+  overflow: hidden;
+  margin: 2rem 0;
+  line-height: 1;
+}
+
+/* ── Stagger lines ── */
+.line-reveal {
+  overflow: hidden;
+  display: block;
+}
+.line-reveal-inner {
+  display: block;
+  transform: translateY(105%);
+  transition: transform 800ms var(--ease-out-expo);
+  transition-delay: calc(var(--d, 0) * 1ms);
+}
+.line-reveal.in-view .line-reveal-inner {
+  transform: translateY(0);
+}
+
+/* ── Hero title scatter ── */
+.hero-title-wrap .split-char {
+  transform: translateY(110%);
+  display: inline-block;
+}
+.hero-title-wrap.chars-in .split-char {
+  transform: translateY(0);
+  transition: transform 900ms var(--ease-out-expo);
+  transition-delay: calc(var(--i, 0) * 35ms);
+}
+
+/* ── Section transition wipe ── */
+.wipe-in {
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 800ms var(--ease-out-expo);
+}
+.wipe-in.in-view {
+  clip-path: inset(0 0% 0 0);
+}
+
+/* ── Grain overlay ── */
+.grain-overlay {
+  pointer-events: none;
+  position: fixed;
+  inset: -200%;
+  width: 400%;
+  height: 400%;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+  opacity: 0.4;
+  z-index: 9998;
+  animation: grain-drift 8s steps(2) infinite;
+}
+@keyframes grain-drift {
+  0%, 100% { transform: translate(0,0); }
+  10%  { transform: translate(-2%,-3%); }
+  20%  { transform: translate(3%,2%); }
+  30%  { transform: translate(-1%,4%); }
+  40%  { transform: translate(4%,-1%); }
+  50%  { transform: translate(-3%,3%); }
+  60%  { transform: translate(2%,-4%); }
+  70%  { transform: translate(-4%,2%); }
+  80%  { transform: translate(1%,-2%); }
+  90%  { transform: translate(-2%,4%); }
+}
+
+/* ============================================================
+   CURSOR EFFECTS
+   ============================================================ */
+
+/* Hide default cursor globally when our custom one is active */
+body.custom-cursor,
+body.custom-cursor * {
+  cursor: none !important;
+}
+
+/* ── Cursor dot ── */
+.cursor-dot {
+  position: fixed;
+  top: 0; left: 0;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  pointer-events: none;
+  z-index: 10000;
+  will-change: transform;
+  transition: background 900ms cubic-bezier(0.16,1,0.3,1), opacity 200ms;
+}
+
+/* ── Cursor ring ── */
+.cursor-ring {
+  position: fixed;
+  top: 0; left: 0;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--accent) 50%, transparent);
+  pointer-events: none;
+  z-index: 9999;
+  will-change: transform;
+  transition: border-color 900ms cubic-bezier(0.16,1,0.3,1),
+              background  900ms cubic-bezier(0.16,1,0.3,1);
+}
+
+.cursor-ring--hover {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+}
+
+/* ── Magnetic letter shift ── */
+.split-char.is-magnetic {
+  transform: translate(var(--mag-x, 0), var(--mag-y, 0)) !important;
+  transition: transform 180ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* Non-magnetic chars snap back */
+.split-char:not(.is-magnetic) {
+  transition: transform 600ms cubic-bezier(0.23, 1, 0.32, 1),
+              opacity 600ms ease;
+}
+
+/* ── Hover shimmer on task titles ── */
+.shimmer-char {
+  display: inline-block;
+  transition: color 200ms ease, text-shadow 200ms ease;
+}
+
+@keyframes char-shimmer {
+  0%   { color: inherit; text-shadow: none; }
+  50%  { color: var(--accent, #c8b560);
+         text-shadow: 0 0 12px rgba(200,181,96,0.6); }
+  100% { color: inherit; text-shadow: none; }
+}
+
+.shimmer-active .shimmer-char {
+  animation: char-shimmer 600ms ease forwards;
+  animation-delay: calc(var(--si) * 30ms);
+}
+
+/* ── Proximity warmth ── */
+.task-description,
+.hero-intro-block p,
+.quote-text {
+  transition: color 400ms ease;
+  color: color-mix(
+    in srgb,
+    var(--text, #f0ede6) calc(100% - calc(var(--warmth, 0) * 12%)),
+    #f5dfa0      calc(var(--warmth, 0) * 12%)
+  );
+}
+
+/* ── Accent pulse on active nav ── */
+@keyframes accent-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+/* ── Counter / ticker ── */
+.ticker-row {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  overflow: hidden;
+  height: 2rem;
+}
+.ticker-num {
+  font-size: clamp(4rem, 10vw, 9rem);
+  font-weight: 700;
+  letter-spacing: -0.05em;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--border);
+  line-height: 1;
+  flex-shrink: 0;
+  transition: -webkit-text-stroke 400ms ease;
+}
