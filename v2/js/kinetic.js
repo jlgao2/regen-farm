@@ -184,27 +184,30 @@ export function initBigWordParallax() {
   });
 }
 
-// ── Quote reveal ──────────────────────────────────────────────
+// ── Quote reveal — staggered word cascade ─────────────────────
 
 export function initQuoteReveals() {
-  if (reduced) return;
+  const sections = document.querySelectorAll('.quote-section');
+  if (!sections.length) return;
 
-  waitForGSAP(() => {
-    document.querySelectorAll('.quote-text, .quote-author').forEach(el => {
-      gsap.fromTo(el,
-        { opacity: 0, y: 30 },
-        {
-          opacity: 1, y: 0,
-          duration: 1,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: el,
-            start: 'top 85%',
-            toggleActions: 'play none none reverse',
-          },
-        }
-      );
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('words-in');
+        observer.unobserve(entry.target);
+      }
     });
+  }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+
+  sections.forEach(s => observer.observe(s));
+
+  // Re-attach after season changes
+  document.body.addEventListener('seasonchange', () => {
+    setTimeout(() => {
+      document.querySelectorAll('.quote-section:not(.words-in)').forEach(s => {
+        observer.observe(s);
+      });
+    }, 150);
   });
 }
 

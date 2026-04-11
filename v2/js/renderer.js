@@ -260,15 +260,51 @@ function renderChecklist(s) {
 }
 
 function renderQuote(s) {
+  // quote may be a plain string or {text, author} object
+  const quoteText = typeof s.quote === 'string' ? s.quote : (s.quote?.text || '');
+  const quoteAuthor = typeof s.quote === 'object' ? s.quote?.author : null;
+
   const section = el('div', { class: 'quote-section' });
 
-  const text = el('blockquote', { class: 'quote-text reveal-up' });
-  text.textContent = `"${s.quote.text}"`;
+  // Opening glyph
+  const glyph = el('div', { class: 'quote-glyph', 'aria-hidden': 'true' });
+  glyph.textContent = '"';
+  section.appendChild(glyph);
 
-  const author = el('cite', { class: 'quote-author reveal-up', style: '--d:150' });
-  author.textContent = `— ${s.quote.author}`;
+  // Blockquote — words split for staggered reveal
+  const bq = el('blockquote', { class: 'quote-text' });
+  const words = quoteText.split(' ');
+  words.forEach((word, i) => {
+    const wrapper = el('span', { class: 'quote-word-wrap' });
+    const span = el('span', {
+      class: 'quote-word',
+      style: `--wi:${i}`,
+    });
+    span.textContent = word;
+    wrapper.appendChild(span);
+    // Space between words (not after last)
+    if (i < words.length - 1) {
+      wrapper.appendChild(document.createTextNode('\u00A0'));
+    }
+    bq.appendChild(wrapper);
+  });
+  section.appendChild(bq);
 
-  section.append(text, author);
+  // Rule
+  const rule = el('div', { class: 'quote-rule' });
+  section.appendChild(rule);
+
+  // Attribution
+  if (quoteAuthor) {
+    const cite = el('cite', { class: 'quote-author' });
+    cite.textContent = `— ${quoteAuthor}`;
+    section.appendChild(cite);
+  } else {
+    const tradition = el('p', { class: 'quote-tradition' });
+    tradition.textContent = 'Te Ao Māori · Southern Hemisphere';
+    section.appendChild(tradition);
+  }
+
   return section;
 }
 
