@@ -95,28 +95,43 @@ function syncMuteUI() {
 // ── Public init ───────────────────────────────────────────────
 
 export function initAudio() {
-  // Don't init on touch/mobile (autoplay restrictions make it awkward)
   const player = buildPlayer();
 
   audio = new Audio();
-  audio.loop   = true;
-  audio.volume = 0.5;
+  audio.loop        = true;
+  audio.volume      = 0.5;
+  audio.preload     = 'auto';
 
   // Start with current season
   const initial = document.body.dataset.season || 'autumn';
-  loadTrack(initial);
   currentSeason = initial;
+  loadTrack(initial);
 
-  // Play / pause
+  // Keep UI in sync with actual audio state
+  audio.addEventListener('pause',  syncPlayPauseUI);
+  audio.addEventListener('play',   syncPlayPauseUI);
+  audio.addEventListener('ended',  syncPlayPauseUI);
+  audio.addEventListener('error', () => {
+    console.warn('[audio] load error', audio.error?.message, audio.src);
+  });
+
+  // ── Play / pause button ───────────────────────────────────────
+  let playPending = false;
   document.getElementById('audio-play').addEventListener('click', () => {
+    if (playPending) return;   // debounce rapid clicks
+
     if (audio.paused) {
-      audio.play().then(() => {
-        userPlayed = true;
-        syncPlayPauseUI();
-      }).catch(() => {});
+      playPending = true;
+      userPlayed  = true;
+      audio.play()
+        .then(() => { playPending = false; syncPlayPauseUI(); })
+        .catch(err => {
+          playPending = false;
+          console.warn('[audio] play() rejected:', err.name, err.message);
+          syncPlayPauseUI();
+        });
     } else {
       audio.pause();
-      syncPlayPauseUI();
     }
   });
 
@@ -135,9 +150,6 @@ export function initAudio() {
     syncMuteUI();
   });
 
-  audio.addEventListener('pause', syncPlayPauseUI);
-  audio.addEventListener('play',  syncPlayPauseUI);
-
   // Switch track when season changes
   document.body.addEventListener('seasonchange', e => {
     const id = e.detail?.id;
@@ -146,20 +158,6 @@ export function initAudio() {
       loadTrack(id);
     }
   });
-
-  // Autoplay on first user interaction (browsers require it)
-  const startOnInteraction = () => {
-    audio.play().then(() => {
-      userPlayed = true;
-      syncPlayPauseUI();
-    }).catch(() => {});
-    ['click', 'keydown', 'scroll', 'touchstart'].forEach(ev =>
-      window.removeEventListener(ev, startOnInteraction)
-    );
-  };
-  ['click', 'keydown', 'scroll', 'touchstart'].forEach(ev =>
-    window.addEventListener(ev, startOnInteraction, { once: true, passive: true })
-  );
 
   // Fade in player after a short delay
   setTimeout(() => player.classList.add('is-visible'), 1200);
