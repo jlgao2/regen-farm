@@ -92,6 +92,9 @@ export function animateHeroIn(seasonId) {
   waitForGSAP(() => {
     const chars = section.querySelectorAll('.hero-title-wrap .split-char');
 
+    // Clear any x-offset left by the scroll-diverge before re-entering
+    gsap.set(chars, { clearProps: 'x,transform' });
+
     gsap.fromTo(chars,
       { y: '110%', opacity: 0 },
       {
@@ -134,11 +137,19 @@ export function animateHeroIn(seasonId) {
 }
 
 // ── Hero scroll diverge (left half / right half split) ────────
+// Track active ScrollTriggers per season to avoid stacking duplicates
+const _divergeTriggers = {};
 
 export function initHeroDiverge(seasonId) {
   if (reduced) return;
 
   waitForGSAP(() => {
+    // Kill any existing triggers for this season before creating new ones
+    if (_divergeTriggers[seasonId]) {
+      _divergeTriggers[seasonId].forEach(t => t?.kill?.());
+      delete _divergeTriggers[seasonId];
+    }
+
     const section = document.getElementById(`season-${seasonId}`);
     if (!section) return;
 
@@ -147,7 +158,10 @@ export function initHeroDiverge(seasonId) {
     const hero = section.querySelector('.season-hero');
     if (!left || !right || !hero) return;
 
-    gsap.to(left, {
+    // Reset x position before attaching new scrub
+    gsap.set([left, right], { x: 0 });
+
+    const tLeft = gsap.to(left, {
       x: '-8vw',
       scrollTrigger: {
         trigger: hero,
@@ -157,7 +171,7 @@ export function initHeroDiverge(seasonId) {
       },
     });
 
-    gsap.to(right, {
+    const tRight = gsap.to(right, {
       x: '8vw',
       scrollTrigger: {
         trigger: hero,
@@ -166,6 +180,11 @@ export function initHeroDiverge(seasonId) {
         scrub: 1.2,
       },
     });
+
+    _divergeTriggers[seasonId] = [
+      tLeft.scrollTrigger,
+      tRight.scrollTrigger,
+    ];
 
     // Hero image parallax
     const heroImg = section.querySelector('.hero-image');
