@@ -98,9 +98,10 @@ export function initAudio() {
   const player = buildPlayer();
 
   audio = new Audio();
-  audio.loop        = true;
-  audio.volume      = 0.5;
-  audio.preload     = 'auto';
+  audio.loop    = true;
+  audio.volume  = 0.5;
+  audio.muted   = true;    // start muted — only muted autoplay is allowed cross-browser
+  audio.preload = 'auto';
 
   // Start with current season
   const initial = document.body.dataset.season || 'autumn';
@@ -115,10 +116,38 @@ export function initAudio() {
     console.warn('[audio] load error', audio.error?.message, audio.src);
   });
 
+  // ── Autoplay muted as soon as the track is ready ──────────────
+  audio.addEventListener('canplay', () => {
+    if (audio.paused) {
+      audio.play().catch(() => {});   // muted play almost always succeeds
+    }
+  }, { once: true });
+
+  // ── Unmute on first user interaction ─────────────────────────
+  // After any interaction, silently unmute — audio is already playing
+  const unmuteOnInteraction = () => {
+    if (audio.muted) {
+      audio.muted = false;
+      userPlayed  = true;
+      syncMuteUI();
+      syncPlayPauseUI();
+      player.classList.remove('needs-unmute');
+    }
+  };
+  ['click', 'keydown', 'scroll', 'touchstart', 'pointerdown'].forEach(ev =>
+    window.addEventListener(ev, unmuteOnInteraction, { once: true, passive: true })
+  );
+
   // ── Play / pause button ───────────────────────────────────────
   let playPending = false;
   document.getElementById('audio-play').addEventListener('click', () => {
-    if (playPending) return;   // debounce rapid clicks
+    if (playPending) return;
+
+    // If still muted from autoplay, unmute and let it play
+    if (audio.muted) {
+      unmuteOnInteraction();
+      return;
+    }
 
     if (audio.paused) {
       playPending = true;
@@ -159,6 +188,9 @@ export function initAudio() {
     }
   });
 
-  // Fade in player after a short delay
-  setTimeout(() => player.classList.add('is-visible'), 1200);
+  // Show player — with a subtle pulse to signal muted autoplay is active
+  setTimeout(() => {
+    player.classList.add('is-visible');
+    if (audio.muted) player.classList.add('needs-unmute');
+  }, 1400);
 }
