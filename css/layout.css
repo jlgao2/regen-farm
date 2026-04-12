@@ -921,8 +921,29 @@
 
 /* ── Responsive ── */
 @media (max-width: 640px) {
-  .nav-seasons { gap: 1rem; }
-  .nav-locale { display: none; }
+  :root { --nav-h: 88px; }
+
+  .site-nav {
+    flex-wrap: wrap;
+    height: auto;
+    padding-block: 0.6rem;
+    row-gap: 0;
+    align-items: center;
+  }
+
+  /* Logo takes remaining space on first row, pushing region to right */
+  .nav-logo { flex: 1; }
+
+  /* Season buttons drop to a second row, spanning full width */
+  .nav-seasons {
+    order: 3;
+    width: 100%;
+    justify-content: space-between;
+    gap: 0;
+    padding-top: 0.45rem;
+    border-top: 1px solid rgba(240, 237, 230, 0.08);
+  }
+
   .category-trigger { grid-template-columns: 2rem 1fr auto; }
   .cat-priority { display: none; }
   .footer-body { flex-direction: column; gap: 0.5rem; align-items: flex-start; }
