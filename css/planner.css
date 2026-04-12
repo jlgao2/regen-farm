@@ -5,36 +5,38 @@
 .plan-pill {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
-  margin-top: 1rem;
-  padding: 0.3rem 0.7rem;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+  padding: 0.5rem 1.1rem;
   font-family: var(--font-mono);
-  font-size: 0.62rem;
+  font-size: 0.7rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--fg-dim);
-  border: 1px solid var(--border);
+  color: var(--fg);
+  border: 1px solid rgba(240,237,230,0.25);
   border-radius: 2rem;
-  background: none;
+  background: rgba(240,237,230,0.06);
   cursor: pointer;
   transition: color 200ms ease, border-color 200ms ease, background 200ms ease;
 }
 .plan-pill:hover {
   color: var(--accent);
   border-color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 6%, transparent);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
 }
 .plan-pill-icon {
-  font-size: 0.75rem;
+  font-size: 1rem;
   line-height: 1;
-  transition: transform 200ms ease;
 }
 .plan-pill.is-checked {
   color: var(--accent);
   border-color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
 }
-.plan-pill.is-checked .plan-pill-icon { transform: none; }
+.task-row.is-planned {
+  border-left: 2px solid var(--accent);
+  padding-left: calc(1.25rem - 2px);
+}
 .task-row.is-planned .task-title { color: var(--accent); }
 
 /* ── Season planner section ──────────────────────────────────── */
@@ -285,17 +287,15 @@
   bottom: calc(100% + 8px);
   left: 50%;
   transform: translateX(-50%);
-  white-space: nowrap;
-  max-width: 220px;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: normal;
+  width: 220px;
   font-family: var(--font-mono);
   font-size: 0.58rem;
-  letter-spacing: 0.05em;
-  line-height: 1.4;
+  letter-spacing: 0.04em;
+  line-height: 1.5;
   color: var(--fg);
   background: rgba(13, 13, 11, 0.97);
-  padding: 0.3rem 0.5rem;
+  padding: 0.45rem 0.6rem;
   border: 1px solid var(--border);
   border-left: 2px solid var(--cat-clr, var(--accent));
   pointer-events: none;
@@ -304,6 +304,119 @@
 }
 .gantt-dot:hover .gantt-dot-label,
 .gantt-dot:focus-visible .gantt-dot-label { opacity: 1; }
+
+.gantt-dot-timing {
+  display: block;
+  color: var(--accent);
+  margin: 0.15rem 0 0.2rem;
+  font-size: 0.54rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.gantt-dot-desc {
+  display: block;
+  color: var(--fg-dim);
+  font-size: 0.54rem;
+  line-height: 1.4;
+  margin-top: 0.2rem;
+}
+
+/* Completed dot styling */
+.gantt-dot.is-done .gantt-dot-core {
+  opacity: 0.4;
+  background: var(--fg-dim);
+  border-color: transparent;
+}
+
+/* ── Planned task checklist ──────────────────────────────────── */
+
+.plan-checklist {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.plan-checklist-header {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fg-dim);
+  margin-bottom: 1rem;
+}
+
+.plan-checklist-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.plan-cl-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid rgba(240,237,230,0.05);
+  transition: opacity 300ms ease;
+}
+.plan-cl-item.is-done { opacity: 0.45; }
+.plan-cl-item.is-done .plan-cl-title { text-decoration: line-through; }
+
+.plan-cl-check {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+  border: 1px solid rgba(240,237,230,0.2);
+  border-radius: 3px;
+  background: none;
+  cursor: pointer;
+  position: relative;
+  transition: border-color 200ms, background 200ms;
+}
+.plan-cl-check:hover { border-color: var(--accent); }
+.plan-cl-check.is-checked {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.plan-cl-check.is-checked::after {
+  content: '';
+  position: absolute;
+  left: 4px; top: 3px;
+  width: 9px; height: 5px;
+  border-left: 1.5px solid var(--bg);
+  border-bottom: 1.5px solid var(--bg);
+  transform: rotate(-45deg);
+}
+
+.plan-cl-meta {
+  min-width: 0;
+  flex: 1;
+}
+.plan-cl-title {
+  display: block;
+  font-size: 0.82rem;
+  color: var(--fg);
+  margin-bottom: 0.3rem;
+  transition: color 200ms;
+}
+.plan-cl-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.plan-cl-chip {
+  font-family: var(--font-mono);
+  font-size: 0.56rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg-dim);
+  border: 1px solid var(--border);
+  padding: 0.1rem 0.4rem;
+  border-radius: 2px;
+}
+.plan-cl-chip--timing { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 35%, transparent); }
 
 /* ── Checklist divider inside planner section ────────────────── */
 

@@ -28,7 +28,8 @@ const SEASON_ORDER = ['autumn','winter','spring','summer'];
 
 // ── State ─────────────────────────────────────────────────────
 
-const selectedTasks = new Map(); // taskId → { task, cat, seasonId }
+const selectedTasks  = new Map(); // taskId → { task, cat, seasonId }
+const completedTasks = new Set(); // taskIds ticked off in the plan checklist
 const inlineContainers = new Map(); // seasonId → HTMLElement
 let panelEl = null;
 
@@ -69,6 +70,10 @@ export function initPlanner() {
   document.getElementById('planner-export').addEventListener('click', exportMarkdown);
   document.addEventListener('plantask', onPlanTask);
   updatePanel();
+
+  // Keep audio player above the bar whenever panel class changes
+  new MutationObserver(_syncAudioBottom)
+    .observe(panelEl, { attributes: true, attributeFilter: ['class'] });
 }
 
 // Keep for API compat with main.js seasonchange listener
@@ -81,6 +86,7 @@ function onPlanTask(e) {
 
   if (selectedTasks.has(taskId)) {
     selectedTasks.delete(taskId);
+    completedTasks.delete(taskId);  // also remove from checklist done state
   } else {
     selectedTasks.set(taskId, { task, cat, seasonId });
   }
@@ -132,8 +138,19 @@ function clearAll() {
     }
   });
   selectedTasks.clear();
+  completedTasks.clear();
   updatePanel();
   refreshAllGantts();
+}
+
+function _syncAudioBottom() {
+  // Defer one frame so the class change has been committed to the DOM
+  requestAnimationFrame(() => {
+    const audio = document.querySelector('.audio-player');
+    if (!audio) return;
+    const elevated = panelEl?.classList.contains('has-tasks');
+    audio.style.bottom = elevated ? 'calc(48px + 1.5rem)' : '';
+  });
 }
 
 function updatePanel() {
@@ -142,9 +159,7 @@ function updatePanel() {
   const countEl = document.getElementById('planner-count');
   if (countEl) countEl.textContent = `${count} task${count !== 1 ? 's' : ''}`;
   panelEl.classList.toggle('has-tasks', count > 0);
-  // Push audio player above the planner bar when it's visible
-  const audio = document.querySelector('.audio-player');
-  if (audio) audio.style.bottom = count > 0 ? 'calc(48px + 1.5rem)' : '';
+  _syncAudioBottom();
 }
 
 // ── Gantt ─────────────────────────────────────────────────────
@@ -158,7 +173,9 @@ function renderGantt(seasonId, container) {
   const cfg = SEASON_CONFIG[seasonId];
   if (!cfg) return;
 
-  const tasks = [...selectedTasks.values()].filter(v => v.seasonId === seasonId);
+  const tasks = [...selectedTasks.entries()]
+    .filter(([_, v]) => v.seasonId === seasonId)
+    .map(([id, v]) => ({ id, ...v }));
 
   if (tasks.length === 0) {
     const empty = document.createElement('div');
@@ -220,7 +237,7 @@ function renderGantt(seasonId, container) {
   const todayPos = getTodayPosition(seasonId);
 
   catOrder.forEach((catId, rowIdx) => {
-    const catTasks = tasks.filter(v => v.cat.id === catId);
+    const catTasks = tasks.filter(t => t.cat.id === catId);
     if (catTasks.length === 0) return;
 
     const meta = CAT_META[catId] || { short: catId.slice(0,6).toUpperCase(), color: 'var(--accent)' };
@@ -260,12 +277,11 @@ function renderGantt(seasonId, container) {
     }
 
     // Task dots with staggered animation
-    catTasks.forEach(({ task, cat }, ti) => {
+    catTasks.forEach(({ id, task, cat }, ti) => {
       const pos = parsePosition(task.timing, seasonId);
-      const taskRowId = findTaskId(task, cat, seasonId);
 
       const dot = document.createElement('button');
-      dot.className = 'gantt-dot';
+      dot.className = `gantt-dot${completedTasks.has(id) ? ' is-done' : ''}`;
       dot.style.left = `${pos * 100}%`;
       dot.style.setProperty('--dot-delay', `${ti * 60}ms`);
       dot.setAttribute('aria-label', task.title);
@@ -276,11 +292,16 @@ function renderGantt(seasonId, container) {
 
       const dotLabel = document.createElement('span');
       dotLabel.className = 'gantt-dot-label';
-      dotLabel.innerHTML = `<strong>${task.title}</strong><br>${task.timing || ''}`;
+      const descSnip = (task.description || task.desc || '').slice(0, 100);
+      dotLabel.innerHTML = [
+        `<strong>${task.title}</strong>`,
+        task.timing ? `<span class="gantt-dot-timing">${task.timing}</span>` : '',
+        descSnip ? `<span class="gantt-dot-desc">${descSnip}${(task.description||task.desc||'').length > 100 ? '…' : ''}</span>` : '',
+      ].filter(Boolean).join('');
       dot.appendChild(dotLabel);
 
       dot.addEventListener('click', () => {
-        const el = taskRowId ? document.querySelector(`[data-task-id="${taskRowId}"]`) : null;
+        const el = document.querySelector(`[data-task-id="${id}"]`);
         if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
       });
 
@@ -310,6 +331,77 @@ function renderGantt(seasonId, container) {
   }
 
   container.appendChild(gantt);
+
+  // ── Planned task checklist ─────────────────────────────────────
+  container.appendChild(buildPlanChecklist(seasonId, tasks));
+}
+
+// ── Plan checklist (below gantt) ──────────────────────────────
+
+function buildPlanChecklist(seasonId, tasks) {
+  const section = document.createElement('div');
+  section.className = 'plan-checklist';
+
+  const header = document.createElement('p');
+  header.className = 'plan-checklist-header';
+  header.textContent = 'Your plan';
+  section.appendChild(header);
+
+  // Sort by timing position within the season
+  const sorted = [...tasks].sort((a, b) =>
+    parsePosition(a.task.timing, seasonId) - parsePosition(b.task.timing, seasonId)
+  );
+
+  const list = document.createElement('ul');
+  list.className = 'plan-checklist-list';
+
+  sorted.forEach(({ id, task, cat }) => {
+    const isDone = completedTasks.has(id);
+    const item = document.createElement('li');
+    item.className = `plan-cl-item${isDone ? ' is-done' : ''}`;
+
+    const btn = document.createElement('button');
+    btn.className = `plan-cl-check${isDone ? ' is-checked' : ''}`;
+    btn.setAttribute('type', 'button');
+    btn.setAttribute('aria-label', isDone ? `Mark "${task.title}" incomplete` : `Mark "${task.title}" complete`);
+    btn.addEventListener('click', () => {
+      if (completedTasks.has(id)) {
+        completedTasks.delete(id);
+      } else {
+        completedTasks.add(id);
+      }
+      refreshAllGantts();
+    });
+
+    const meta = document.createElement('div');
+    meta.className = 'plan-cl-meta';
+
+    const title = document.createElement('span');
+    title.className = 'plan-cl-title';
+    title.textContent = task.title;
+
+    const chips = document.createElement('div');
+    chips.className = 'plan-cl-chips';
+    if (cat?.title) {
+      const catChip = document.createElement('span');
+      catChip.className = 'plan-cl-chip';
+      catChip.textContent = cat.title;
+      chips.appendChild(catChip);
+    }
+    if (task.timing) {
+      const timeChip = document.createElement('span');
+      timeChip.className = 'plan-cl-chip plan-cl-chip--timing';
+      timeChip.textContent = task.timing;
+      chips.appendChild(timeChip);
+    }
+
+    meta.append(title, chips);
+    item.append(btn, meta);
+    list.appendChild(item);
+  });
+
+  section.appendChild(list);
+  return section;
 }
 
 function findTaskId(task, cat, seasonId) {

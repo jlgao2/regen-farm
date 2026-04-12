@@ -77,7 +77,7 @@ export function animateLoader(onDone) {
 
 // ── Hero title scatter-in ─────────────────────────────────────
 
-export function animateHeroIn(seasonId) {
+export function animateHeroIn(seasonId, instant = false) {
   const section = document.getElementById(`season-${seasonId}`);
   if (!section) return;
 
@@ -90,7 +90,19 @@ export function animateHeroIn(seasonId) {
   }
 
   waitForGSAP(() => {
-    const chars = section.querySelectorAll('.hero-title-wrap .split-char');
+    const chars     = section.querySelectorAll('.hero-title-wrap .split-char');
+    const taglineInner = section.querySelector('.line-reveal-inner');
+    const months    = section.querySelector('.hero-months');
+    const introBlock = section.querySelector('.hero-intro-block');
+
+    // Instant mode: snap everything visible with no animation
+    if (instant) {
+      gsap.set(chars, { y: '0%', opacity: 1 });
+      if (taglineInner) gsap.set(taglineInner, { y: '0%' });
+      if (months)       gsap.set(months,       { opacity: 1, y: 0 });
+      if (introBlock)   gsap.set(introBlock,   { opacity: 1, y: 0 });
+      return;
+    }
 
     // Clear any x-offset left by the scroll-diverge before re-entering
     gsap.set(chars, { clearProps: 'x,transform' });
@@ -107,8 +119,6 @@ export function animateHeroIn(seasonId) {
       }
     );
 
-    // Tagline
-    const taglineInner = section.querySelector('.line-reveal-inner');
     if (taglineInner) {
       gsap.fromTo(taglineInner,
         { y: '105%' },
@@ -116,8 +126,6 @@ export function animateHeroIn(seasonId) {
       );
     }
 
-    // Months
-    const months = section.querySelector('.hero-months');
     if (months) {
       gsap.fromTo(months,
         { opacity: 0, y: 10 },
@@ -125,8 +133,6 @@ export function animateHeroIn(seasonId) {
       );
     }
 
-    // Intro block
-    const introBlock = section.querySelector('.hero-intro-block');
     if (introBlock) {
       gsap.fromTo(introBlock,
         { opacity: 0, y: 16 },

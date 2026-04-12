@@ -37,6 +37,7 @@ export function activateSeason(id, opts = {}) {
     setTimeout(() => initHeroDiverge(id), 200);
     typeIntro(id, false);
   } else {
+    animateHeroIn(id, true);   // snap chars visible immediately
     typeIntro(id, true);
     initHeroDiverge(id);
   }
