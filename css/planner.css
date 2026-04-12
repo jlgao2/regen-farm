@@ -1,0 +1,313 @@
+/* ── Task Planner — panel, timeline, checkbox ── */
+
+/* ── Task row — extend grid for planner checkbox ─────────────── */
+
+.task-row {
+  grid-template-columns: 1.5rem 2.5rem 1fr;
+  align-items: start;
+}
+
+.planner-check {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  background: none;
+  cursor: pointer;
+  position: relative;
+  transition: border-color 200ms ease, background 200ms ease;
+}
+
+.planner-check:hover {
+  border-color: var(--accent);
+}
+
+.planner-check.is-checked {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+/* Checkmark via pseudo-element */
+.planner-check.is-checked::after {
+  content: '';
+  position: absolute;
+  left: 3px;
+  top: 2px;
+  width: 9px;
+  height: 5px;
+  border-left: 1.5px solid var(--bg);
+  border-bottom: 1.5px solid var(--bg);
+  transform: rotate(-45deg);
+}
+
+/* Planned task row highlight */
+.task-row.is-planned .task-title {
+  color: var(--accent);
+}
+
+/* ── Planner panel ───────────────────────────────────────────── */
+
+.planner-panel {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 300;
+  background: rgba(13, 13, 11, 0.97);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid var(--border);
+  transform: translateY(100%);
+  transition: transform 400ms var(--ease-out-expo);
+}
+
+.planner-panel.has-tasks {
+  transform: translateY(0);
+}
+
+/* ── Bar ─────────────────────────────────────────────────────── */
+
+.planner-bar {
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--pad-x);
+  gap: 1rem;
+}
+
+.planner-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-width: 0;
+}
+
+.planner-chevron-icon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  transition: transform 300ms var(--ease-out-expo);
+}
+
+.planner-panel.is-open .planner-chevron-icon {
+  transform: rotate(180deg);
+}
+
+.planner-bar-label {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.planner-count { color: var(--accent); }
+
+.planner-bar-sub {
+  color: var(--fg-dim);
+  font-size: 0.66rem;
+}
+
+.planner-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.planner-btn {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.7rem;
+  border: 1px solid var(--border);
+  transition: color 200ms ease, border-color 200ms ease, background 200ms ease;
+}
+
+.planner-btn--ghost {
+  color: var(--fg-dim);
+}
+.planner-btn--ghost:hover {
+  color: var(--fg);
+  border-color: var(--fg-dim);
+}
+
+.planner-btn--accent {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+.planner-btn--accent:hover {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+/* ── Expandable body ─────────────────────────────────────────── */
+
+.planner-body {
+  border-top: 1px solid var(--border);
+  padding: 1.25rem var(--pad-x) 1.5rem;
+  max-height: 60svh;
+  overflow-y: auto;
+}
+
+.planner-body[hidden] { display: none; }
+
+/* ── Timeline ────────────────────────────────────────────────── */
+
+.planner-timeline {
+  /* container — child elements laid out below */
+}
+
+.tl-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fg-dim);
+}
+
+.tl-month {
+  flex: 1;
+  text-align: center;
+}
+.tl-month:first-child { text-align: left; }
+.tl-month:last-child  { text-align: right; }
+
+.tl-bar-wrap {
+  padding: 1.2rem 0;
+}
+
+.tl-bar {
+  position: relative;
+  height: 1px;
+  background: var(--border);
+}
+
+/* Month divider ticks */
+.tl-tick {
+  position: absolute;
+  top: -5px;
+  width: 1px;
+  height: 11px;
+  background: var(--border);
+}
+
+/* Task dots */
+.tl-dot {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+  transition: transform 200ms ease;
+  cursor: pointer;
+}
+
+.tl-dot:hover,
+.tl-dot:focus-visible {
+  transform: translate(-50%, -50%) scale(1.6);
+  z-index: 2;
+}
+
+/* Dot labels visible on hover */
+.tl-tooltip {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.06em;
+  color: var(--fg);
+  background: rgba(13, 13, 11, 0.95);
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--border);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 150ms ease;
+}
+
+.tl-dot:hover .tl-tooltip,
+.tl-dot:focus-visible .tl-tooltip {
+  opacity: 1;
+}
+
+/* Legend (sorted task list) */
+.tl-legend {
+  margin-top: 0.75rem;
+  border-top: 1px solid var(--border);
+  padding-top: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.tl-legend-row {
+  display: grid;
+  grid-template-columns: 8rem 1fr auto;
+  gap: 0.75rem;
+  align-items: baseline;
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+}
+
+.tl-legend-cat {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tl-legend-name {
+  color: var(--fg);
+}
+
+.tl-legend-timing {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  color: var(--fg-dim);
+  white-space: nowrap;
+}
+
+.tl-empty {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  color: var(--fg-dim);
+  padding: 0.5rem 0;
+}
+
+.tl-note {
+  margin-top: 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  color: var(--fg-dim);
+}
+
+/* ── Responsive ──────────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+  .planner-bar-sub { display: none; }
+  .tl-legend-row   { grid-template-columns: 1fr auto; }
+  .tl-legend-cat   { display: none; }
+}

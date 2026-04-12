@@ -279,7 +279,7 @@ function renderCategory(cat, index, seasonId) {
 
   // ── Task list ─────────────────────────────────────────────────
   const taskList = el('div', { class: 'task-list' });
-  cat.tasks.forEach((task, ti) => taskList.appendChild(renderTask(task, ti)));
+  cat.tasks.forEach((task, ti) => taskList.appendChild(renderTask(task, ti, seasonId, cat)));
   bodyEl.appendChild(taskList);
 
   trigger.addEventListener('click', () => {
@@ -305,8 +305,30 @@ function loadCategoryImg(img) {
   img.src = img.dataset.src;
 }
 
-function renderTask(task, index) {
-  const row = el('div', { class: 'task-row' });
+function renderTask(task, index, seasonId, cat) {
+  const taskId = `${seasonId}-${cat?.id || 'task'}-${index}`;
+  const row = el('div', { class: 'task-row', 'data-task-id': taskId });
+
+  // ── Planner checkbox ──────────────────────────────────────────
+  const checkBtn = el('button', {
+    class: 'planner-check',
+    'aria-label': `Add "${task.title}" to plan`,
+    type: 'button',
+  });
+  checkBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    const isNowChecked = checkBtn.classList.toggle('is-checked');
+    row.classList.toggle('is-planned', isNowChecked);
+    row.dispatchEvent(new CustomEvent('plantask', {
+      bubbles: true,
+      detail: {
+        taskId,
+        task,
+        cat: { id: cat?.id || '', title: cat?.title || '' },
+        seasonId,
+      },
+    }));
+  });
 
   const idx = el('span', { class: 'task-index' });
   idx.textContent = String(index + 1).padStart(2, '0');
@@ -329,7 +351,7 @@ function renderTask(task, index) {
   }
 
   const desc = el('p', { class: 'task-desc' });
-  desc.textContent = task.desc;
+  desc.textContent = task.description || task.desc || '';
 
   content.append(title, chips, desc);
 
@@ -351,7 +373,7 @@ function renderTask(task, index) {
     content.appendChild(tip);
   }
 
-  row.append(idx, content);
+  row.append(checkBtn, idx, content);
   return row;
 }
 

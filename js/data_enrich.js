@@ -30,7 +30,7 @@ const _MICROSEASON_REFERENCE = {
       dateRange: 'Mar 1–15',
       soilTemp: '15–20°C',
       keyIndicator: 'Kangaroo grass seed heads fully mature (brown/black awns); pōhutukawa still flowering on coastal headlands',
-      farmingFocus: 'Peak harvest; collect seed; assess summer's success; begin cover crop planning',
+      farmingFocus: "Peak harvest; collect seed; assess summer's success; begin cover crop planning",
     },
     {
       name: 'Paenga-whāwhā',
@@ -198,7 +198,7 @@ const _MICROSEASON_REFERENCE = {
       subtitle: 'Rūhī Star Season',
       dateRange: 'Feb 1–20',
       soilTemp: '25–30°C',
-      keyIndicator: '"Rūhī's foot rests on the earth" — summer star governs; subtle first cooling; early insects beginning dormancy',
+      keyIndicator: `"Rūhī's foot rests on the earth" — summer star governs; subtle first cooling; early insects beginning dormancy`,
       farmingFocus: 'Continued harvest; begin autumn cover crop planning; order cool-season seed; prepare for transition',
     },
     {

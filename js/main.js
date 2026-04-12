@@ -19,6 +19,7 @@ import {
   initProximityWarmth,
 } from './cursor.js';
 import { initAudio } from './audio.js';
+import { initPlanner, setPlannerSeason } from './planner.js';
 
 // ── Merge season-specific image metadata into each category ───
 // CATEGORY_IMAGES keys are "{seasonId}-{catId}" → { imageAlt, imageQuery }
@@ -73,6 +74,13 @@ animateLoader(() => {
   }
   initHoverShimmer();
   initAudio();
+  initPlanner();
+  setPlannerSeason(initial);
+});
+
+// ── Planner season sync ───────────────────────────────────────
+document.body.addEventListener('seasonchange', e => {
+  setPlannerSeason(e.detail?.id || 'autumn');
 });
 
 // ── Nav wiring ────────────────────────────────────────────────
