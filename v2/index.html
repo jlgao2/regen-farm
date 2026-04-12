@@ -22,10 +22,26 @@
 
   <!-- Loading -->
   <div id="loader">
-    <div class="loader-text">
-      <span class="loader-word" data-split>READING</span>
-      <span class="loader-word" data-split>THE</span>
-      <span class="loader-word" data-split>LAND</span>
+    <div class="loader-inner">
+      <svg class="loader-sprout" viewBox="0 0 40 64" fill="none"
+           xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <!-- Seed -->
+        <circle class="sprout-seed" cx="20" cy="58" r="3.5" fill="currentColor"/>
+        <!-- Stem -->
+        <line class="sprout-stem"
+              x1="20" y1="58" x2="20" y2="8"
+              stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+        <!-- Left leaf -->
+        <path class="sprout-leaf sprout-leaf--l"
+              d="M20 36 Q10 26 5 30 Q11 36 20 36Z" fill="currentColor"/>
+        <!-- Right leaf -->
+        <path class="sprout-leaf sprout-leaf--r"
+              d="M20 26 Q30 16 35 20 Q29 26 20 26Z" fill="currentColor"/>
+        <!-- Crown leaf -->
+        <path class="sprout-leaf sprout-leaf--c"
+              d="M20 16 Q24 6 29 9 Q25 15 20 16Z" fill="currentColor"/>
+      </svg>
+      <p class="loader-label" aria-hidden="true">regen.farm</p>
     </div>
   </div>
 

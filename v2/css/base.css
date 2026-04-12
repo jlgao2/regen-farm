@@ -57,24 +57,55 @@ a:hover { opacity: 0.7; }
 }
 #loader.done {
   opacity: 0;
-  transition: opacity 600ms ease;
+  transition: opacity 700ms ease;
   pointer-events: none;
 }
-.loader-text {
+
+.loader-inner {
   display: flex;
-  gap: 0.6em;
-  font-size: clamp(2rem, 8vw, 6rem);
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  text-transform: uppercase;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.2rem;
 }
-.loader-word {
-  display: inline-block;
-  overflow: hidden;
+
+/* ── Seedling SVG ── */
+.loader-sprout {
+  width: clamp(40px, 7vw, 64px);
+  color: var(--accent);
+  overflow: visible;
 }
-.loader-word .char {
-  display: inline-block;
-  transform: translateY(110%);
+
+/* Initial hidden states (GSAP will animate from here) */
+.sprout-seed {
+  transform-box: fill-box;
+  transform-origin: center;
+  transform: scale(0);
+}
+.sprout-stem {
+  /* full stem length = 58−8 = 50 units */
+  stroke-dasharray: 50;
+  stroke-dashoffset: 50;
+}
+.sprout-leaf {
+  transform-box: fill-box;
+  transform-origin: right center;   /* attach point is the right end of each leaf */
+  transform: scale(0);
+  opacity: 0;
+}
+.sprout-leaf--l { transform-origin: right center; }
+.sprout-leaf--r { transform-origin: left center; }
+.sprout-leaf--c { transform-origin: left bottom; }
+
+/* ── Label ── */
+.loader-label {
+  font-family: var(--font-edit);
+  font-size: clamp(0.85rem, 2vw, 1.1rem);
+  font-weight: 300;
+  font-style: italic;
+  letter-spacing: 0.18em;
+  color: var(--fg-dim);
+  opacity: 0;
+  transform: translateY(10px);
 }
 
 /* ── Utilities ── */

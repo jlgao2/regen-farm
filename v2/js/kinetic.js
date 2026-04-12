@@ -8,47 +8,70 @@ export function animateLoader(onDone) {
   const loader = document.getElementById('loader');
   if (!loader) { onDone(); return; }
 
-  // Split loader chars
-  loader.querySelectorAll('.loader-word').forEach(word => {
-    const text = word.textContent;
-    word.textContent = '';
-    text.split('').forEach(ch => {
-      const span = document.createElement('span');
-      span.className = 'char';
-      span.textContent = ch;
-      word.appendChild(span);
-    });
-  });
-
   if (reduced) {
     setTimeout(() => { loader.classList.add('done'); onDone(); }, 400);
     return;
   }
 
   waitForGSAP(() => {
-    const chars = loader.querySelectorAll('.char');
+    const seed   = loader.querySelector('.sprout-seed');
+    const stem   = loader.querySelector('.sprout-stem');
+    const leafL  = loader.querySelector('.sprout-leaf--l');
+    const leafR  = loader.querySelector('.sprout-leaf--r');
+    const leafC  = loader.querySelector('.sprout-leaf--c');
+    const label  = loader.querySelector('.loader-label');
+
     const tl = gsap.timeline({
       onComplete() {
         setTimeout(() => {
           loader.classList.add('done');
-          setTimeout(onDone, 650);
-        }, 300);
+          setTimeout(onDone, 700);
+        }, 100);
       }
     });
 
-    tl.to(chars, {
-      y: '0%',
-      duration: 0.7,
-      stagger: 0.05,
-      ease: 'power4.out',
+    // 1. Seed emerges
+    tl.to(seed, {
+      scale: 1,
+      duration: 0.35,
+      ease: 'back.out(2.5)',
     })
-    .to(chars, {
-      y: '-110%',
-      duration: 0.5,
-      stagger: 0.04,
-      ease: 'power3.in',
-      delay: 0.5,
-    });
+    // 2. Stem grows upward (strokeDashoffset 50 → 0)
+    .to(stem, {
+      strokeDashoffset: 0,
+      duration: 0.9,
+      ease: 'power2.inOut',
+    }, '+=0.05')
+    // 3. Leaves unfurl — slightly staggered
+    .to(leafL, {
+      scale: 1, opacity: 1,
+      duration: 0.45, ease: 'back.out(1.8)',
+    }, '-=0.25')
+    .to(leafR, {
+      scale: 1, opacity: 1,
+      duration: 0.4, ease: 'back.out(1.8)',
+    }, '-=0.3')
+    .to(leafC, {
+      scale: 1, opacity: 1,
+      duration: 0.35, ease: 'back.out(1.8)',
+    }, '-=0.2')
+    // 4. Label fades in
+    .to(label, {
+      opacity: 1, y: 0,
+      duration: 0.55, ease: 'power2.out',
+    }, '-=0.1')
+    // 5. Hold briefly
+    .to({}, { duration: 0.6 })
+    // 6. Sprout rises and fades out
+    .to([seed, stem, leafL, leafR, leafC], {
+      opacity: 0, y: -18,
+      duration: 0.4, ease: 'power2.in',
+      stagger: 0.03,
+    })
+    .to(label, {
+      opacity: 0, y: -10,
+      duration: 0.35, ease: 'power2.in',
+    }, '-=0.25');
   });
 }
 
