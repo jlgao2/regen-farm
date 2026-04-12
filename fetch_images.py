@@ -1,12 +1,17 @@
 #!/usr/bin/env python3
 """
-fetch_images.py  —  Download category banner images for regen.farm
+fetch_images.py  —  Download season × category images for regen.farm
 
-Uses Wikimedia Commons API (no API key required).
-Saves to: assets/images/cat-{id}.jpg
+Uses Wikimedia Commons API (no API key required, all images freely licensed).
+Saves 20 images as:  assets/images/cat-{season}-{category}.jpg
+
+Images show the regenerative ACT happening in each season — natural processes
+without people or prominent man-made objects. Different scenes per season.
 
 Usage:
-    python3 fetch_images.py
+    python3 fetch_images.py              # download all missing images
+    python3 fetch_images.py --force      # re-download everything
+    python3 fetch_images.py autumn       # download only autumn images
 """
 
 import requests
@@ -16,13 +21,38 @@ import json
 
 OUTPUT_DIR = os.path.join(os.path.dirname(__file__), "assets", "images")
 
-# Category ID → search query for Wikimedia Commons
-CATEGORIES = {
-    "soil-prep":    "soil garden tilling spade",
-    "planting":     "seedling planting garden hands",
-    "composting":   "compost heap organic matter",
-    "cover-crops":  "cover crop field green wheat rye",
-    "water":        "rain irrigation field agriculture water",
+# ── Season × category → Wikimedia Commons search queries ─────────────────────
+# Queries tuned for natural-process photography without people.
+# Keys: "{season}-{cat-id}" matching the renderer's cat-{season}-{cat-id}.jpg
+
+IMAGES = {
+    # ── AUTUMN ──────────────────────────────────────────────────────────────
+    "autumn-soil-prep":    "mycelium hyphae soil fungal",
+    "autumn-planting":     "vegetable garden autumn planting",
+    "autumn-composting":   "leaf litter fungi forest floor",
+    "autumn-cover-crops":  "cover crop winter soil protection",
+    "autumn-water":        "agricultural water management dam",
+
+    # ── WINTER ──────────────────────────────────────────────────────────────
+    "winter-soil-prep":    "biochar carbon soil amendment",
+    "winter-planting":     "apple tree planting dormant winter",
+    "winter-composting":   "compost kitchen organic matter",
+    "winter-cover-crops":  "rye frost winter crop field",
+    "winter-water":        "farm dam irrigation pond",
+
+    # ── SPRING ──────────────────────────────────────────────────────────────
+    "spring-soil-prep":    "earthworm soil profile",
+    "spring-planting":     "seedling transplant spring vegetable",
+    "spring-composting":   "organic compost pile garden",
+    "spring-cover-crops":  "phacelia blue flowers field",
+    "spring-water":        "irrigation channel water field spring",
+
+    # ── SUMMER ──────────────────────────────────────────────────────────────
+    "summer-soil-prep":    "straw mulch garden soil moisture",
+    "summer-planting":     "corn bean squash companion",
+    "summer-composting":   "liquid fertilizer fermentation organic",
+    "summer-cover-crops":  "buckwheat flower white field",
+    "summer-water":        "dry soil drought agriculture",
 }
 
 # Image dimensions to request
@@ -88,65 +118,75 @@ def download_image(url, dest_path):
             f.write(chunk)
 
 
-def fetch_category(cat_id, query):
-    dest = os.path.join(OUTPUT_DIR, f"cat-{cat_id}.jpg")
+def fetch_image(key, query, force=False):
+    """Download one season-category image from Wikimedia Commons."""
+    dest = os.path.join(OUTPUT_DIR, f"cat-{key}.jpg")
 
-    if os.path.exists(dest):
+    if os.path.exists(dest) and not force:
         size = os.path.getsize(dest)
         if size > 50_000:
-            print(f"  [{cat_id}] already exists ({size // 1024} KB), skipping.")
+            print(f"  [{key}] already exists ({size // 1024} KB), skipping.")
             return True
 
-    print(f"  [{cat_id}] Searching: '{query}' ...")
+    print(f"  [{key}] Searching: '{query}' ...")
     titles = search_commons(query)
 
     if not titles:
-        print(f"  [{cat_id}] No results found.")
+        print(f"  [{key}] No results found — try a different query.")
         return False
 
     for title in titles:
         url = get_image_url(title)
         if not url:
             continue
-        # Skip SVGs and tiny images
         if url.lower().endswith(".svg"):
             continue
         try:
-            print(f"  [{cat_id}] Downloading: {title[:60]} …")
+            print(f"  [{key}] Downloading: {title[:60]} …")
             download_image(url, dest)
             size = os.path.getsize(dest)
             if size < 30_000:
                 os.remove(dest)
-                print(f"  [{cat_id}] Too small ({size} bytes), trying next …")
+                print(f"  [{key}] Too small ({size} bytes), trying next …")
                 continue
-            print(f"  [{cat_id}] Saved {size // 1024} KB → {dest}")
+            print(f"  [{key}] Saved {size // 1024} KB → {dest}")
             return True
         except Exception as e:
-            print(f"  [{cat_id}] Error downloading: {e}")
+            print(f"  [{key}] Error: {e}")
             continue
 
-    print(f"  [{cat_id}] Could not download a usable image.")
+    print(f"  [{key}] Could not download a usable image.")
     return False
 
 
 def main():
     os.makedirs(OUTPUT_DIR, exist_ok=True)
-    print(f"Fetching {len(CATEGORIES)} category images → {OUTPUT_DIR}\n")
+    force = "--force" in sys.argv
+    season_filter = next((a for a in sys.argv[1:] if not a.startswith("--")), None)
+
+    targets = {k: v for k, v in IMAGES.items()
+               if season_filter is None or k.startswith(season_filter)}
+
+    print(f"Fetching {len(targets)} season × category images → {OUTPUT_DIR}")
+    if season_filter:
+        print(f"Filter: {season_filter} only")
+    print()
 
     failed = []
-    for cat_id, query in CATEGORIES.items():
-        ok = fetch_category(cat_id, query)
+    for key, query in targets.items():
+        ok = fetch_image(key, query, force=force)
         if not ok:
-            failed.append(cat_id)
+            failed.append(key)
 
     print()
     if failed:
-        print(f"Failed: {failed}")
-        print("Try re-running, or manually place cat-{id}.jpg files in assets/images/")
+        print(f"Failed ({len(failed)}): {failed}")
+        print("\nFor each failed image, search manually on:")
+        print("  https://commons.wikimedia.org/wiki/Special:Search")
+        print("and save to assets/images/cat-{season}-{category}.jpg")
         sys.exit(1)
     else:
-        print("All images downloaded successfully.")
-        print("Next: git add assets/images && git commit -m 'Add category images'")
+        print(f"All {len(targets)} images downloaded — no bare ground on the site.")
 
 
 if __name__ == "__main__":

@@ -1,6 +1,7 @@
 /* ── Main ── */
 
 import { SEASONS } from './data.js';
+import { CATEGORY_IMAGES } from './data_enrich.js';
 import { renderAllSeasons } from './renderer.js';
 import { activateSeason } from './seasons.js';
 import {
@@ -10,7 +11,6 @@ import {
   initQuoteReveals,
   loadTyped,
 } from './kinetic.js';
-
 import {
   initCursor,
   initSeedTrail,
@@ -20,6 +20,17 @@ import {
 } from './cursor.js';
 import { initAudio } from './audio.js';
 
+// ── Merge season-specific image metadata into each category ───
+// CATEGORY_IMAGES keys are "{seasonId}-{catId}" → { imageAlt, imageQuery }
+// microseasons.js is imported directly by renderer.js
+const ENRICHED_SEASONS = SEASONS.map(s => ({
+  ...s,
+  categories: s.categories.map(cat => ({
+    ...cat,
+    ...(CATEGORY_IMAGES[`${s.id}-${cat.id}`] || {}),
+  })),
+}));
+
 // ── Grain overlay ─────────────────────────────────────────────
 const grain = document.createElement('div');
 grain.className = 'grain-overlay';
@@ -28,7 +39,7 @@ document.body.appendChild(grain);
 
 // ── Render ────────────────────────────────────────────────────
 const root = document.getElementById('seasons-root');
-root.appendChild(renderAllSeasons(SEASONS));
+root.appendChild(renderAllSeasons(ENRICHED_SEASONS));
 
 // ── Determine initial season ──────────────────────────────────
 const validIds = SEASONS.map(s => s.id);
@@ -40,7 +51,6 @@ animateLoader(() => {
   activateSeason(initial, { instant: true });
 
   loadTyped(() => {
-    // re-run typed now that library is loaded
     const el = document.getElementById(`intro-${initial}`);
     if (el && !el.textContent.trim()) {
       import('./kinetic.js').then(m => m.typeIntro(initial, false));
@@ -54,7 +64,6 @@ animateLoader(() => {
   wireHash();
   wireHeader();
 
-  // Cursor & text interaction effects
   if (!('ontouchstart' in window)) {
     document.body.classList.add('custom-cursor');
     initCursor();
@@ -62,7 +71,7 @@ animateLoader(() => {
     initMagneticLetters();
     initProximityWarmth();
   }
-  initHoverShimmer(); // shimmer works on touch too (tap)
+  initHoverShimmer();
   initAudio();
 });
 

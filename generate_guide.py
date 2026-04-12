@@ -50,6 +50,33 @@ CATEGORIES = [
     {"id": "water",         "icon": "droplet",  "title": "Water Management"},
 ]
 
+# ─── Microseason calendar context (for researcher prompt) ─────────────────────
+# Seven cross-seasonal periods drawn from Noongar, Wurundjeri, Māori Maramataka,
+# Dja Dja Wurrung and Kaurna calendars. Provided to the researcher so generated
+# tasks are grounded in appropriate microseasonal timing.
+
+MICROSEASON_CONTEXT = """
+The year is divided into seven ecological microseasons observed across temperate
+SE Australia and Aotearoa New Zealand. When specifying timing, use these alongside
+calendar months to reflect indigenous and ecological precision:
+
+  1. Birak · Raumati (Dec 1 – Feb 14) — first-summer heat; Pohutukawa in bloom; Rehua/Antares governs
+  2. Iuk (Feb 15 – Apr 14) — eel migration; autumn equinox; soil temp falling through 18°C
+  3. Makuru · Paenga-whāwhā (Apr 15 – Jun 14) — breaking rains; mushroom flush; Matariki approaching
+  4. Waring · Hōtoke (Jun 15 – Aug 7) — wombat cold; Matariki rises at dawn; deep fungal season
+  5. Djilba · Guling (Aug 8 – Sep 21) — silver wattle in gold; orchids; kōwhai flowers; soil 8–10°C
+  6. Kambarang · Mahuru (Sep 22 – Nov 7) — blossoming earth; equinox; last frosts pass; whitebait run
+  7. Buath Gurru · Whiringa (Nov 8 – Nov 30) — kangaroo grass flowers; Rehua climbing; Pohutukawa reddens
+
+Key phenological anchors for timing:
+  - Matariki (Pleiades) heliacal rise: late June (~Jun 22–30) — Māori New Year; start of planning season
+  - Silver wattle (Acacia dealbata) flowers: July–September (peak Aug–Sep) — spring approach signal
+  - Mānuka (Leptospermum scoparium) flowers: October–January — mycorrhizal host at peak activity
+  - Kangaroo grass (Themeda triandra) seeds: December–April — native pasture health indicator
+  - Pōhutukawa (Metrosideros excelsa) flowers: mid-late December — peak summer in NZ
+  - Rehua (Antares/Scorpius): prominent in summer night sky — Māori star of abundance and energy
+"""
+
 # ─── Claude client ────────────────────────────────────────────────────────────
 
 client = anthropic.Anthropic()
@@ -87,6 +114,12 @@ Prioritise practices that are:
 - Specific to temperate AU/NZ conditions (Otago, Canterbury, Hawke's Bay, Victoria, Tasmania, SE SA)
 - Naming actual local cultivars, native plants (e.g. kānuka, mānuka, puha), and regional suppliers where relevant
 - Incorporating indigenous land stewardship knowledge where appropriate
+
+The ecological calendar for this region:
+{MICROSEASON_CONTEXT}
+
+When giving timing for tasks, reference both calendar dates AND the relevant microseasonal
+period name where appropriate (e.g. "Early Makuru / mid-April").
 
 For EACH of these five categories, provide 2–4 specific tasks:
 1. Soil Preparation (include biostimulants, fungal inoculants, EM1, biochar where seasonal)
@@ -144,10 +177,12 @@ def format_season_data(season: dict, research: str) -> dict:
                 "icon": "shovel",
                 "title": "Soil Preparation",
                 "priority": "high",
+                "imageAlt": "One descriptive sentence of a natural scene (no people, minimal man-made objects) that shows the soil preparation ACT happening this season — e.g. macro view of mycelial threads in autumn soil.",
+                "imageQuery": "3-5 Unsplash search keywords for the above scene",
                 "tasks": [
                     {
                         "title": "Task Title",
-                        "timing": "Early March",
+                        "timing": "Early March / Makuru",
                         "duration": "2–3 hours",
                         "description": "Full task description here.",
                         "tools": ["tool1", "tool2"],
@@ -196,6 +231,8 @@ Rules:
 - Use ALL FIVE categories. If research is sparse for one, invent 2 plausible tasks.
 - "priority" must be "high", "medium", or "low" — set soil-prep and planting to "high", rest to "medium"
 - Keep "id", "months", and "heroGradient" exactly as given in the schema example
+- For "imageAlt": write a single descriptive sentence of a NATURAL SCENE (no people, no prominent man-made objects) that visually represents the category's act happening in this specific season. Focus on natural processes: root systems, fungi, decomposition, water flow, plant growth. Different for each season.
+- For "imageQuery": provide 3–5 Unsplash/Pexels search keywords as a comma-separated string matching the imageAlt scene.
 - Output ONLY the JSON object, nothing else"""
         }]
     ) as stream:

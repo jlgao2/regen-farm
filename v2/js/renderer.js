@@ -216,9 +216,9 @@ function renderBody(s) {
   bigWrap.appendChild(big);
   body.appendChild(bigWrap);
 
-  // Categories
+  // Categories — pass seasonId so images are season-specific
   const list = el('div', { class: 'categories-list' });
-  s.categories.forEach((cat, i) => list.appendChild(renderCategory(cat, i)));
+  s.categories.forEach((cat, i) => list.appendChild(renderCategory(cat, i, s.id)));
   body.appendChild(list);
 
   // Checklist
@@ -227,7 +227,7 @@ function renderBody(s) {
   return body;
 }
 
-function renderCategory(cat, index) {
+function renderCategory(cat, index, seasonId) {
   const block = el('div', { class: 'category-block reveal-up', style: `--d:${index * 80}` });
 
   const trigger = el('button', { class: 'category-trigger', 'aria-expanded': index === 0 ? 'true' : 'false' });
@@ -254,14 +254,18 @@ function renderCategory(cat, index) {
     trigger.setAttribute('aria-expanded', 'true');
   }
 
-  // ── Category banner image ─────────────────────────────────────
-  const imgWrap = el('div', { class: 'category-img-wrap', 'aria-hidden': 'true' });
+  // ── Category banner image (season-specific) ───────────────────
+  // Image path: cat-{season}-{category}.jpg  e.g. cat-autumn-soil-prep.jpg
+  // Falls back gracefully via onerror → img.remove()
+  const imgWrap = el('div', { class: 'category-img-wrap' });
+  if (cat.imageAlt) imgWrap.setAttribute('aria-label', cat.imageAlt);
+  else imgWrap.setAttribute('aria-hidden', 'true');
   const img = el('img', {
     class: 'category-img',
-    alt: '',
+    alt: cat.imageAlt || '',
     loading: 'lazy',
     decoding: 'async',
-    'data-src': `../assets/images/cat-${cat.id}.jpg`,
+    'data-src': `../assets/images/cat-${seasonId}-${cat.id}.jpg`,
   });
   // Lazy-load via IntersectionObserver (set in kinetic.js) or
   // fall back to direct src if already in view
