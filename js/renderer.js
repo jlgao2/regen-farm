@@ -1,331 +1,445 @@
-/* ============================================================
-   RENDERER — Pure DOM construction from data
-   ============================================================ */
+/* ── Renderer — builds DOM from data, no side effects ── */
 
-/**
- * Build and return the full DOM for all seasons.
- * Called once by main.js; output inserted into #seasons-container.
- */
+import { MICROSEASONS, getCurrentMicroseason } from './microseasons.js';
+
 export function renderAllSeasons(seasons) {
-  const fragment = document.createDocumentFragment();
-  seasons.forEach(season => {
-    fragment.appendChild(renderSeasonSection(season));
-  });
-  return fragment;
+  const frag = document.createDocumentFragment();
+  seasons.forEach(s => frag.appendChild(renderSeason(s)));
+  return frag;
 }
 
-function renderSeasonSection(season) {
+function renderSeason(s) {
   const section = el('section', {
-    class: `season-section${season.id === 'spring' ? ' is-active' : ''}`,
-    id: `season-${season.id}`,
-    'data-season': season.id,
-    role: 'region',
-    'aria-label': `${season.label} — ${season.months}`,
+    class: `season-section${s.id === 'autumn' ? ' is-active' : ''}`,
+    id: `season-${s.id}`,
+    'data-season': s.id,
   });
-
-  section.appendChild(renderHero(season));
-  section.appendChild(renderSeasonBody(season));
+  section.appendChild(renderHero(s));
+  section.appendChild(renderMarqueeDivider(s));
+  section.appendChild(renderMicroseasons(s.id));
+  section.appendChild(renderBody(s));
+  section.appendChild(renderQuote(s));
   return section;
 }
 
 // ── Hero ──────────────────────────────────────────────────────
 
-function renderHero(season) {
+function renderHero(s) {
   const hero = el('div', { class: 'season-hero' });
 
-  // Background
-  const bg = el('div', {
-    class: `hero-bg ${season.heroGradient}`,
-    'aria-hidden': 'true',
+  // bg image
+  hero.appendChild(el('div', { class: 'hero-image', 'aria-hidden': 'true' }));
+
+  // eyebrow
+  const eyebrow = el('div', { class: 'hero-eyebrow' });
+  eyebrow.textContent = `${s.id.toUpperCase()} · AU/NZ`;
+  hero.appendChild(eyebrow);
+
+  // title — split into two halves for scroll diverge effect
+  const titleWrap = el('div', { class: 'hero-title-wrap' });
+  const label = s.label.toUpperCase();
+  const mid = Math.ceil(label.length / 2);
+
+  // Each char gets a span for the scatter-in animation
+  const title = el('div', { class: 'hero-title', 'aria-label': s.label });
+  const leftSpan = el('span', { class: 'hero-title-left', 'aria-hidden': 'true' });
+  const rightSpan = el('span', { class: 'hero-title-right', 'aria-hidden': 'true' });
+
+  label.slice(0, mid).split('').forEach((ch, i) => {
+    const span = el('span', { class: 'split-char', style: `--i:${i}` });
+    span.textContent = ch === ' ' ? '\u00A0' : ch;
+    leftSpan.appendChild(span);
+  });
+  label.slice(mid).split('').forEach((ch, i) => {
+    const span = el('span', { class: 'split-char', style: `--i:${i + mid}` });
+    span.textContent = ch === ' ' ? '\u00A0' : ch;
+    rightSpan.appendChild(span);
   });
 
-  const texture = el('div', { class: 'hero-texture', 'aria-hidden': 'true' });
-  const overlay = el('div', { class: 'hero-overlay', 'aria-hidden': 'true' });
+  title.append(leftSpan, rightSpan);
+  titleWrap.appendChild(title);
+  hero.appendChild(titleWrap);
 
-  // Content
-  const content = el('div', { class: 'hero-content' });
+  // meta bar
+  const meta = el('div', { class: 'hero-meta' });
+
+  const taglineWrap = el('div', { class: 'line-reveal' });
+  const taglineInner = el('div', { class: 'line-reveal-inner' });
+  const tagline = el('p', { class: 'hero-tagline' });
+  tagline.textContent = s.tagline;
+  taglineInner.appendChild(tagline);
+  taglineWrap.appendChild(taglineInner);
 
   const months = el('span', { class: 'hero-months' });
-  months.textContent = season.months;
+  months.textContent = s.months;
 
-  const title = el('h1', { class: 'hero-title' });
-  title.textContent = season.label;
+  meta.append(taglineWrap, months);
+  hero.appendChild(meta);
 
-  const tagline = el('p', { class: 'hero-tagline' });
-  tagline.textContent = season.tagline;
-
-  const introWrap = el('div', { class: 'hero-intro-wrap' });
-  const introEl = el('span', {
+  // intro typed
+  const introBlock = el('div', { class: 'hero-intro-block' });
+  const intro = el('p', {
     class: 'hero-intro',
-    id: `hero-intro-${season.id}`,
-    'data-intro-text': season.intro,
+    id: `intro-${s.id}`,
+    'data-text': s.intro,
   });
-  introWrap.appendChild(introEl);
+  introBlock.appendChild(intro);
+  hero.appendChild(introBlock);
 
-  content.append(months, title, tagline, introWrap);
-
-  // Scroll hint
-  const scrollHint = el('div', { class: 'hero-scroll-hint', 'aria-hidden': 'true' });
-  scrollHint.innerHTML = `
-    <span>Scroll</span>
-    <svg class="scroll-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-      <polyline points="6 9 12 15 18 9"/>
-    </svg>`;
-
-  hero.append(bg, texture, overlay, content, scrollHint);
   return hero;
 }
 
-// ── Season Body ───────────────────────────────────────────────
+// ── Marquee Divider ───────────────────────────────────────────
 
-function renderSeasonBody(season) {
+function renderMarqueeDivider(s) {
+  const div = el('div', { class: 'marquee-divider' });
+  const items = ['SOIL', 'WATER', 'SEED', 'COMPOST', 'REST', 'OBSERVE', 'TEND', 'RETURN'];
+  const doubled = [...items, ...items];
+
+  const track = el('div', { class: 'marquee-track' });
+  doubled.forEach(word => {
+    const span = el('span');
+    span.textContent = word;
+    const dot = el('span', { class: 'marquee-dot' });
+    dot.textContent = '·';
+    track.append(span, dot);
+  });
+
+  div.appendChild(track);
+  return div;
+}
+
+// ── Microseasons ──────────────────────────────────────────────
+
+function renderMicroseasons(seasonId) {
+  const current = getCurrentMicroseason();
+  const relevant = MICROSEASONS.filter(ms => ms.standardSeasons.includes(seasonId));
+
+  const section = el('div', { class: 'microseason-section reveal-up', style: '--d:60' });
+
+  // Section header
+  const header = el('div', { class: 'microseason-header' });
+  const kicker = el('p', { class: 'section-kicker' });
+  kicker.textContent = 'Indigenous Calendar';
+  const heading = el('h2', { class: 'microseason-heading' });
+  heading.textContent = 'Reading the Microseasons';
+  const sub = el('p', { class: 'microseason-sub' });
+  sub.textContent = 'Seven periods drawn from Noongar, Wurundjeri, Dja Dja Wurrung, Kaurna and Māori seasonal knowledge — temperate SE Australia and Aotearoa New Zealand.';
+  header.append(kicker, heading, sub);
+  section.appendChild(header);
+
+  // Cards for each relevant microseasonal period
+  const grid = el('div', { class: 'microseason-grid' });
+  relevant.forEach(ms => {
+    const isCurrent = ms.id === current.id;
+    const card = el('div', {
+      class: `microseason-card${isCurrent ? ' is-current' : ''}`,
+    });
+
+    // Date range
+    const dateStr = formatDateRange(ms.start, ms.end);
+    const dateBadge = el('span', { class: 'ms-date' });
+    dateBadge.textContent = dateStr;
+    card.appendChild(dateBadge);
+
+    if (isCurrent) {
+      const nowPill = el('span', { class: 'ms-now-pill' });
+      nowPill.textContent = 'NOW';
+      card.appendChild(nowPill);
+    }
+
+    // Name
+    const name = el('h3', { class: 'ms-name' });
+    name.textContent = ms.name;
+    card.appendChild(name);
+
+    const subtitle = el('p', { class: 'ms-subtitle' });
+    subtitle.textContent = ms.subtitle;
+    card.appendChild(subtitle);
+
+    // Heritage sources
+    const heritage = el('div', { class: 'ms-heritage' });
+    ms.heritage.forEach(h => {
+      const tag = el('span', { class: 'ms-heritage-tag' });
+      tag.innerHTML = `<em>${h.term}</em> — ${h.nation}`;
+      heritage.appendChild(tag);
+    });
+    card.appendChild(heritage);
+
+    // Indicators (collapsible)
+    const indicators = el('ul', { class: 'ms-indicators' });
+    ms.indicators.slice(0, 4).forEach(ind => {
+      const li = el('li');
+      li.textContent = ind;
+      indicators.appendChild(li);
+    });
+    card.appendChild(indicators);
+
+    // Tohu
+    const tohu = el('p', { class: 'ms-tohu' });
+    tohu.textContent = ms.tohu;
+    card.appendChild(tohu);
+
+    // Farming note
+    const farming = el('p', { class: 'ms-farming' });
+    farming.textContent = ms.farming;
+    card.appendChild(farming);
+
+    grid.appendChild(card);
+  });
+
+  section.appendChild(grid);
+  return section;
+}
+
+const MONTH_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+function formatDateRange(start, end) {
+  return `${MONTH_SHORT[start.month - 1]} ${start.day} — ${MONTH_SHORT[end.month - 1]} ${end.day}`;
+}
+
+// ── Body ──────────────────────────────────────────────────────
+
+function renderBody(s) {
   const body = el('div', { class: 'season-body' });
 
-  body.appendChild(renderTimeline(season));
-  body.appendChild(renderCategoriesMain(season));
-  body.appendChild(renderSidebar(season));
-  body.appendChild(renderQuote(season));
+  // Heading
+  const kicker = el('p', { class: 'section-kicker reveal-up' });
+  kicker.textContent = s.months;
+  const heading = el('h2', { class: 'section-heading reveal-up', style: '--d:100' });
+  heading.textContent = `${s.label} Practices`;
+  body.append(kicker, heading);
+
+  // Big decorative word
+  const bigWrap = el('div', { class: 'big-word-wrap' });
+  const big = el('div', { class: 'big-word', 'aria-hidden': 'true' });
+  big.textContent = s.label.toUpperCase();
+  bigWrap.appendChild(big);
+  body.appendChild(bigWrap);
+
+  // Categories — pass seasonId so images are season-specific
+  const list = el('div', { class: 'categories-list' });
+  s.categories.forEach((cat, i) => list.appendChild(renderCategory(cat, i, s.id)));
+  body.appendChild(list);
+
+  // Checklist
+  body.appendChild(renderChecklist(s));
 
   return body;
 }
 
-// ── Timeline ─────────────────────────────────────────────────
+function renderCategory(cat, index, seasonId) {
+  const block = el('div', { class: 'category-block reveal-up', style: `--d:${index * 80}` });
 
-function renderTimeline(season) {
-  const strip = el('div', { class: 'timeline-strip animate-on-scroll' });
+  const trigger = el('button', { class: 'category-trigger', 'aria-expanded': index === 0 ? 'true' : 'false' });
 
-  const header = el('div', { class: 'timeline-header' });
-  const title = el('span', { class: 'timeline-title' });
-  title.textContent = 'Task Timeline';
-  header.appendChild(title);
+  const num = el('span', { class: 'cat-number' });
+  num.textContent = String(index + 1).padStart(2, '0');
 
-  const track = el('div', { class: 'timeline-track' });
-  const line = el('div', { class: 'timeline-line' });
-  const items = el('div', { class: 'timeline-items' });
+  const title = el('span', { class: 'cat-title' });
+  title.textContent = cat.title;
 
-  // Collect all tasks with timing info
-  const allTasks = [];
-  season.categories.forEach(cat => {
-    cat.tasks.forEach(task => {
-      if (task.timing) {
-        allTasks.push({ title: task.title, timing: task.timing, category: cat.id });
-      }
-    });
+  const priority = el('span', {
+    class: `cat-priority priority-${cat.priority}`,
   });
+  priority.textContent = cat.priority;
 
-  // Spread them evenly across the timeline (10% to 90%)
-  allTasks.forEach((task, i) => {
-    const pct = allTasks.length === 1
-      ? 50
-      : 10 + (i / (allTasks.length - 1)) * 80;
+  const toggle = el('span', { class: 'cat-toggle', 'aria-hidden': 'true' });
+  toggle.textContent = '+';
 
-    const item = el('div', {
-      class: 'timeline-item animate-on-scroll',
-      'data-title': task.title,
-      style: `left: ${pct}%; --anim-delay: ${i * 60 + 100}`,
-    });
+  trigger.append(num, title, priority, toggle);
 
-    const dot = el('div', { class: 'timeline-dot' });
-    const label = el('div', { class: 'timeline-label' });
-    label.textContent = task.timing;
+  const bodyEl = el('div', { class: `category-body${index === 0 ? ' is-open' : ''}` });
+  if (index === 0) {
+    block.classList.add('is-open');
+    trigger.setAttribute('aria-expanded', 'true');
+  }
 
-    item.append(dot, label);
-    items.appendChild(item);
+  // ── Category banner image (season-specific) ───────────────────
+  // Image path: cat-{season}-{category}.jpg  e.g. cat-autumn-soil-prep.jpg
+  // Falls back gracefully via onerror → img.remove()
+  const imgWrap = el('div', { class: 'category-img-wrap' });
+  if (cat.imageAlt) imgWrap.setAttribute('aria-label', cat.imageAlt);
+  else imgWrap.setAttribute('aria-hidden', 'true');
+  const img = el('img', {
+    class: 'category-img',
+    alt: cat.imageAlt || '',
+    loading: 'lazy',
+    decoding: 'async',
+    'data-src': `assets/images/cat-${seasonId}-${cat.id}.jpg`,
   });
+  // Lazy-load via IntersectionObserver (set in kinetic.js) or
+  // fall back to direct src if already in view
+  imgWrap.appendChild(img);
 
-  track.append(line, items);
-  strip.append(header, track);
-  return strip;
-}
+  const imgLabel = el('span', { class: 'category-img-label' });
+  imgLabel.textContent = cat.title;
+  imgWrap.appendChild(imgLabel);
 
-// ── Categories Main ───────────────────────────────────────────
+  bodyEl.appendChild(imgWrap);
 
-function renderCategoriesMain(season) {
-  const main = el('div', { class: 'categories-main' });
-
-  const heading = el('div', { class: 'section-heading animate-on-scroll' });
-  const label = el('p', { class: 'section-label' });
-  label.textContent = season.months;
-  const title = el('h2', { class: 'section-title' });
-  title.textContent = `${season.label} Practices`;
-  heading.append(label, title);
-
-  const grid = el('div', { class: 'categories-grid' });
-
-  season.categories.forEach((cat, i) => {
-    const card = renderCategoryCard(cat, i);
-    grid.appendChild(card);
-  });
-
-  main.append(heading, grid);
-  return main;
-}
-
-function renderCategoryCard(cat, index) {
-  const details = el('details', {
-    class: 'category-card animate-on-scroll',
-    style: `--anim-delay: ${index * 80}`,
-  });
-
-  if (index === 0) details.setAttribute('open', '');
-
-  const summary = el('summary', { class: 'card-header' });
-
-  // Icon
-  const iconWrap = el('div', { class: 'card-icon', 'aria-hidden': 'true' });
-  iconWrap.innerHTML = `<svg><use href="#icon-${cat.icon}"/></svg>`;
-
-  // Meta
-  const meta = el('div', { class: 'card-meta' });
-  const cardTitle = el('h3', { class: 'card-title' });
-  cardTitle.textContent = cat.title;
-  const count = el('p', { class: 'card-task-count' });
-  count.textContent = `${cat.tasks.length} task${cat.tasks.length !== 1 ? 's' : ''}`;
-  meta.append(cardTitle, count);
-
-  // Right: badge + chevron
-  const right = el('div', { class: 'card-right' });
-  const badge = el('span', { class: `badge badge--${cat.priority}` });
-  badge.textContent = cat.priority;
-  const chevron = el('div', { class: 'card-chevron', 'aria-hidden': 'true' });
-  chevron.innerHTML = `<svg><use href="#icon-chevron-down"/></svg>`;
-  right.append(badge, chevron);
-
-  summary.append(iconWrap, meta, right);
-
-  // Body
-  const body = el('div', { class: 'card-body' });
+  // ── Task list ─────────────────────────────────────────────────
   const taskList = el('div', { class: 'task-list' });
+  cat.tasks.forEach((task, ti) => taskList.appendChild(renderTask(task, ti)));
+  bodyEl.appendChild(taskList);
 
-  cat.tasks.forEach(task => {
-    taskList.appendChild(renderTaskItem(task));
+  trigger.addEventListener('click', () => {
+    const isOpen = block.classList.toggle('is-open');
+    bodyEl.classList.toggle('is-open', isOpen);
+    trigger.setAttribute('aria-expanded', String(isOpen));
+    // Lazy-load the image when section opens
+    if (isOpen) loadCategoryImg(img);
   });
 
-  body.appendChild(taskList);
-  details.append(summary, body);
-  return details;
-}
+  // Load immediately if starts open
+  if (index === 0) loadCategoryImg(img);
 
-function renderTaskItem(task) {
-  const item = el('div', { class: 'task-item' });
-
-  // Header row
-  const header = el('div', { class: 'task-header' });
-  const title = el('h4', { class: 'task-title' });
-  title.textContent = task.title;
-
-  const pills = el('div', { class: 'task-pills' });
-  if (task.timing) {
-    const tPill = el('span', { class: 'task-pill' });
-    tPill.textContent = task.timing;
-    pills.appendChild(tPill);
-  }
-  if (task.duration) {
-    const dPill = el('span', { class: 'task-pill' });
-    dPill.textContent = task.duration;
-    pills.appendChild(dPill);
-  }
-
-  header.append(title, pills);
-
-  // Description
-  const desc = el('p', { class: 'task-description' });
-  desc.textContent = task.description;
-
-  item.append(header, desc);
-
-  // Tools
-  if (task.tools && task.tools.length) {
-    const toolsWrap = el('div', { class: 'task-tools' });
-    task.tools.forEach(tool => {
-      const tag = el('span', { class: 'tool-tag' });
-      tag.innerHTML = `<svg width="11" height="11"><use href="#icon-tool"/></svg>${tool}`;
-      toolsWrap.appendChild(tag);
-    });
-    item.appendChild(toolsWrap);
-  }
-
-  // Tip
-  if (task.tip) {
-    const tip = el('div', { class: 'task-tip' });
-    tip.innerHTML = `<strong>Pro Tip</strong>${task.tip}`;
-    item.appendChild(tip);
-  }
-
-  return item;
-}
-
-// ── Sidebar / Checklist ───────────────────────────────────────
-
-function renderSidebar(season) {
-  const sidebar = el('aside', {
-    class: 'season-sidebar animate-on-scroll',
-    style: '--anim-delay: 200',
-  });
-
-  const card = el('div', { class: 'checklist-card' });
-  const title = el('h3', { class: 'checklist-title' });
-  title.textContent = `${season.label} Checklist`;
-
-  const items = el('ul', { class: 'checklist-items', role: 'list' });
-
-  season.checklist.forEach((text, i) => {
-    const li = el('li', {
-      class: 'checklist-item',
-      role: 'listitem',
-      tabindex: '0',
-    });
-
-    const box = el('div', { class: 'checklist-box', 'aria-hidden': 'true' });
-    box.innerHTML = `<svg><use href="#icon-check"/></svg>`;
-
-    const label = el('span', { class: 'checklist-text' });
-    label.textContent = text;
-
-    li.append(box, label);
-
-    // Toggle checked state
-    const toggle = () => li.classList.toggle('is-checked');
-    li.addEventListener('click', toggle);
-    li.addEventListener('keydown', e => {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
-    });
-
-    items.appendChild(li);
-  });
-
-  card.append(title, items);
-  sidebar.appendChild(card);
-  return sidebar;
-}
-
-// ── Quote Block ───────────────────────────────────────────────
-
-function renderQuote(season) {
-  const block = el('blockquote', {
-    class: 'quote-block animate-on-scroll',
-    cite: 'seasonal-quote',
-  });
-
-  const mark = el('span', { class: 'quote-mark', 'aria-hidden': 'true' });
-  mark.textContent = '\u201C';
-
-  const text = el('p', { class: 'quote-text' });
-  text.textContent = season.quote.text;
-
-  const author = el('footer', { class: 'quote-author' });
-  author.textContent = season.quote.author;
-
-  block.append(mark, text, author);
+  block.append(trigger, bodyEl);
   return block;
 }
 
-// ── Utility ───────────────────────────────────────────────────
+function loadCategoryImg(img) {
+  if (img.dataset.loaded) return;
+  img.dataset.loaded = '1';
+  img.onload = () => img.classList.add('is-loaded');
+  img.onerror = () => img.remove();   // gracefully drop missing image
+  img.src = img.dataset.src;
+}
+
+function renderTask(task, index) {
+  const row = el('div', { class: 'task-row' });
+
+  const idx = el('span', { class: 'task-index' });
+  idx.textContent = String(index + 1).padStart(2, '0');
+
+  const content = el('div', { class: 'task-content' });
+
+  const title = el('h3', { class: 'task-title' });
+  title.textContent = task.title;
+
+  const chips = el('div', { class: 'task-chips' });
+  if (task.timing) {
+    const c = el('span', { class: 'chip chip--timing' });
+    c.textContent = task.timing;
+    chips.appendChild(c);
+  }
+  if (task.duration) {
+    const c = el('span', { class: 'chip' });
+    c.textContent = task.duration;
+    chips.appendChild(c);
+  }
+
+  const desc = el('p', { class: 'task-desc' });
+  desc.textContent = task.desc;
+
+  content.append(title, chips, desc);
+
+  if (task.tools?.length) {
+    const tools = el('div', { class: 'task-tools' });
+    task.tools.forEach(t => {
+      const chip = el('span', { class: 'tool-chip' });
+      chip.textContent = t;
+      tools.appendChild(chip);
+    });
+    content.appendChild(tools);
+  }
+
+  if (task.tip) {
+    const tip = el('div', { class: 'task-tip' });
+    const tipLabel = el('span', { class: 'task-tip-label' });
+    tipLabel.textContent = 'Field note';
+    tip.append(tipLabel, document.createTextNode(task.tip));
+    content.appendChild(tip);
+  }
+
+  row.append(idx, content);
+  return row;
+}
+
+function renderChecklist(s) {
+  const section = el('div', { class: 'checklist-section reveal-up', style: '--d:200' });
+
+  const kicker = el('p', { class: 'section-kicker' });
+  kicker.textContent = `${s.label} Checklist`;
+  const heading = el('h3', { class: 'section-heading', style: 'font-size: clamp(1.4rem, 3vw, 2.2rem); margin-bottom: 1.5rem;' });
+  heading.textContent = 'Essential Tasks';
+
+  const grid = el('div', { class: 'checklist-grid' });
+  s.checklist.forEach(text => {
+    const item = el('div', { class: 'check-item', tabindex: '0', role: 'checkbox', 'aria-checked': 'false' });
+    const box = el('div', { class: 'check-box', 'aria-hidden': 'true' });
+    const label = el('span', { class: 'check-label' });
+    label.textContent = text;
+    item.append(box, label);
+
+    const toggle = () => {
+      const checked = item.classList.toggle('is-checked');
+      item.setAttribute('aria-checked', String(checked));
+    };
+    item.addEventListener('click', toggle);
+    item.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
+    });
+
+    grid.appendChild(item);
+  });
+
+  section.append(kicker, heading, grid);
+  return section;
+}
+
+function renderQuote(s) {
+  // quote may be a plain string or {text, author} object
+  const quoteText = typeof s.quote === 'string' ? s.quote : (s.quote?.text || '');
+  const quoteAuthor = typeof s.quote === 'object' ? s.quote?.author : null;
+
+  const section = el('div', { class: 'quote-section' });
+
+  // Opening glyph
+  const glyph = el('div', { class: 'quote-glyph', 'aria-hidden': 'true' });
+  glyph.textContent = '"';
+  section.appendChild(glyph);
+
+  // Blockquote — words split for staggered reveal
+  const bq = el('blockquote', { class: 'quote-text' });
+  const words = quoteText.split(' ');
+  words.forEach((word, i) => {
+    const wrapper = el('span', { class: 'quote-word-wrap' });
+    const span = el('span', {
+      class: 'quote-word',
+      style: `--wi:${i}`,
+    });
+    span.textContent = word;
+    wrapper.appendChild(span);
+    // Space between words (not after last)
+    if (i < words.length - 1) {
+      wrapper.appendChild(document.createTextNode('\u00A0'));
+    }
+    bq.appendChild(wrapper);
+  });
+  section.appendChild(bq);
+
+  // Rule
+  const rule = el('div', { class: 'quote-rule' });
+  section.appendChild(rule);
+
+  // Attribution
+  if (quoteAuthor) {
+    const cite = el('cite', { class: 'quote-author' });
+    cite.textContent = `— ${quoteAuthor}`;
+    section.appendChild(cite);
+  } else {
+    const tradition = el('p', { class: 'quote-tradition' });
+    tradition.textContent = 'Te Ao Māori · Southern Hemisphere';
+    section.appendChild(tradition);
+  }
+
+  return section;
+}
+
+// ── Util ──────────────────────────────────────────────────────
 
 function el(tag, attrs = {}) {
-  const element = document.createElement(tag);
-  Object.entries(attrs).forEach(([key, val]) => {
-    element.setAttribute(key, val);
-  });
-  return element;
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v);
+  return e;
 }

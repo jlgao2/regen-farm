@@ -1,65 +1,100 @@
-/* ============================================================
-   MAIN — Orchestration entry point
-   ============================================================ */
+/* ── Main ── */
 
 import { SEASONS } from './data.js';
+import { CATEGORY_IMAGES } from './data_enrich.js';
 import { renderAllSeasons } from './renderer.js';
 import { activateSeason } from './seasons.js';
-import { initAnimations, initWheelLabels } from './animations.js';
+import {
+  animateLoader,
+  initRevealObserver,
+  initBigWordParallax,
+  initQuoteReveals,
+  loadTyped,
+} from './kinetic.js';
+import {
+  initCursor,
+  initSeedTrail,
+  initMagneticLetters,
+  initHoverShimmer,
+  initProximityWarmth,
+} from './cursor.js';
+import { initAudio } from './audio.js';
 
-document.addEventListener('DOMContentLoaded', () => {
-  // ── 1. Render all season sections into the DOM ──
-  const container = document.getElementById('seasons-container');
-  if (container) {
-    container.appendChild(renderAllSeasons(SEASONS));
+// ── Merge season-specific image metadata into each category ───
+// CATEGORY_IMAGES keys are "{seasonId}-{catId}" → { imageAlt, imageQuery }
+// microseasons.js is imported directly by renderer.js
+const ENRICHED_SEASONS = SEASONS.map(s => ({
+  ...s,
+  categories: s.categories.map(cat => ({
+    ...cat,
+    ...(CATEGORY_IMAGES[`${s.id}-${cat.id}`] || {}),
+  })),
+}));
+
+// ── Grain overlay ─────────────────────────────────────────────
+const grain = document.createElement('div');
+grain.className = 'grain-overlay';
+grain.setAttribute('aria-hidden', 'true');
+document.body.appendChild(grain);
+
+// ── Render ────────────────────────────────────────────────────
+const root = document.getElementById('seasons-root');
+root.appendChild(renderAllSeasons(ENRICHED_SEASONS));
+
+// ── Determine initial season ──────────────────────────────────
+const validIds = SEASONS.map(s => s.id);
+const hashId = location.hash.replace('#', '').toLowerCase();
+const initial = validIds.includes(hashId) ? hashId : 'autumn';
+
+// ── Boot sequence ─────────────────────────────────────────────
+animateLoader(() => {
+  activateSeason(initial, { instant: true });
+
+  loadTyped(() => {
+    const el = document.getElementById(`intro-${initial}`);
+    if (el && !el.textContent.trim()) {
+      import('./kinetic.js').then(m => m.typeIntro(initial, false));
+    }
+  });
+
+  initRevealObserver();
+  initBigWordParallax();
+  initQuoteReveals();
+  wireNav();
+  wireHash();
+  wireHeader();
+
+  if (!('ontouchstart' in window)) {
+    document.body.classList.add('custom-cursor');
+    initCursor();
+    initSeedTrail();
+    initMagneticLetters();
+    initProximityWarmth();
   }
+  initHoverShimmer();
+  initAudio();
+});
 
-  // ── 2. Determine initial season from URL hash ──
-  const validIds = SEASONS.map(s => s.id);
-  const hashId = window.location.hash.replace('#', '').toLowerCase();
-  const initialSeason = validIds.includes(hashId) ? hashId : 'spring';
-
-  // ── 3. Activate initial season (no animation) ──
-  activateSeason(initialSeason, { skipAnimation: true });
-
-  // ── 4. Wire nav pill click handlers ──
-  document.querySelectorAll('.season-pill').forEach(pill => {
-    pill.addEventListener('click', () => {
-      activateSeason(pill.dataset.season);
-    });
+// ── Nav wiring ────────────────────────────────────────────────
+function wireNav() {
+  document.querySelectorAll('.nav-btn').forEach(btn => {
+    btn.addEventListener('click', () => activateSeason(btn.dataset.season));
   });
+}
 
-  // ── 5. Wire custom event from season wheel ──
-  document.body.addEventListener('switchseason', e => {
-    if (e.detail?.id) activateSeason(e.detail.id);
-  });
-
-  // ── 6. Handle browser back/forward hash changes ──
+function wireHash() {
   window.addEventListener('hashchange', () => {
-    const id = window.location.hash.replace('#', '').toLowerCase();
+    const id = location.hash.replace('#', '').toLowerCase();
     if (validIds.includes(id)) activateSeason(id);
   });
+}
 
-  // ── 7. Init animations ──
-  initAnimations();
-  initWheelLabels();
-
-  // ── 8. Dismiss loading overlay ──
-  const overlay = document.getElementById('loading-overlay');
-  if (overlay) {
-    setTimeout(() => {
-      overlay.classList.add('is-hidden');
-      // Remove from DOM after transition
-      overlay.addEventListener('transitionend', () => overlay.remove(), { once: true });
-    }, 800);
-  }
-
-  // ── 9. Header scroll shadow ──
-  const header = document.getElementById('site-header');
-  if (header) {
-    const shadow = '0 2px 20px rgba(0,0,0,0.10)';
-    window.addEventListener('scroll', () => {
-      header.style.boxShadow = window.scrollY > 10 ? shadow : '';
-    }, { passive: true });
-  }
-});
+function wireHeader() {
+  const nav = document.getElementById('site-nav');
+  if (!nav) return;
+  window.addEventListener('scroll', () => {
+    nav.style.borderBottomColor = window.scrollY > 20
+      ? 'rgba(240,237,230,0.14)'
+      : 'rgba(240,237,230,0.1)';
+  }, { passive: true });
+}

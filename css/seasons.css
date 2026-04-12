@@ -1,102 +1,80 @@
-/* ============================================================
-   SEASONS — Per-season color theme overrides
-   Applied to <body> via data-active-season and class
-   ============================================================ */
+/* ── Season accent + background colours ── */
 
-/* ── Spring ── soft greens, cream, golden yellow */
-body.season--spring,
-body[data-active-season="spring"] {
-  --color-primary:    #4a7c59;
-  --color-secondary:  #a8c5a0;
-  --color-accent:     #e8a838;
-  --color-bg:         #f5f0e8;
-  --color-bg-alt:     #ede6d4;
-  --color-surface:    #faf7f0;
-  --color-text:       #2d2a1e;
-  --color-text-muted: #7a7060;
-  --color-border:     rgba(74, 124, 89, 0.15);
+/* Autumn — warm amber earth, like red-brown volcanic loam at dusk */
+[data-season="autumn"] {
+  --accent:    #c8722a;
+  --accent-dim: rgba(200,114,42,0.15);
+  --bg-tint:   #1a1209;   /* deep amber-brown */
+  --fg-dim:    rgba(240, 237, 230, 0.52);
 }
 
-/* ── Summer ── warm ochre, deep green, sky blue */
-body.season--summer,
-body[data-active-season="summer"] {
-  --color-primary:    #2d6a4f;
-  --color-secondary:  #74c69d;
-  --color-accent:     #e07a30;
-  --color-bg:         #f0ede3;
-  --color-bg-alt:     #e5e0d3;
-  --color-surface:    #f8f5ec;
-  --color-text:       #1a2e22;
-  --color-text-muted: #5a7060;
-  --color-border:     rgba(45, 106, 79, 0.15);
+/* Winter — cool blue-slate, like frost on Canterbury Plains */
+[data-season="winter"] {
+  --accent:    #6a9cc0;
+  --accent-dim: rgba(106,156,192,0.15);
+  --bg-tint:   #0e1318;   /* deep blue-grey */
+  --fg-dim:    rgba(220, 230, 240, 0.52);
 }
 
-/* ── Autumn ── burnt sienna, amber, deep brown */
-body.season--autumn,
-body[data-active-season="autumn"] {
-  --color-primary:    #a0522d;
-  --color-secondary:  #d4956a;
-  --color-accent:     #d4af37;
-  --color-bg:         #f2ebe0;
-  --color-bg-alt:     #e8dece;
-  --color-surface:    #f7f2e8;
-  --color-text:       #2e1f0e;
-  --color-text-muted: #80604a;
-  --color-border:     rgba(160, 82, 45, 0.15);
+/* Spring — green-tinged warmth, like basalt soil after rain */
+[data-season="spring"] {
+  --accent:    #5aaa72;
+  --accent-dim: rgba(90,170,114,0.15);
+  --bg-tint:   #0d1510;   /* deep forest green-black */
+  --fg-dim:    rgba(230, 242, 234, 0.52);
 }
 
-/* ── Winter ── slate blue, silver, icy white */
-body.season--winter,
-body[data-active-season="winter"] {
-  --color-primary:    #3d5a80;
-  --color-secondary:  #8da9c4;
-  --color-accent:     #c0c8d8;
-  --color-bg:         #eef1f7;
-  --color-bg-alt:     #e2e8f2;
-  --color-surface:    #f6f8fc;
-  --color-text:       #1a2535;
-  --color-text-muted: #607080;
-  --color-border:     rgba(61, 90, 128, 0.15);
+/* Summer — ochre warmth, like dry Hawke's Bay clay in January */
+[data-season="summer"] {
+  --accent:    #d4833a;
+  --accent-dim: rgba(212,131,58,0.15);
+  --bg-tint:   #1a1408;   /* warm ochre-black */
+  --fg-dim:    rgba(245, 238, 220, 0.52);
 }
 
 /* ── Season section visibility ── */
-.season-section {
-  display: none;
+.season-section { display: none; }
+.season-section.is-active { display: block; }
+
+/* ── Nav button active state ── */
+.nav-btn { position: relative; }
+.nav-btn::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0; right: 100%;
+  height: 1px;
+  background: var(--accent);
+  transition: right 300ms var(--ease-out-expo);
 }
-.season-section.is-active {
+.nav-btn.is-active::after { right: 0; }
+.nav-btn.is-active { color: var(--accent); }
+
+/* ── Hero image overlay ── */
+.hero-image {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.18;
+  filter: grayscale(100%) contrast(1.2);
+  mix-blend-mode: luminosity;
+}
+[data-season="autumn"]  .hero-image { background-image: url('../assets/images/au-autumn.jpg'); }
+[data-season="winter"]  .hero-image { background-image: url('../assets/images/au-winter.jpg'); }
+[data-season="spring"]  .hero-image { background-image: url('../assets/images/au-spring.jpg'); }
+[data-season="summer"]  .hero-image { background-image: url('../assets/images/au-summer.jpg'); }
+
+/* ── Priority markers ── */
+.priority-high   { color: #e05a3a; }
+.priority-medium { color: #c8a228; }
+.priority-low    { color: var(--fg-dim); }
+
+/* ── Accent line ── */
+.accent-rule {
   display: block;
+  width: 40px;
+  height: 1px;
+  background: var(--accent);
+  transition: background 500ms ease;
 }
-
-/* ── Hero gradient overlays per season ── */
-.season--spring  .hero-overlay { background: linear-gradient(180deg, rgba(74,124,89,0.35) 0%, rgba(245,240,232,0.0) 50%, rgba(245,240,232,0.95) 100%); }
-.season--summer  .hero-overlay { background: linear-gradient(180deg, rgba(45,106,79,0.35) 0%, rgba(240,237,227,0.0) 50%, rgba(240,237,227,0.95) 100%); }
-.season--autumn  .hero-overlay { background: linear-gradient(180deg, rgba(160,82,45,0.4)  0%, rgba(242,235,224,0.0) 50%, rgba(242,235,224,0.95) 100%); }
-.season--winter  .hero-overlay { background: linear-gradient(180deg, rgba(61,90,128,0.35) 0%, rgba(238,241,247,0.0) 50%, rgba(238,241,247,0.95) 100%); }
-
-/* ── Season pill active states ── */
-.season-pill.is-active[data-season="spring"] { background: #4a7c59; color: #fff; border-color: #4a7c59; }
-.season-pill.is-active[data-season="summer"] { background: #2d6a4f; color: #fff; border-color: #2d6a4f; }
-.season-pill.is-active[data-season="autumn"] { background: #a0522d; color: #fff; border-color: #a0522d; }
-.season-pill.is-active[data-season="winter"] { background: #3d5a80; color: #fff; border-color: #3d5a80; }
-
-/* ── Pill dot colors ── */
-.season-pill[data-season="spring"] .pill-dot { background: #4a7c59; }
-.season-pill[data-season="summer"] .pill-dot { background: #2d6a4f; }
-.season-pill[data-season="autumn"] .pill-dot { background: #a0522d; }
-.season-pill[data-season="winter"] .pill-dot { background: #3d5a80; }
-
-.season-pill.is-active .pill-dot { background: rgba(255,255,255,0.8); }
-
-/* ── Priority badge colors ── */
-.badge--high   { background: rgba(200, 60, 40, 0.12); color: #c03c28; border-color: rgba(200, 60, 40, 0.25); }
-.badge--medium { background: rgba(200, 150, 30, 0.12); color: #b87a10; border-color: rgba(200, 150, 30, 0.25); }
-.badge--low    { background: rgba(74, 124, 89, 0.12); color: #3a6647; border-color: rgba(74, 124, 89, 0.25); }
-
-/* ── Wheel arc colors ── */
-.wheel-arc--spring { fill: #a8c5a0; stroke: #4a7c59; }
-.wheel-arc--summer { fill: #74c69d; stroke: #2d6a4f; }
-.wheel-arc--autumn { fill: #d4956a; stroke: #a0522d; }
-.wheel-arc--winter { fill: #8da9c4; stroke: #3d5a80; }
-.wheel-arc.is-active { opacity: 1; }
-.wheel-arc { opacity: 0.55; transition: opacity 400ms ease, transform 300ms ease; cursor: pointer; }
-.wheel-arc:hover { opacity: 0.85; }
