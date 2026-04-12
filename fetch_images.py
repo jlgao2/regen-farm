@@ -29,7 +29,7 @@ IMAGES = {
     # ── AUTUMN ──────────────────────────────────────────────────────────────
     "autumn-soil-prep":    "mycelium hyphae soil fungal",
     "autumn-planting":     "vegetable garden autumn planting",
-    "autumn-composting":   "leaf litter fungi forest floor",
+    "autumn-composting":   "humus soil organic matter dark",
     "autumn-cover-crops":  "cover crop winter soil protection",
     "autumn-water":        "agricultural water management dam",
 
@@ -44,7 +44,7 @@ IMAGES = {
     "spring-soil-prep":    "earthworm soil profile",
     "spring-planting":     "seedling transplant spring vegetable",
     "spring-composting":   "organic compost pile garden",
-    "spring-cover-crops":  "phacelia blue flowers field",
+    "spring-cover-crops":  "clover field green cover crop spring",
     "spring-water":        "irrigation channel water field spring",
 
     # ── SUMMER ──────────────────────────────────────────────────────────────
