@@ -506,6 +506,98 @@
 .planner-btn--accent { color: var(--accent); border-color: var(--accent); }
 .planner-btn--accent:hover { background: var(--accent); color: var(--bg); }
 
+/* ── Master plan section ─────────────────────────────────────── */
+
+.master-plan {
+  display: none;
+  border-top: 1px solid var(--border);
+}
+.master-plan.has-tasks { display: block; }
+
+.master-plan-body {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 5rem var(--pad-x) 6rem;
+}
+
+/* ── Season bands for 12-month gantt ────────────────────────── */
+
+.gantt-season-band          { flex: 1; }
+.gantt-season-band--autumn  { background: rgba(193,135, 70, 0.06); }
+.gantt-season-band--winter  { background: rgba(100,120,180, 0.04); }
+.gantt-season-band--spring  { background: rgba( 80,160, 90, 0.06); }
+.gantt-season-band--summer  { background: rgba(200, 90, 40, 0.06); }
+
+/* 12 month labels — denser than the 3-label version */
+.gantt-month-labels--12 {
+  justify-content: space-between;
+}
+.gantt-month-labels--12 span {
+  flex: 1;
+  text-align: center;
+  font-size: 0.52rem;
+}
+.gantt-month-labels--12 span:first-child { text-align: left; }
+.gantt-month-labels--12 span:last-child  { text-align: right; }
+
+/* Stronger tick at season boundaries (every 3rd tick in the year gantt) */
+.gantt-tick--season {
+  height: 13px;
+  top: -6px;
+  background: rgba(240,237,230,0.18);
+}
+
+/* Season label row below year gantt */
+.gantt-season-labels {
+  display: flex;
+  margin-left: 5.5rem;
+  margin-top: 0.35rem;
+  padding-bottom: 1.5rem;
+}
+.gantt-season-label {
+  flex: 1;
+  font-family: var(--font-mono);
+  font-size: 0.5rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-align: center;
+  padding-top: 0.2rem;
+  border-top: 1px solid transparent;
+  opacity: 0.5;
+}
+.gantt-season-label--autumn { color:#c18746; border-color:rgba(193,135, 70,0.3); }
+.gantt-season-label--winter { color:#6482b4; border-color:rgba(100,120,180,0.3); }
+.gantt-season-label--spring { color:#50a05a; border-color:rgba( 80,160, 90,0.3); }
+.gantt-season-label--summer { color:#c85a28; border-color:rgba(200, 90, 40,0.3); }
+
+/* Season chip in all-seasons checklist */
+.plan-cl-chip--season { font-weight:700; }
+.plan-cl-chip--autumn { color:#c18746; border-color:rgba(193,135, 70,0.35); }
+.plan-cl-chip--winter { color:#6482b4; border-color:rgba(100,120,180,0.35); }
+.plan-cl-chip--spring { color:#50a05a; border-color:rgba( 80,160, 90,0.35); }
+.plan-cl-chip--summer { color:#c85a28; border-color:rgba(200, 90, 40,0.35); }
+
+/* Season tooltip label inside gantt dot */
+.gantt-dot-season {
+  display: block;
+  color: var(--fg-dim);
+  font-size: 0.5rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-top: 0.1rem;
+  opacity: 0.7;
+}
+
+/* Supply item title — slightly muted vs task title */
+.plan-supply-title {
+  color: rgba(240,237,230,0.7);
+  font-size: 0.78rem;
+}
+.plan-cl-item.is-done .plan-supply-title {
+  text-decoration: line-through;
+  color: var(--fg-dim);
+}
+
 /* ── Responsive ──────────────────────────────────────────────── */
 
 @media (max-width: 640px) {
@@ -513,4 +605,9 @@
   .gantt-label { font-size: 0.5rem; width: 4rem; }
   .gantt-label-col { width: 4rem; }
   .gantt-dot-label { max-width: 150px; }
+  .gantt-month-labels--12 span:nth-child(even) { visibility: hidden; }
+  .gantt-season-labels { margin-left: 4rem; }
+}
+@media (max-width: 480px) {
+  #planner-fullyear { display: none; }
 }
