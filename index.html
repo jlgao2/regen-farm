@@ -63,7 +63,25 @@
       <li><button class="nav-btn" data-season="spring">SPRING</button></li>
       <li><button class="nav-btn" data-season="summer">SUMMER</button></li>
     </ul>
-    <span class="nav-locale">Australia · Aotearoa</span>
+    <div class="nav-region" id="nav-region">
+      <button class="nav-region-btn" type="button"
+              aria-expanded="false" aria-haspopup="listbox"
+              id="nav-region-btn">
+        <span>AU + NZ</span>
+        <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <path d="M1 1l4 4 4-4"/>
+        </svg>
+      </button>
+      <div class="nav-region-drop" role="listbox"
+           aria-label="Select region" id="nav-region-drop" hidden>
+        <button class="nav-region-option is-active" role="option"
+                aria-selected="true" data-region="au-nz" type="button">
+          <span class="nav-region-option-name">AU + NZ</span>
+          <span class="nav-region-option-sub">Temperate SE Australia &amp; Aotearoa</span>
+        </button>
+        <div class="nav-region-more">More regions coming</div>
+      </div>
+    </div>
   </nav>
 
   <!-- Main -->

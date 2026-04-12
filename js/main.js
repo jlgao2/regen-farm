@@ -64,6 +64,7 @@ animateLoader(() => {
   wireNav();
   wireHash();
   wireHeader();
+  wireRegionSelector();
 
   if (!('ontouchstart' in window)) {
     document.body.classList.add('custom-cursor');
@@ -105,4 +106,32 @@ function wireHeader() {
       ? 'rgba(240,237,230,0.14)'
       : 'rgba(240,237,230,0.1)';
   }, { passive: true });
+}
+
+function wireRegionSelector() {
+  const btn  = document.getElementById('nav-region-btn');
+  const drop = document.getElementById('nav-region-drop');
+  if (!btn || !drop) return;
+
+  const open  = () => { btn.setAttribute('aria-expanded', 'true');  drop.hidden = false; };
+  const close = () => { btn.setAttribute('aria-expanded', 'false'); drop.hidden = true; };
+
+  btn.addEventListener('click', e => {
+    e.stopPropagation();
+    btn.getAttribute('aria-expanded') === 'true' ? close() : open();
+  });
+
+  // Close on outside click
+  document.addEventListener('click', () => close());
+
+  // Prevent clicks inside the dropdown from closing it
+  drop.addEventListener('click', e => e.stopPropagation());
+
+  // Escape key
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && btn.getAttribute('aria-expanded') === 'true') {
+      close();
+      btn.focus();
+    }
+  });
 }

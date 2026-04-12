@@ -30,9 +30,9 @@ function renderHero(s) {
   // bg image
   hero.appendChild(el('div', { class: 'hero-image', 'aria-hidden': 'true' }));
 
-  // eyebrow
+  // eyebrow — shows months, not the season name (big title already has that)
   const eyebrow = el('div', { class: 'hero-eyebrow' });
-  eyebrow.textContent = `${s.id.toUpperCase()} · AU/NZ`;
+  eyebrow.textContent = s.months;
   hero.appendChild(eyebrow);
 
   // title — split into two halves for scroll diverge effect
