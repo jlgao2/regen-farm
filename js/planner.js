@@ -1,12 +1,20 @@
-/* ── Planner — task selection, seasonal timeline, and markdown export ── */
+/* ── Planner v2 — inline Gantt timeline + unified season plan ── */
 
-// ── Season config ─────────────────────────────────────────────
+// ── Config ────────────────────────────────────────────────────
 
 const SEASON_CONFIG = {
-  autumn: { months: [3,4,5],  labels: ['Mar','Apr','May'], name: 'Autumn' },
-  winter: { months: [6,7,8],  labels: ['Jun','Jul','Aug'], name: 'Winter' },
-  spring: { months: [9,10,11],labels: ['Sep','Oct','Nov'], name: 'Spring' },
-  summer: { months: [12,1,2], labels: ['Dec','Jan','Feb'], name: 'Summer' },
+  autumn: { months:[3,4,5],  labels:['Mar','Apr','May'], name:'Autumn' },
+  winter: { months:[6,7,8],  labels:['Jun','Jul','Aug'], name:'Winter' },
+  spring: { months:[9,10,11],labels:['Sep','Oct','Nov'], name:'Spring' },
+  summer: { months:[12,1,2], labels:['Dec','Jan','Feb'], name:'Summer' },
+};
+
+const CAT_META = {
+  'soil-prep':   { short:'SOIL',    color:'#c0844a' },
+  'planting':    { short:'PLANT',   color:'#5aaa72' },
+  'composting':  { short:'COMPOST', color:'#c8a84a' },
+  'cover-crops': { short:'CROPS',   color:'#8ab878' },
+  'water':       { short:'WATER',   color:'#5a96c8' },
 };
 
 const MONTH_MAP = {
@@ -21,88 +29,52 @@ const SEASON_ORDER = ['autumn','winter','spring','summer'];
 // ── State ─────────────────────────────────────────────────────
 
 const selectedTasks = new Map(); // taskId → { task, cat, seasonId }
-let currentSeasonId = 'autumn';
+const inlineContainers = new Map(); // seasonId → HTMLElement
 let panelEl = null;
 
-// ── Timeline positioning ──────────────────────────────────────
-
-function parsePosition(timingStr, seasonId) {
-  const cfg = SEASON_CONFIG[seasonId];
-  if (!cfg || !timingStr) return 0.5;
-
-  const lower = timingStr.toLowerCase();
-
-  // Find a month name in the string
-  let month = null;
-  for (const [name, num] of Object.entries(MONTH_MAP)) {
-    // Use word boundary check to avoid 'mar' matching 'march', etc.
-    const re = new RegExp(`\\b${name}\\b`);
-    if (re.test(lower)) { month = num; break; }
-  }
-
-  if (month === null) return 0.5;
-
-  // Find index of this month in season's month array
-  const monthIdx = cfg.months.indexOf(month);
-  if (monthIdx === -1) return 0.5;
-
-  // Intra-month offset from early/mid/late qualifiers
-  let offset = 0.5;
-  if (/\bearly\b/.test(lower))       offset = 0.15;
-  else if (/\bmid(?:dle)?\b/.test(lower)) offset = 0.5;
-  else if (/\blate\b/.test(lower))   offset = 0.85;
-
-  return Math.max(0, Math.min(1, (monthIdx + offset) / 3));
-}
-
-// ── Public API ────────────────────────────────────────────────
-
-export function setPlannerSeason(seasonId) {
-  currentSeasonId = seasonId;
-  if (panelEl) renderTimeline();
-}
+// ── Init ──────────────────────────────────────────────────────
 
 export function initPlanner() {
-  // Build panel DOM
+  // Register all inline gantt containers that renderer placed in the DOM
+  document.querySelectorAll('[data-planner-season]').forEach(el => {
+    inlineContainers.set(el.dataset.plannerSeason, el);
+    renderGantt(el.dataset.plannerSeason, el);
+  });
+
+  // Build minimal floating bottom bar (count + export only; gantt lives inline)
   panelEl = document.createElement('div');
   panelEl.className = 'planner-panel';
   panelEl.id = 'planner-panel';
-  panelEl.setAttribute('role', 'complementary');
-  panelEl.setAttribute('aria-label', 'Task planner');
   panelEl.innerHTML = `
     <div class="planner-bar">
-      <button class="planner-toggle" id="planner-toggle" aria-expanded="false" aria-controls="planner-body">
-        <svg class="planner-chevron-icon" viewBox="0 0 16 16" fill="none"
-             stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-          <polyline points="3,10 8,5 13,10"/>
+      <button class="planner-bar-link" id="planner-jump" aria-label="Jump to season timeline">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+          <rect x="2" y="3" width="12" height="2" rx="0.5"/>
+          <rect x="2" y="7" width="8"  height="2" rx="0.5"/>
+          <rect x="2" y="11" width="10" height="2" rx="0.5"/>
         </svg>
-        <span class="planner-bar-label">
-          <span class="planner-count" id="planner-count">0 tasks</span>
-          <span class="planner-bar-sub">planned this season</span>
-        </span>
+        <span class="planner-count" id="planner-count">0 tasks</span>
+        <span class="planner-bar-sub">planned · view timeline ↑</span>
       </button>
       <div class="planner-actions">
         <button class="planner-btn planner-btn--ghost" id="planner-clear">Clear</button>
         <button class="planner-btn planner-btn--accent" id="planner-export">Export ↓</button>
       </div>
     </div>
-    <div class="planner-body" id="planner-body" hidden>
-      <div class="planner-timeline" id="planner-timeline"></div>
-    </div>
   `;
   document.body.appendChild(panelEl);
 
-  document.getElementById('planner-toggle').addEventListener('click', togglePanel);
+  document.getElementById('planner-jump').addEventListener('click', scrollToActivePlan);
   document.getElementById('planner-clear').addEventListener('click', clearAll);
   document.getElementById('planner-export').addEventListener('click', exportMarkdown);
-
-  // Listen for task-toggle events dispatched by renderer
   document.addEventListener('plantask', onPlanTask);
-
   updatePanel();
 }
 
-// ── Event handling ────────────────────────────────────────────
+// Keep for API compat with main.js seasonchange listener
+export function setPlannerSeason() {}
+
+// ── Task events ───────────────────────────────────────────────
 
 function onPlanTask(e) {
   const { taskId, task, cat, seasonId } = e.detail;
@@ -113,30 +85,28 @@ function onPlanTask(e) {
     selectedTasks.set(taskId, { task, cat, seasonId });
   }
 
-  // Update checkbox appearance
+  const isSelected = selectedTasks.has(taskId);
+
+  // Sync the checkbox UI in the accordion
   const row = document.querySelector(`[data-task-id="${taskId}"]`);
   if (row) {
-    const isSelected = selectedTasks.has(taskId);
     row.querySelector('.planner-check')?.classList.toggle('is-checked', isSelected);
     row.classList.toggle('is-planned', isSelected);
   }
 
   updatePanel();
+  refreshAllGantts();
 }
 
-// ── Panel control ─────────────────────────────────────────────
+function scrollToActivePlan() {
+  // Find the first season that has selected tasks and scroll to its inline gantt
+  const activeSeason = SEASON_ORDER.find(sid =>
+    [...selectedTasks.values()].some(v => v.seasonId === sid)
+  ) || document.body.dataset.season || 'autumn';
 
-function togglePanel() {
-  const btn = document.getElementById('planner-toggle');
-  const body = document.getElementById('planner-body');
-  const isOpen = btn.getAttribute('aria-expanded') === 'true';
-  const willOpen = !isOpen;
-
-  btn.setAttribute('aria-expanded', String(willOpen));
-  body.hidden = !willOpen;
-  panelEl.classList.toggle('is-open', willOpen);
-
-  if (willOpen) renderTimeline();
+  const container = inlineContainers.get(activeSeason);
+  container?.closest('.season-planner')
+    ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
 function clearAll() {
@@ -148,142 +118,226 @@ function clearAll() {
     }
   });
   selectedTasks.clear();
-  // Close panel
-  const btn = document.getElementById('planner-toggle');
-  const body = document.getElementById('planner-body');
-  if (btn) btn.setAttribute('aria-expanded', 'false');
-  if (body) body.hidden = true;
-  panelEl.classList.remove('is-open');
   updatePanel();
+  refreshAllGantts();
 }
 
 function updatePanel() {
   if (!panelEl) return;
-
   const count = selectedTasks.size;
   const countEl = document.getElementById('planner-count');
   if (countEl) countEl.textContent = `${count} task${count !== 1 ? 's' : ''}`;
-
   panelEl.classList.toggle('has-tasks', count > 0);
-
-  // Re-render if panel is open
-  const body = document.getElementById('planner-body');
-  if (body && !body.hidden) renderTimeline();
 }
 
-// ── Timeline rendering ────────────────────────────────────────
+// ── Gantt ─────────────────────────────────────────────────────
 
-function renderTimeline() {
-  const container = document.getElementById('planner-timeline');
-  if (!container) return;
+function refreshAllGantts() {
+  inlineContainers.forEach((el, sid) => renderGantt(sid, el));
+}
+
+function renderGantt(seasonId, container) {
   container.innerHTML = '';
-
-  const cfg = SEASON_CONFIG[currentSeasonId];
+  const cfg = SEASON_CONFIG[seasonId];
   if (!cfg) return;
 
-  // Tasks in current season
-  const seasonTasks = [...selectedTasks.entries()]
-    .filter(([, v]) => v.seasonId === currentSeasonId)
-    .map(([id, v]) => ({ id, ...v }));
+  const tasks = [...selectedTasks.values()].filter(v => v.seasonId === seasonId);
 
-  // Other season count
-  const otherCount = selectedTasks.size - seasonTasks.length;
+  if (tasks.length === 0) {
+    const empty = document.createElement('div');
+    empty.className = 'gantt-empty';
+    empty.innerHTML = `
+      <span class="gantt-empty-icon" aria-hidden="true">
+        <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.2">
+          <circle cx="16" cy="16" r="13"/>
+          <line x1="16" y1="10" x2="16" y2="17"/>
+          <line x1="8" y1="16" x2="24" y2="16" stroke-dasharray="2 2"/>
+          <circle cx="10" cy="16" r="1.5" fill="currentColor"/>
+          <circle cx="16" cy="16" r="1.5" fill="currentColor"/>
+          <circle cx="22" cy="16" r="1.5" fill="currentColor"/>
+        </svg>
+      </span>
+      <span>Check tasks above to map them to this timeline</span>
+    `;
+    container.appendChild(empty);
+    return;
+  }
+
+  const gantt = document.createElement('div');
+  gantt.className = 'gantt';
+  gantt.setAttribute('role', 'img');
+  gantt.setAttribute('aria-label', `${cfg.name} task timeline`);
 
   // ── Month header ──────────────────────────────────────────────
   const header = document.createElement('div');
-  header.className = 'tl-header';
+  header.className = 'gantt-header';
+
+  const labelSpace = document.createElement('div');
+  labelSpace.className = 'gantt-label-col';
+  header.appendChild(labelSpace);
+
+  const monthsRow = document.createElement('div');
+  monthsRow.className = 'gantt-months';
+
+  // Background month bands
+  cfg.labels.forEach((lbl, i) => {
+    const band = document.createElement('div');
+    band.className = `gantt-band${i % 2 === 1 ? ' gantt-band--alt' : ''}`;
+    monthsRow.appendChild(band);
+  });
+
+  // Month labels overlay
+  const monthLabels = document.createElement('div');
+  monthLabels.className = 'gantt-month-labels';
   cfg.labels.forEach(lbl => {
     const m = document.createElement('span');
-    m.className = 'tl-month';
     m.textContent = lbl;
-    header.appendChild(m);
+    monthLabels.appendChild(m);
   });
-  container.appendChild(header);
+  monthsRow.appendChild(monthLabels);
+  header.appendChild(monthsRow);
+  gantt.appendChild(header);
 
-  // ── Bar + dots ────────────────────────────────────────────────
-  const barWrap = document.createElement('div');
-  barWrap.className = 'tl-bar-wrap';
+  // ── Category rows ─────────────────────────────────────────────
+  const catOrder = ['soil-prep','planting','composting','cover-crops','water'];
+  const todayPos = getTodayPosition(seasonId);
 
-  const bar = document.createElement('div');
-  bar.className = 'tl-bar';
+  catOrder.forEach((catId, rowIdx) => {
+    const catTasks = tasks.filter(v => v.cat.id === catId);
+    if (catTasks.length === 0) return;
 
-  // Month dividers at 33.33% and 66.66%
-  ['33.33%', '66.66%'].forEach(left => {
-    const tick = document.createElement('div');
-    tick.className = 'tl-tick';
-    tick.style.left = left;
-    bar.appendChild(tick);
-  });
+    const meta = CAT_META[catId] || { short: catId.slice(0,6).toUpperCase(), color: 'var(--accent)' };
 
-  // Place dots
-  const catColors = ['soil-prep','planting','composting','cover-crops','water'];
-  seasonTasks.forEach(({ id, task, cat }) => {
-    const pos = parsePosition(task.timing, currentSeasonId);
-    const colorIdx = catColors.indexOf(cat.id);
+    const row = document.createElement('div');
+    row.className = 'gantt-row';
+    row.style.setProperty('--cat-clr', meta.color);
+    row.style.setProperty('--row-idx', rowIdx);
 
-    const dot = document.createElement('button');
-    dot.className = 'tl-dot';
-    dot.style.left = `${pos * 100}%`;
-    dot.dataset.catIdx = colorIdx >= 0 ? colorIdx : 0;
-    dot.setAttribute('aria-label', `${task.title} — click to scroll to task`);
-    dot.title = `${cat.title}: ${task.title}\n${task.timing || ''}`;
+    // Label
+    const label = document.createElement('div');
+    label.className = 'gantt-label';
+    const dot = document.createElement('span');
+    dot.className = 'gantt-label-dot';
+    label.appendChild(dot);
+    label.appendChild(document.createTextNode(meta.short));
+    row.appendChild(label);
 
-    const tooltip = document.createElement('span');
-    tooltip.className = 'tl-tooltip';
-    tooltip.textContent = task.title;
-    dot.appendChild(tooltip);
+    // Track
+    const track = document.createElement('div');
+    track.className = 'gantt-track';
 
-    dot.addEventListener('click', () => {
-      // Close panel and scroll to task
-      const taskEl = document.querySelector(`[data-task-id="${id}"]`);
-      if (!taskEl) return;
-      const btn = document.getElementById('planner-toggle');
-      const body = document.getElementById('planner-body');
-      if (btn) btn.setAttribute('aria-expanded', 'false');
-      if (body) body.hidden = true;
-      panelEl?.classList.remove('is-open');
-      setTimeout(() => taskEl.scrollIntoView({ behavior: 'smooth', block: 'center' }), 150);
+    // Month dividers
+    [33.33, 66.66].forEach(pct => {
+      const tick = document.createElement('div');
+      tick.className = 'gantt-tick';
+      tick.style.left = `${pct}%`;
+      track.appendChild(tick);
     });
 
-    bar.appendChild(dot);
-  });
+    // Today line (only on the first row that renders, avoids duplication)
+    if (todayPos !== null && rowIdx === catOrder.findIndex(c => tasks.some(t => t.cat.id === c))) {
+      const today = document.createElement('div');
+      today.className = 'gantt-today';
+      today.style.left = `${todayPos * 100}%`;
+      track.appendChild(today);
+    }
 
-  barWrap.appendChild(bar);
-  container.appendChild(barWrap);
+    // Task dots with staggered animation
+    catTasks.forEach(({ task, cat }, ti) => {
+      const pos = parsePosition(task.timing, seasonId);
+      const taskRowId = findTaskId(task, cat, seasonId);
 
-  // ── Legend (compact task list) ────────────────────────────────
-  if (seasonTasks.length > 0) {
-    const legend = document.createElement('div');
-    legend.className = 'tl-legend';
+      const dot = document.createElement('button');
+      dot.className = 'gantt-dot';
+      dot.style.left = `${pos * 100}%`;
+      dot.style.setProperty('--dot-delay', `${ti * 60}ms`);
+      dot.setAttribute('aria-label', task.title);
 
-    seasonTasks
-      .sort((a, b) => parsePosition(a.task.timing, currentSeasonId) - parsePosition(b.task.timing, currentSeasonId))
-      .forEach(({ task, cat }) => {
-        const row = document.createElement('div');
-        row.className = 'tl-legend-row';
-        row.innerHTML = `
-          <span class="tl-legend-cat">${cat.title}</span>
-          <span class="tl-legend-name">${task.title}</span>
-          <span class="tl-legend-timing">${task.timing || ''}</span>
-        `;
-        legend.appendChild(row);
+      const dotCore = document.createElement('span');
+      dotCore.className = 'gantt-dot-core';
+      dot.appendChild(dotCore);
+
+      const dotLabel = document.createElement('span');
+      dotLabel.className = 'gantt-dot-label';
+      dotLabel.innerHTML = `<strong>${task.title}</strong><br>${task.timing || ''}`;
+      dot.appendChild(dotLabel);
+
+      dot.addEventListener('click', () => {
+        const el = taskRowId ? document.querySelector(`[data-task-id="${taskRowId}"]`) : null;
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
       });
 
-    container.appendChild(legend);
-  } else {
-    const empty = document.createElement('p');
-    empty.className = 'tl-empty';
-    empty.textContent = 'No tasks planned for this season. Check tasks above to add them.';
-    container.appendChild(empty);
+      track.appendChild(dot);
+    });
+
+    row.appendChild(track);
+    gantt.appendChild(row);
+  });
+
+  // ── Today legend ──────────────────────────────────────────────
+  if (todayPos !== null) {
+    const todayLegend = document.createElement('div');
+    todayLegend.className = 'gantt-today-legend';
+    todayLegend.style.left = `calc(5rem + ${todayPos * 100}% * (100% - 5rem) / 100%)`;
+
+    const todayWrap = document.createElement('div');
+    todayWrap.className = 'gantt-today-wrap';
+    const pct = Math.round(todayPos * 100);
+    todayWrap.style.left = `calc(5rem + ${pct}% * (100% - 5rem) / 100%)`;
+
+    const todayBadge = document.createElement('span');
+    todayBadge.className = 'gantt-today-badge';
+    todayBadge.textContent = 'TODAY';
+    todayWrap.appendChild(todayBadge);
+    gantt.appendChild(todayWrap);
   }
 
-  // ── Cross-season note ─────────────────────────────────────────
-  if (otherCount > 0) {
-    const note = document.createElement('p');
-    note.className = 'tl-note';
-    note.textContent = `+ ${otherCount} task${otherCount !== 1 ? 's' : ''} planned in other seasons (included in export)`;
-    container.appendChild(note);
+  container.appendChild(gantt);
+}
+
+function findTaskId(task, cat, seasonId) {
+  for (const [id, v] of selectedTasks.entries()) {
+    if (v.seasonId === seasonId && v.cat.id === cat.id &&
+        v.task.title === task.title) {
+      return id;
+    }
   }
+  return null;
+}
+
+// ── Position maths ────────────────────────────────────────────
+
+function parsePosition(timingStr, seasonId) {
+  const cfg = SEASON_CONFIG[seasonId];
+  if (!cfg || !timingStr) return 0.5;
+  const lower = timingStr.toLowerCase();
+
+  let month = null;
+  for (const [name, num] of Object.entries(MONTH_MAP)) {
+    if (new RegExp(`\\b${name}\\b`).test(lower)) { month = num; break; }
+  }
+  if (month === null) return 0.5;
+
+  const monthIdx = cfg.months.indexOf(month);
+  if (monthIdx === -1) return 0.5;
+
+  let offset = 0.5;
+  if (/\bearly\b/.test(lower))            offset = 0.15;
+  else if (/\bmid(?:dle)?\b/.test(lower)) offset = 0.5;
+  else if (/\blate\b/.test(lower))        offset = 0.85;
+
+  return Math.max(0, Math.min(1, (monthIdx + offset) / 3));
+}
+
+function getTodayPosition(seasonId) {
+  const cfg = SEASON_CONFIG[seasonId];
+  if (!cfg) return null;
+  const today = new Date();
+  const month = today.getMonth() + 1;
+  const day   = today.getDate();
+  const monthIdx = cfg.months.indexOf(month);
+  if (monthIdx === -1) return null;
+  return Math.max(0, Math.min(1, (monthIdx + (day - 1) / 31) / 3));
 }
 
 // ── Markdown export ───────────────────────────────────────────
@@ -292,12 +346,14 @@ function exportMarkdown() {
   if (selectedTasks.size === 0) return;
 
   const lines = [];
-  const today = new Date().toLocaleDateString('en-AU', { year: 'numeric', month: 'long', day: 'numeric' });
+  const today = new Date().toLocaleDateString('en-AU', {
+    year: 'numeric', month: 'long', day: 'numeric',
+  });
 
   lines.push('# Farm Task Plan\n');
   lines.push(`**Generated:** ${today}  `);
   lines.push(`**Tasks planned:** ${selectedTasks.size}\n`);
-  lines.push('---\n');
+  lines.push('---');
 
   SEASON_ORDER.forEach(sid => {
     const cfg = SEASON_CONFIG[sid];
@@ -305,33 +361,30 @@ function exportMarkdown() {
     if (tasks.length === 0) return;
 
     lines.push(`\n## ${cfg.name} — ${cfg.labels[0]}–${cfg.labels[2]}\n`);
-
-    // ASCII timeline
-    const timelineStr = buildAsciiTimeline(sid, tasks);
     lines.push('```');
-    lines.push(timelineStr);
+    lines.push(buildAsciiTimeline(sid, tasks));
     lines.push('```\n');
 
-    // Task details sorted by timeline position
     const sorted = [...tasks].sort((a, b) =>
       parsePosition(a.task.timing, sid) - parsePosition(b.task.timing, sid)
     );
 
     sorted.forEach(({ task, cat }) => {
       lines.push(`### ${task.title}`);
-      if (cat?.title) lines.push(`**Category:** ${cat.title}  `);
-      if (task.timing)    lines.push(`**Timing:** ${task.timing}  `);
-      if (task.duration)  lines.push(`**Duration:** ${task.duration}  `);
+      if (cat?.title)        lines.push(`**Category:** ${cat.title}  `);
+      if (task.timing)       lines.push(`**Timing:** ${task.timing}  `);
+      if (task.duration)     lines.push(`**Duration:** ${task.duration}  `);
       lines.push('');
-      if (task.description) lines.push(`${task.description}\n`);
+      const desc = task.description || task.desc;
+      if (desc)              lines.push(`${desc}\n`);
       if (task.tools?.length) lines.push(`**Tools:** ${task.tools.join(', ')}\n`);
-      if (task.tip) lines.push(`> **Field note:** ${task.tip}\n`);
+      if (task.tip)          lines.push(`> **Field note:** ${task.tip}\n`);
     });
   });
 
   const blob = new Blob([lines.join('\n')], { type: 'text/markdown; charset=utf-8' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
   a.href = url;
   a.download = 'farm-plan.md';
   document.body.appendChild(a);
@@ -340,24 +393,16 @@ function exportMarkdown() {
   URL.revokeObjectURL(url);
 }
 
-// ── ASCII timeline builder ────────────────────────────────────
-
 function buildAsciiTimeline(seasonId, taskValues) {
   const cfg = SEASON_CONFIG[seasonId];
-  const W = 49;  // total chars, 3 spans of ~16 each
-
-  // Build the bar array
+  const W = 49;
   const bar = Array(W).fill('─');
-  bar[0] = '├';
-  bar[W - 1] = '┤';
+  bar[0] = '├'; bar[W - 1] = '┤';
   const m1 = Math.round((W - 1) / 3);
   const m2 = Math.round((W - 1) * 2 / 3);
-  bar[m1] = '┼';
-  bar[m2] = '┼';
+  bar[m1] = '┼'; bar[m2] = '┼';
 
-  // Sort by position
-  const sorted = taskValues
-    .map((v, i) => ({ ...v, origIdx: i }))
+  const sorted = [...taskValues]
     .sort((a, b) => parsePosition(a.task.timing, seasonId) - parsePosition(b.task.timing, seasonId));
 
   const usedCols = new Set([0, m1, m2, W - 1]);
@@ -366,32 +411,21 @@ function buildAsciiTimeline(seasonId, taskValues) {
   sorted.forEach((v, i) => {
     const sym = circledDigit(i + 1);
     let col = Math.round(parsePosition(v.task.timing, seasonId) * (W - 1));
-    // Nudge right to avoid structural markers
     while (usedCols.has(col) && col < W - 1) col++;
     usedCols.add(col);
     bar[col] = sym;
-    placements.push({ sym, task: v.task, cat: v.cat, col });
+    placements.push({ sym, task: v.task, col });
   });
 
-  // Month header — pad each to its column width
-  const header = cfg.labels[0].padEnd(m1)
-    + cfg.labels[1].padEnd(m2 - m1)
-    + cfg.labels[2];
-
-  const barLine = bar.join('');
-
+  const hdr = cfg.labels[0].padEnd(m1) + cfg.labels[1].padEnd(m2 - m1) + cfg.labels[2];
   const legend = placements
     .sort((a, b) => a.col - b.col)
-    .map(p => {
-      const timing = p.task.timing ? `  [${p.task.timing}]` : '';
-      return `  ${p.sym} ${p.task.title}${timing}`;
-    })
+    .map(p => `  ${p.sym} ${p.task.title}${p.task.timing ? '  [' + p.task.timing + ']' : ''}`)
     .join('\n');
 
-  return `${header}\n${barLine}\n\n${legend}`;
+  return `${hdr}\n${bar.join('')}\n\n${legend}`;
 }
 
 function circledDigit(n) {
-  if (n >= 1 && n <= 20) return String.fromCharCode(0x2460 + n - 1); // ①–⑳
-  return `(${n})`;
+  return n >= 1 && n <= 20 ? String.fromCharCode(0x2460 + n - 1) : `(${n})`;
 }

@@ -1,11 +1,13 @@
-/* ── Task Planner — panel, timeline, checkbox ── */
+/* ── Planner — task checkboxes, inline Gantt, floating bar ── */
 
-/* ── Task row — extend grid for planner checkbox ─────────────── */
+/* ── Task row: extend grid for checkbox column ───────────────── */
 
 .task-row {
   grid-template-columns: 1.5rem 2.5rem 1fr;
   align-items: start;
 }
+
+/* ── Planner checkbox ────────────────────────────────────────── */
 
 .planner-check {
   flex-shrink: 0;
@@ -19,35 +21,315 @@
   position: relative;
   transition: border-color 200ms ease, background 200ms ease;
 }
-
-.planner-check:hover {
-  border-color: var(--accent);
-}
-
+.planner-check:hover { border-color: var(--accent); }
 .planner-check.is-checked {
   background: var(--accent);
   border-color: var(--accent);
 }
-
-/* Checkmark via pseudo-element */
 .planner-check.is-checked::after {
   content: '';
   position: absolute;
-  left: 3px;
-  top: 2px;
-  width: 9px;
-  height: 5px;
+  left: 3px; top: 2px;
+  width: 9px; height: 5px;
   border-left: 1.5px solid var(--bg);
   border-bottom: 1.5px solid var(--bg);
   transform: rotate(-45deg);
 }
+.task-row.is-planned .task-title { color: var(--accent); }
 
-/* Planned task row highlight */
-.task-row.is-planned .task-title {
-  color: var(--accent);
+/* ── Season planner section ──────────────────────────────────── */
+
+.season-planner {
+  margin-top: 5rem;
+  padding-top: 3rem;
+  border-top: 1px solid var(--border);
 }
 
-/* ── Planner panel ───────────────────────────────────────────── */
+.planner-heading {
+  font-size: clamp(1.4rem, 3vw, 2.2rem);
+  margin-bottom: 0.5rem;
+}
+
+.planner-sub {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  color: var(--fg-dim);
+  margin-bottom: 2rem;
+}
+
+/* ── Gantt container ─────────────────────────────────────────── */
+
+.planner-gantt-wrap {
+  min-height: 3.5rem;
+  margin-bottom: 1rem;
+}
+
+/* ── Empty state ─────────────────────────────────────────────── */
+
+.gantt-empty {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  color: var(--fg-dim);
+  padding: 1.25rem 0;
+  opacity: 0.6;
+}
+.gantt-empty-icon {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  color: var(--fg-dim);
+}
+.gantt-empty-icon svg { width: 100%; height: 100%; }
+
+/* ── Gantt structure ─────────────────────────────────────────── */
+
+.gantt {
+  position: relative;
+  width: 100%;
+  padding-bottom: 1.5rem;
+}
+
+/* Header row */
+.gantt-header {
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: 0.25rem;
+}
+
+.gantt-label-col {
+  width: 5.5rem;
+  flex-shrink: 0;
+}
+
+.gantt-months {
+  flex: 1;
+  position: relative;
+  display: flex;
+}
+
+/* Alternating month background bands */
+.gantt-band {
+  flex: 1;
+  height: 100%;
+  min-height: 0.5rem;
+}
+.gantt-band--alt {
+  background: rgba(240, 237, 230, 0.025);
+}
+
+/* Month labels sit on top of bands */
+.gantt-month-labels {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fg-dim);
+  pointer-events: none;
+  padding: 0 0.1rem;
+}
+.gantt-month-labels span { flex: 1; text-align: center; }
+.gantt-month-labels span:first-child { text-align: left; }
+.gantt-month-labels span:last-child  { text-align: right; }
+
+/* ── Category rows ───────────────────────────────────────────── */
+
+.gantt-row {
+  display: flex;
+  align-items: center;
+  padding: 0.55rem 0;
+  animation: row-slide-in 350ms var(--ease-out-expo) both;
+  animation-delay: calc(var(--row-idx, 0) * 50ms);
+}
+
+@keyframes row-slide-in {
+  from { opacity: 0; transform: translateX(-8px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* Category label */
+.gantt-label {
+  width: 5.5rem;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  justify-content: flex-end;
+  padding-right: 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--cat-clr, var(--fg-dim));
+}
+
+.gantt-label-dot {
+  display: block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--cat-clr, var(--accent));
+  flex-shrink: 0;
+}
+
+/* Track bar */
+.gantt-track {
+  flex: 1;
+  height: 1px;
+  background: color-mix(in srgb, var(--cat-clr, var(--border)) 20%, var(--border));
+  position: relative;
+  transition: background 250ms ease;
+}
+.gantt-row:hover .gantt-track {
+  background: color-mix(in srgb, var(--cat-clr, var(--accent)) 30%, var(--border));
+}
+
+/* Month tick marks */
+.gantt-tick {
+  position: absolute;
+  top: -4px;
+  width: 1px;
+  height: 9px;
+  background: var(--border);
+  pointer-events: none;
+}
+
+/* ── Today line ──────────────────────────────────────────────── */
+
+.gantt-today {
+  position: absolute;
+  top: -8px;
+  width: 1px;
+  height: 17px;
+  background: var(--accent);
+  pointer-events: none;
+  animation: today-glow 2.5s ease-in-out infinite;
+}
+
+@keyframes today-glow {
+  0%, 100% { opacity: 0.5; box-shadow: none; }
+  50%       { opacity: 1;   box-shadow: 0 0 6px var(--accent); }
+}
+
+/* Today badge (positioned below all rows) */
+.gantt-today-wrap {
+  position: absolute;
+  bottom: 0;
+  transform: translateX(-50%);
+}
+
+.gantt-today-badge {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.5rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  padding: 0.1rem 0.3rem;
+  border-radius: 2px;
+  opacity: 0.8;
+}
+
+/* ── Task dots ───────────────────────────────────────────────── */
+
+.gantt-dot {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  padding: 4px;
+  background: none;
+  cursor: pointer;
+  z-index: 2;
+  animation: dot-pop calc(350ms + var(--dot-delay, 0ms))
+             cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  animation-delay: var(--dot-delay, 0ms);
+}
+
+@keyframes dot-pop {
+  0%   { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+  60%  { transform: translate(-50%, -50%) scale(1.5); opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+}
+
+.gantt-dot-core {
+  display: block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--cat-clr, var(--accent));
+  border: 2px solid color-mix(in srgb, var(--cat-clr, var(--accent)) 40%, var(--bg));
+  transition: transform 200ms ease, box-shadow 200ms ease;
+}
+
+.gantt-dot:hover .gantt-dot-core,
+.gantt-dot:focus-visible .gantt-dot-core {
+  transform: scale(1.6);
+  box-shadow: 0 0 10px var(--cat-clr, var(--accent));
+}
+
+/* ── Dot tooltip ─────────────────────────────────────────────── */
+
+.gantt-dot-label {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.05em;
+  line-height: 1.4;
+  color: var(--fg);
+  background: rgba(13, 13, 11, 0.97);
+  padding: 0.3rem 0.5rem;
+  border: 1px solid var(--border);
+  border-left: 2px solid var(--cat-clr, var(--accent));
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 150ms ease;
+}
+.gantt-dot:hover .gantt-dot-label,
+.gantt-dot:focus-visible .gantt-dot-label { opacity: 1; }
+
+/* ── Checklist divider inside planner section ────────────────── */
+
+.planner-cl-divider {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 3rem 0 1.25rem;
+}
+.planner-cl-divider::before {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.planner-cl-label {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fg-dim);
+  flex-shrink: 0;
+}
+
+/* ── Floating bottom bar ─────────────────────────────────────── */
 
 .planner-panel {
   position: fixed;
@@ -62,12 +344,7 @@
   transform: translateY(100%);
   transition: transform 400ms var(--ease-out-expo);
 }
-
-.planner-panel.has-tasks {
-  transform: translateY(0);
-}
-
-/* ── Bar ─────────────────────────────────────────────────────── */
+.planner-panel.has-tasks { transform: translateY(0); }
 
 .planner-bar {
   height: 48px;
@@ -78,236 +355,49 @@
   gap: 1rem;
 }
 
-.planner-toggle {
+.planner-bar-link {
   display: flex;
   align-items: center;
   gap: 0.6rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   min-width: 0;
 }
-
-.planner-chevron-icon {
-  width: 14px;
-  height: 14px;
+.planner-bar-link svg {
+  width: 14px; height: 14px;
   flex-shrink: 0;
-  transition: transform 300ms var(--ease-out-expo);
-}
-
-.planner-panel.is-open .planner-chevron-icon {
-  transform: rotate(180deg);
-}
-
-.planner-bar-label {
-  display: flex;
-  align-items: baseline;
-  gap: 0.4rem;
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
-.planner-count { color: var(--accent); }
-
-.planner-bar-sub {
   color: var(--fg-dim);
-  font-size: 0.66rem;
 }
+.planner-count { color: var(--accent); }
+.planner-bar-sub { color: var(--fg-dim); font-size: 0.64rem; }
 
 .planner-actions {
   display: flex;
-  align-items: center;
   gap: 0.5rem;
   flex-shrink: 0;
 }
 
 .planner-btn {
   font-family: var(--font-mono);
-  font-size: 0.66rem;
+  font-size: 0.64rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   padding: 0.3rem 0.7rem;
   border: 1px solid var(--border);
-  transition: color 200ms ease, border-color 200ms ease, background 200ms ease;
+  transition: color 200ms, border-color 200ms, background 200ms;
 }
-
-.planner-btn--ghost {
-  color: var(--fg-dim);
-}
-.planner-btn--ghost:hover {
-  color: var(--fg);
-  border-color: var(--fg-dim);
-}
-
-.planner-btn--accent {
-  color: var(--accent);
-  border-color: var(--accent);
-}
-.planner-btn--accent:hover {
-  background: var(--accent);
-  color: var(--bg);
-}
-
-/* ── Expandable body ─────────────────────────────────────────── */
-
-.planner-body {
-  border-top: 1px solid var(--border);
-  padding: 1.25rem var(--pad-x) 1.5rem;
-  max-height: 60svh;
-  overflow-y: auto;
-}
-
-.planner-body[hidden] { display: none; }
-
-/* ── Timeline ────────────────────────────────────────────────── */
-
-.planner-timeline {
-  /* container — child elements laid out below */
-}
-
-.tl-header {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 0.5rem;
-  font-family: var(--font-mono);
-  font-size: 0.64rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--fg-dim);
-}
-
-.tl-month {
-  flex: 1;
-  text-align: center;
-}
-.tl-month:first-child { text-align: left; }
-.tl-month:last-child  { text-align: right; }
-
-.tl-bar-wrap {
-  padding: 1.2rem 0;
-}
-
-.tl-bar {
-  position: relative;
-  height: 1px;
-  background: var(--border);
-}
-
-/* Month divider ticks */
-.tl-tick {
-  position: absolute;
-  top: -5px;
-  width: 1px;
-  height: 11px;
-  background: var(--border);
-}
-
-/* Task dots */
-.tl-dot {
-  position: absolute;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: var(--accent);
-  transition: transform 200ms ease;
-  cursor: pointer;
-}
-
-.tl-dot:hover,
-.tl-dot:focus-visible {
-  transform: translate(-50%, -50%) scale(1.6);
-  z-index: 2;
-}
-
-/* Dot labels visible on hover */
-.tl-tooltip {
-  position: absolute;
-  bottom: calc(100% + 10px);
-  left: 50%;
-  transform: translateX(-50%);
-  white-space: nowrap;
-  max-width: 200px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-family: var(--font-mono);
-  font-size: 0.6rem;
-  letter-spacing: 0.06em;
-  color: var(--fg);
-  background: rgba(13, 13, 11, 0.95);
-  padding: 0.25rem 0.5rem;
-  border: 1px solid var(--border);
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 150ms ease;
-}
-
-.tl-dot:hover .tl-tooltip,
-.tl-dot:focus-visible .tl-tooltip {
-  opacity: 1;
-}
-
-/* Legend (sorted task list) */
-.tl-legend {
-  margin-top: 0.75rem;
-  border-top: 1px solid var(--border);
-  padding-top: 0.75rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-}
-
-.tl-legend-row {
-  display: grid;
-  grid-template-columns: 8rem 1fr auto;
-  gap: 0.75rem;
-  align-items: baseline;
-  font-size: 0.7rem;
-  letter-spacing: 0.04em;
-}
-
-.tl-legend-cat {
-  font-family: var(--font-mono);
-  font-size: 0.62rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--accent);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.tl-legend-name {
-  color: var(--fg);
-}
-
-.tl-legend-timing {
-  font-family: var(--font-mono);
-  font-size: 0.6rem;
-  color: var(--fg-dim);
-  white-space: nowrap;
-}
-
-.tl-empty {
-  font-family: var(--font-mono);
-  font-size: 0.68rem;
-  letter-spacing: 0.06em;
-  color: var(--fg-dim);
-  padding: 0.5rem 0;
-}
-
-.tl-note {
-  margin-top: 0.75rem;
-  font-family: var(--font-mono);
-  font-size: 0.62rem;
-  letter-spacing: 0.06em;
-  color: var(--fg-dim);
-}
+.planner-btn--ghost { color: var(--fg-dim); }
+.planner-btn--ghost:hover { color: var(--fg); border-color: var(--fg-dim); }
+.planner-btn--accent { color: var(--accent); border-color: var(--accent); }
+.planner-btn--accent:hover { background: var(--accent); color: var(--bg); }
 
 /* ── Responsive ──────────────────────────────────────────────── */
 
 @media (max-width: 640px) {
   .planner-bar-sub { display: none; }
-  .tl-legend-row   { grid-template-columns: 1fr auto; }
-  .tl-legend-cat   { display: none; }
+  .gantt-label { font-size: 0.5rem; width: 4rem; }
+  .gantt-label-col { width: 4rem; }
+  .gantt-dot-label { max-width: 150px; }
 }

@@ -221,8 +221,8 @@ function renderBody(s) {
   s.categories.forEach((cat, i) => list.appendChild(renderCategory(cat, i, s.id)));
   body.appendChild(list);
 
-  // Checklist
-  body.appendChild(renderChecklist(s));
+  // Season Planner (replaces static checklist — feeds into inline Gantt + floating bar)
+  body.appendChild(renderSeasonPlanner(s));
 
   return body;
 }
@@ -254,9 +254,10 @@ function renderCategory(cat, index, seasonId) {
     trigger.setAttribute('aria-expanded', 'true');
   }
 
+  // Inner wrapper required for grid-row accordion animation (no max-height hack)
+  const bodyInner = el('div', { class: 'category-body-inner' });
+
   // ── Category banner image (season-specific) ───────────────────
-  // Image path: cat-{season}-{category}.jpg  e.g. cat-autumn-soil-prep.jpg
-  // Falls back gracefully via onerror → img.remove()
   const imgWrap = el('div', { class: 'category-img-wrap' });
   if (cat.imageAlt) imgWrap.setAttribute('aria-label', cat.imageAlt);
   else imgWrap.setAttribute('aria-hidden', 'true');
@@ -267,30 +268,27 @@ function renderCategory(cat, index, seasonId) {
     decoding: 'async',
     'data-src': `assets/images/cat-${seasonId}-${cat.id}.jpg`,
   });
-  // Lazy-load via IntersectionObserver (set in kinetic.js) or
-  // fall back to direct src if already in view
   imgWrap.appendChild(img);
 
   const imgLabel = el('span', { class: 'category-img-label' });
   imgLabel.textContent = cat.title;
   imgWrap.appendChild(imgLabel);
-
-  bodyEl.appendChild(imgWrap);
+  bodyInner.appendChild(imgWrap);
 
   // ── Task list ─────────────────────────────────────────────────
   const taskList = el('div', { class: 'task-list' });
   cat.tasks.forEach((task, ti) => taskList.appendChild(renderTask(task, ti, seasonId, cat)));
-  bodyEl.appendChild(taskList);
+  bodyInner.appendChild(taskList);
+
+  bodyEl.appendChild(bodyInner);
 
   trigger.addEventListener('click', () => {
     const isOpen = block.classList.toggle('is-open');
     bodyEl.classList.toggle('is-open', isOpen);
     trigger.setAttribute('aria-expanded', String(isOpen));
-    // Lazy-load the image when section opens
     if (isOpen) loadCategoryImg(img);
   });
 
-  // Load immediately if starts open
   if (index === 0) loadCategoryImg(img);
 
   block.append(trigger, bodyEl);
@@ -396,35 +394,63 @@ function renderTask(task, index, seasonId, cat) {
   return row;
 }
 
-function renderChecklist(s) {
-  const section = el('div', { class: 'checklist-section reveal-up', style: '--d:200' });
+function renderSeasonPlanner(s) {
+  const section = el('div', { class: 'season-planner reveal-up', style: '--d:200' });
 
+  // ── Section header ────────────────────────────────────────────
   const kicker = el('p', { class: 'section-kicker' });
-  kicker.textContent = `${s.label} Checklist`;
-  const heading = el('h3', { class: 'section-heading', style: 'font-size: clamp(1.4rem, 3vw, 2.2rem); margin-bottom: 1.5rem;' });
-  heading.textContent = 'Essential Tasks';
+  kicker.textContent = `${s.label} Plan`;
 
-  const grid = el('div', { class: 'checklist-grid' });
-  s.checklist.forEach(text => {
-    const item = el('div', { class: 'check-item', tabindex: '0', role: 'checkbox', 'aria-checked': 'false' });
-    const box = el('div', { class: 'check-box', 'aria-hidden': 'true' });
-    const label = el('span', { class: 'check-label' });
-    label.textContent = text;
-    item.append(box, label);
+  const heading = el('h2', { class: 'section-heading planner-heading' });
+  heading.textContent = 'Season Timeline';
 
-    const toggle = () => {
-      const checked = item.classList.toggle('is-checked');
-      item.setAttribute('aria-checked', String(checked));
-    };
-    item.addEventListener('click', toggle);
-    item.addEventListener('keydown', e => {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
-    });
+  const sub = el('p', { class: 'planner-sub' });
+  sub.textContent = 'Check a task above — it appears here on the timeline.';
 
-    grid.appendChild(item);
+  section.append(kicker, heading, sub);
+
+  // ── Gantt container — filled by planner.js after init ─────────
+  // planner.js scans for [data-planner-season] and renders the Gantt
+  const ganttWrap = el('div', {
+    class: 'planner-gantt-wrap',
+    'data-planner-season': s.id,
   });
+  section.appendChild(ganttWrap);
 
-  section.append(kicker, heading, grid);
+  // ── Quick checklist ───────────────────────────────────────────
+  if (s.checklist?.length) {
+    const divider = el('div', { class: 'planner-cl-divider' });
+    const clLabel = el('p', { class: 'planner-cl-label' });
+    clLabel.textContent = 'Essential Checklist';
+    divider.appendChild(clLabel);
+    section.appendChild(divider);
+
+    const grid = el('div', { class: 'checklist-grid' });
+    s.checklist.forEach(text => {
+      const item = el('div', {
+        class: 'check-item',
+        tabindex: '0',
+        role: 'checkbox',
+        'aria-checked': 'false',
+      });
+      const box = el('div', { class: 'check-box', 'aria-hidden': 'true' });
+      const label = el('span', { class: 'check-label' });
+      label.textContent = text;
+      item.append(box, label);
+
+      const toggle = () => {
+        const checked = item.classList.toggle('is-checked');
+        item.setAttribute('aria-checked', String(checked));
+      };
+      item.addEventListener('click', toggle);
+      item.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
+      });
+      grid.appendChild(item);
+    });
+    section.appendChild(grid);
+  }
+
   return section;
 }
 

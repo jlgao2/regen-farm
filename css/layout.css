@@ -440,12 +440,17 @@
 .category-block.is-open .cat-toggle { transform: rotate(45deg); color: var(--accent); }
 
 .category-body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 500ms var(--ease-out-expo);
+}
+/* Inner wrapper needed for grid-row animation */
+.category-body-inner {
   overflow: hidden;
-  max-height: 0;
-  transition: max-height 600ms var(--ease-out-expo);
+  min-height: 0;
 }
 .category-body.is-open {
-  max-height: 6000px;
+  grid-template-rows: 1fr;
 }
 
 /* ── Category image banner ── */
