@@ -335,6 +335,25 @@ function renderTask(task, index, seasonId, cat) {
 
   const content = el('div', { class: 'task-content' });
 
+  // ── Per-task image strip ──────────────────────────────────────
+  if (seasonId && cat?.id) {
+    const taskImgWrap = el('div', { class: 'task-img-wrap', 'aria-hidden': 'true' });
+    const taskImg = el('img', {
+      class: 'task-img',
+      alt: '',
+      loading: 'lazy',
+      decoding: 'async',
+    });
+    taskImg.onload  = () => taskImg.classList.add('is-loaded');
+    taskImg.onerror = () => taskImgWrap.remove();
+    taskImgWrap.appendChild(taskImg);
+    content.appendChild(taskImgWrap);
+    // Defer src to after element is in DOM
+    requestAnimationFrame(() => {
+      taskImg.src = `assets/images/task-${seasonId}-${cat.id}-${index}.jpg`;
+    });
+  }
+
   const title = el('h3', { class: 'task-title' });
   title.textContent = task.title;
 
