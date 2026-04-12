@@ -1,40 +1,40 @@
 /* ── Planner — task checkboxes, inline Gantt, floating bar ── */
 
-/* ── Task row: extend grid for checkbox column ───────────────── */
+/* ── Plan pill button (lives inside .task-content) ──────────── */
 
-.task-row {
-  grid-template-columns: 1.5rem 2.5rem 1fr;
-  align-items: start;
-}
-
-/* ── Planner checkbox ────────────────────────────────────────── */
-
-.planner-check {
-  flex-shrink: 0;
-  width: 18px;
-  height: 18px;
-  margin-top: 2px;
+.plan-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 1rem;
+  padding: 0.3rem 0.7rem;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fg-dim);
   border: 1px solid var(--border);
-  border-radius: 2px;
+  border-radius: 2rem;
   background: none;
   cursor: pointer;
-  position: relative;
-  transition: border-color 200ms ease, background 200ms ease;
+  transition: color 200ms ease, border-color 200ms ease, background 200ms ease;
 }
-.planner-check:hover { border-color: var(--accent); }
-.planner-check.is-checked {
-  background: var(--accent);
+.plan-pill:hover {
+  color: var(--accent);
   border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 6%, transparent);
 }
-.planner-check.is-checked::after {
-  content: '';
-  position: absolute;
-  left: 3px; top: 2px;
-  width: 9px; height: 5px;
-  border-left: 1.5px solid var(--bg);
-  border-bottom: 1.5px solid var(--bg);
-  transform: rotate(-45deg);
+.plan-pill-icon {
+  font-size: 0.75rem;
+  line-height: 1;
+  transition: transform 200ms ease;
 }
+.plan-pill.is-checked {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+}
+.plan-pill.is-checked .plan-pill-icon { transform: none; }
 .task-row.is-planned .task-title { color: var(--accent); }
 
 /* ── Season planner section ──────────────────────────────────── */

@@ -272,11 +272,6 @@ body.custom-cursor * {
   pointer-events: none;
 }
 
-/* Lift audio player above planner bar when it's visible */
-body:has(.planner-panel.has-tasks) .audio-player {
-  bottom: calc(48px + 1.5rem);
-}
-
 .audio-player.is-visible {
   opacity: 1;
   transform: translateY(0);

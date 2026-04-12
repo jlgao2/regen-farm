@@ -87,10 +87,17 @@ function onPlanTask(e) {
 
   const isSelected = selectedTasks.has(taskId);
 
-  // Sync the checkbox UI in the accordion
+  // Sync the plan pill UI in the accordion
   const row = document.querySelector(`[data-task-id="${taskId}"]`);
   if (row) {
-    row.querySelector('.planner-check')?.classList.toggle('is-checked', isSelected);
+    const pill = row.querySelector('.plan-pill');
+    if (pill) {
+      pill.classList.toggle('is-checked', isSelected);
+      const icon = pill.querySelector('.plan-pill-icon');
+      const text = pill.querySelector('.plan-pill-text');
+      if (icon) icon.textContent = isSelected ? '✓' : '+';
+      if (text) text.textContent = isSelected ? 'Planned' : 'Plan';
+    }
     row.classList.toggle('is-planned', isSelected);
   }
 
@@ -113,7 +120,14 @@ function clearAll() {
   selectedTasks.forEach((_, id) => {
     const row = document.querySelector(`[data-task-id="${id}"]`);
     if (row) {
-      row.querySelector('.planner-check')?.classList.remove('is-checked');
+      const pill = row.querySelector('.plan-pill');
+      if (pill) {
+        pill.classList.remove('is-checked');
+        const icon = pill.querySelector('.plan-pill-icon');
+        const text = pill.querySelector('.plan-pill-text');
+        if (icon) icon.textContent = '+';
+        if (text) text.textContent = 'Plan';
+      }
       row.classList.remove('is-planned');
     }
   });
@@ -128,6 +142,9 @@ function updatePanel() {
   const countEl = document.getElementById('planner-count');
   if (countEl) countEl.textContent = `${count} task${count !== 1 ? 's' : ''}`;
   panelEl.classList.toggle('has-tasks', count > 0);
+  // Push audio player above the planner bar when it's visible
+  const audio = document.querySelector('.audio-player');
+  if (audio) audio.style.bottom = count > 0 ? 'calc(48px + 1.5rem)' : '';
 }
 
 // ── Gantt ─────────────────────────────────────────────────────

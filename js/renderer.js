@@ -238,15 +238,10 @@ function renderCategory(cat, index, seasonId) {
   const title = el('span', { class: 'cat-title' });
   title.textContent = cat.title;
 
-  const priority = el('span', {
-    class: `cat-priority priority-${cat.priority}`,
-  });
-  priority.textContent = cat.priority;
-
   const toggle = el('span', { class: 'cat-toggle', 'aria-hidden': 'true' });
   toggle.textContent = '+';
 
-  trigger.append(num, title, priority, toggle);
+  trigger.append(num, title, toggle);
 
   const bodyEl = el('div', { class: `category-body${index === 0 ? ' is-open' : ''}` });
   if (index === 0) {
@@ -307,15 +302,18 @@ function renderTask(task, index, seasonId, cat) {
   const taskId = `${seasonId}-${cat?.id || 'task'}-${index}`;
   const row = el('div', { class: 'task-row', 'data-task-id': taskId });
 
-  // ── Planner checkbox ──────────────────────────────────────────
-  const checkBtn = el('button', {
-    class: 'planner-check',
+  // ── Plan pill button ──────────────────────────────────────────
+  const planPill = el('button', {
+    class: 'plan-pill',
     'aria-label': `Add "${task.title}" to plan`,
     type: 'button',
   });
-  checkBtn.addEventListener('click', e => {
+  planPill.innerHTML = '<span class="plan-pill-icon">+</span><span class="plan-pill-text">Plan</span>';
+  planPill.addEventListener('click', e => {
     e.stopPropagation();
-    const isNowChecked = checkBtn.classList.toggle('is-checked');
+    const isNowChecked = planPill.classList.toggle('is-checked');
+    planPill.querySelector('.plan-pill-icon').textContent = isNowChecked ? '✓' : '+';
+    planPill.querySelector('.plan-pill-text').textContent = isNowChecked ? 'Planned' : 'Plan';
     row.classList.toggle('is-planned', isNowChecked);
     row.dispatchEvent(new CustomEvent('plantask', {
       bubbles: true,
@@ -390,7 +388,8 @@ function renderTask(task, index, seasonId, cat) {
     content.appendChild(tip);
   }
 
-  row.append(checkBtn, idx, content);
+  content.appendChild(planPill);
+  row.append(idx, content);
   return row;
 }
 
@@ -416,40 +415,6 @@ function renderSeasonPlanner(s) {
     'data-planner-season': s.id,
   });
   section.appendChild(ganttWrap);
-
-  // ── Quick checklist ───────────────────────────────────────────
-  if (s.checklist?.length) {
-    const divider = el('div', { class: 'planner-cl-divider' });
-    const clLabel = el('p', { class: 'planner-cl-label' });
-    clLabel.textContent = 'Essential Checklist';
-    divider.appendChild(clLabel);
-    section.appendChild(divider);
-
-    const grid = el('div', { class: 'checklist-grid' });
-    s.checklist.forEach(text => {
-      const item = el('div', {
-        class: 'check-item',
-        tabindex: '0',
-        role: 'checkbox',
-        'aria-checked': 'false',
-      });
-      const box = el('div', { class: 'check-box', 'aria-hidden': 'true' });
-      const label = el('span', { class: 'check-label' });
-      label.textContent = text;
-      item.append(box, label);
-
-      const toggle = () => {
-        const checked = item.classList.toggle('is-checked');
-        item.setAttribute('aria-checked', String(checked));
-      };
-      item.addEventListener('click', toggle);
-      item.addEventListener('keydown', e => {
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
-      });
-      grid.appendChild(item);
-    });
-    section.appendChild(grid);
-  }
 
   return section;
 }
