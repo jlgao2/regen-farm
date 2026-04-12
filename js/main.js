@@ -1,9 +1,10 @@
 /* ── Main ── */
 
-import { SEASONS } from './data.js';
-import { CATEGORY_IMAGES } from './data_enrich.js';
-import { renderAllSeasons } from './renderer.js';
-import { activateSeason } from './seasons.js';
+import { buildSeasons }      from './data_loader.js';
+import { initRegion, setRegion, getRegion, REGIONS } from './regions.js';
+import { CATEGORY_IMAGES }   from './data_enrich.js';
+import { renderAllSeasons }  from './renderer.js';
+import { activateSeason }    from './seasons.js';
 import {
   animateLoader,
   initRevealObserver,
@@ -18,12 +19,16 @@ import {
   initHoverShimmer,
   initProximityWarmth,
 } from './cursor.js';
-import { initAudio } from './audio.js';
+import { initAudio }         from './audio.js';
 import { initPlanner, setPlannerSeason } from './planner.js';
 
+// ── Set region on body before rendering ───────────────────────
+const currentRegion = initRegion();
+
+// ── Build season data for this region ─────────────────────────
+const SEASONS = buildSeasons(currentRegion);
+
 // ── Merge season-specific image metadata into each category ───
-// CATEGORY_IMAGES keys are "{seasonId}-{catId}" → { imageAlt, imageQuery }
-// microseasons.js is imported directly by renderer.js
 const ENRICHED_SEASONS = SEASONS.map(s => ({
   ...s,
   categories: s.categories.map(cat => ({
@@ -44,8 +49,8 @@ root.appendChild(renderAllSeasons(ENRICHED_SEASONS));
 
 // ── Determine initial season ──────────────────────────────────
 const validIds = SEASONS.map(s => s.id);
-const hashId = location.hash.replace('#', '').toLowerCase();
-const initial = validIds.includes(hashId) ? hashId : 'autumn';
+const hashId   = location.hash.replace('#', '').toLowerCase();
+const initial  = validIds.includes(hashId) ? hashId : 'autumn';
 
 // ── Boot sequence ─────────────────────────────────────────────
 animateLoader(() => {
@@ -108,10 +113,22 @@ function wireHeader() {
   }, { passive: true });
 }
 
+// ── Region selector ───────────────────────────────────────────
 function wireRegionSelector() {
   const btn  = document.getElementById('nav-region-btn');
   const drop = document.getElementById('nav-region-drop');
   if (!btn || !drop) return;
+
+  // Reflect stored region in the button label and option states
+  const active = getRegion();
+  const regionLabel = btn.querySelector('.nav-region-label');
+  if (regionLabel) regionLabel.textContent = REGIONS[active]?.label || 'AU + NZ';
+
+  drop.querySelectorAll('.nav-region-option').forEach(opt => {
+    const isActive = opt.dataset.region === active;
+    opt.classList.toggle('is-active', isActive);
+    opt.setAttribute('aria-selected', String(isActive));
+  });
 
   const open  = () => { btn.setAttribute('aria-expanded', 'true');  drop.hidden = false; };
   const close = () => { btn.setAttribute('aria-expanded', 'false'); drop.hidden = true; };
@@ -121,13 +138,20 @@ function wireRegionSelector() {
     btn.getAttribute('aria-expanded') === 'true' ? close() : open();
   });
 
+  // Region option clicks — store + reload
+  drop.querySelectorAll('.nav-region-option').forEach(opt => {
+    opt.addEventListener('click', () => {
+      const id = opt.dataset.region;
+      if (id && id !== getRegion()) setRegion(id);
+      else close();
+    });
+  });
+
   // Close on outside click
   document.addEventListener('click', () => close());
-
-  // Prevent clicks inside the dropdown from closing it
   drop.addEventListener('click', e => e.stopPropagation());
 
-  // Escape key
+  // Escape
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape' && btn.getAttribute('aria-expanded') === 'true') {
       close();
