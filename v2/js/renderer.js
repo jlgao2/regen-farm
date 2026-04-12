@@ -279,7 +279,7 @@ function renderCategory(cat, index, seasonId) {
 
   // ── Task list ─────────────────────────────────────────────────
   const taskList = el('div', { class: 'task-list' });
-  cat.tasks.forEach((task, ti) => taskList.appendChild(renderTask(task, ti)));
+  cat.tasks.forEach((task, ti) => taskList.appendChild(renderTask(task, ti, seasonId, cat.id)));
   bodyEl.appendChild(taskList);
 
   trigger.addEventListener('click', () => {
@@ -305,13 +305,32 @@ function loadCategoryImg(img) {
   img.src = img.dataset.src;
 }
 
-function renderTask(task, index) {
+function renderTask(task, index, seasonId, catId) {
   const row = el('div', { class: 'task-row' });
 
   const idx = el('span', { class: 'task-index' });
   idx.textContent = String(index + 1).padStart(2, '0');
 
   const content = el('div', { class: 'task-content' });
+
+  // ── Per-task image strip ──────────────────────────────────────
+  if (seasonId && catId) {
+    const taskImgWrap = el('div', { class: 'task-img-wrap', 'aria-hidden': 'true' });
+    const taskImg = el('img', {
+      class: 'task-img',
+      alt: '',
+      loading: 'lazy',
+      decoding: 'async',
+      'data-src': `../assets/images/task-${seasonId}-${catId}-${index}.jpg`,
+    });
+    taskImg.onload = () => taskImg.classList.add('is-loaded');
+    taskImg.onerror = () => taskImgWrap.remove();
+    taskImgWrap.appendChild(taskImg);
+    content.appendChild(taskImgWrap);
+
+    // Defer src assignment so the element is in DOM first
+    requestAnimationFrame(() => { taskImg.src = taskImg.dataset.src; });
+  }
 
   const title = el('h3', { class: 'task-title' });
   title.textContent = task.title;
