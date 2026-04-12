@@ -163,6 +163,26 @@ function renderCategory(cat, index) {
     trigger.setAttribute('aria-expanded', 'true');
   }
 
+  // ── Category banner image ─────────────────────────────────────
+  const imgWrap = el('div', { class: 'category-img-wrap', 'aria-hidden': 'true' });
+  const img = el('img', {
+    class: 'category-img',
+    alt: '',
+    loading: 'lazy',
+    decoding: 'async',
+    'data-src': `../assets/images/cat-${cat.id}.jpg`,
+  });
+  // Lazy-load via IntersectionObserver (set in kinetic.js) or
+  // fall back to direct src if already in view
+  imgWrap.appendChild(img);
+
+  const imgLabel = el('span', { class: 'category-img-label' });
+  imgLabel.textContent = cat.title;
+  imgWrap.appendChild(imgLabel);
+
+  bodyEl.appendChild(imgWrap);
+
+  // ── Task list ─────────────────────────────────────────────────
   const taskList = el('div', { class: 'task-list' });
   cat.tasks.forEach((task, ti) => taskList.appendChild(renderTask(task, ti)));
   bodyEl.appendChild(taskList);
@@ -171,10 +191,23 @@ function renderCategory(cat, index) {
     const isOpen = block.classList.toggle('is-open');
     bodyEl.classList.toggle('is-open', isOpen);
     trigger.setAttribute('aria-expanded', String(isOpen));
+    // Lazy-load the image when section opens
+    if (isOpen) loadCategoryImg(img);
   });
+
+  // Load immediately if starts open
+  if (index === 0) loadCategoryImg(img);
 
   block.append(trigger, bodyEl);
   return block;
+}
+
+function loadCategoryImg(img) {
+  if (img.dataset.loaded) return;
+  img.dataset.loaded = '1';
+  img.onload = () => img.classList.add('is-loaded');
+  img.onerror = () => img.remove();   // gracefully drop missing image
+  img.src = img.dataset.src;
 }
 
 function renderTask(task, index) {
