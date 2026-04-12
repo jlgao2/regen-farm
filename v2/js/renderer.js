@@ -1,5 +1,7 @@
 /* ── Renderer — builds DOM from data, no side effects ── */
 
+import { MICROSEASONS, getCurrentMicroseason } from './microseasons.js';
+
 export function renderAllSeasons(seasons) {
   const frag = document.createDocumentFragment();
   seasons.forEach(s => frag.appendChild(renderSeason(s)));
@@ -14,6 +16,7 @@ function renderSeason(s) {
   });
   section.appendChild(renderHero(s));
   section.appendChild(renderMarqueeDivider(s));
+  section.appendChild(renderMicroseasons(s.id));
   section.appendChild(renderBody(s));
   section.appendChild(renderQuote(s));
   return section;
@@ -104,6 +107,94 @@ function renderMarqueeDivider(s) {
 
   div.appendChild(track);
   return div;
+}
+
+// ── Microseasons ──────────────────────────────────────────────
+
+function renderMicroseasons(seasonId) {
+  const current = getCurrentMicroseason();
+  const relevant = MICROSEASONS.filter(ms => ms.standardSeasons.includes(seasonId));
+
+  const section = el('div', { class: 'microseason-section reveal-up', style: '--d:60' });
+
+  // Section header
+  const header = el('div', { class: 'microseason-header' });
+  const kicker = el('p', { class: 'section-kicker' });
+  kicker.textContent = 'Indigenous Calendar';
+  const heading = el('h2', { class: 'microseason-heading' });
+  heading.textContent = 'Reading the Microseasons';
+  const sub = el('p', { class: 'microseason-sub' });
+  sub.textContent = 'Seven periods drawn from Noongar, Wurundjeri, Dja Dja Wurrung, Kaurna and Māori seasonal knowledge — temperate SE Australia and Aotearoa New Zealand.';
+  header.append(kicker, heading, sub);
+  section.appendChild(header);
+
+  // Cards for each relevant microseasonal period
+  const grid = el('div', { class: 'microseason-grid' });
+  relevant.forEach(ms => {
+    const isCurrent = ms.id === current.id;
+    const card = el('div', {
+      class: `microseason-card${isCurrent ? ' is-current' : ''}`,
+    });
+
+    // Date range
+    const dateStr = formatDateRange(ms.start, ms.end);
+    const dateBadge = el('span', { class: 'ms-date' });
+    dateBadge.textContent = dateStr;
+    card.appendChild(dateBadge);
+
+    if (isCurrent) {
+      const nowPill = el('span', { class: 'ms-now-pill' });
+      nowPill.textContent = 'NOW';
+      card.appendChild(nowPill);
+    }
+
+    // Name
+    const name = el('h3', { class: 'ms-name' });
+    name.textContent = ms.name;
+    card.appendChild(name);
+
+    const subtitle = el('p', { class: 'ms-subtitle' });
+    subtitle.textContent = ms.subtitle;
+    card.appendChild(subtitle);
+
+    // Heritage sources
+    const heritage = el('div', { class: 'ms-heritage' });
+    ms.heritage.forEach(h => {
+      const tag = el('span', { class: 'ms-heritage-tag' });
+      tag.innerHTML = `<em>${h.term}</em> — ${h.nation}`;
+      heritage.appendChild(tag);
+    });
+    card.appendChild(heritage);
+
+    // Indicators (collapsible)
+    const indicators = el('ul', { class: 'ms-indicators' });
+    ms.indicators.slice(0, 4).forEach(ind => {
+      const li = el('li');
+      li.textContent = ind;
+      indicators.appendChild(li);
+    });
+    card.appendChild(indicators);
+
+    // Tohu
+    const tohu = el('p', { class: 'ms-tohu' });
+    tohu.textContent = ms.tohu;
+    card.appendChild(tohu);
+
+    // Farming note
+    const farming = el('p', { class: 'ms-farming' });
+    farming.textContent = ms.farming;
+    card.appendChild(farming);
+
+    grid.appendChild(card);
+  });
+
+  section.appendChild(grid);
+  return section;
+}
+
+const MONTH_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+function formatDateRange(start, end) {
+  return `${MONTH_SHORT[start.month - 1]} ${start.day} — ${MONTH_SHORT[end.month - 1]} ${end.day}`;
 }
 
 // ── Body ──────────────────────────────────────────────────────

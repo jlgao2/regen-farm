@@ -180,6 +180,162 @@
   padding: 5rem var(--pad-x) 6rem;
 }
 
+/* ── Microseasons ── */
+.microseason-section {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 5rem var(--pad-x) 4rem;
+  border-top: 1px solid var(--border);
+}
+
+.microseason-header {
+  margin-bottom: 3rem;
+}
+.microseason-heading {
+  font-size: clamp(1.8rem, 4vw, 3.2rem);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  margin-bottom: 1rem;
+}
+.microseason-sub {
+  font-size: 0.8rem;
+  font-family: var(--font-mono);
+  color: var(--fg-dim);
+  max-width: 60ch;
+  line-height: 1.6;
+  letter-spacing: 0.04em;
+}
+
+/* Grid: cards side-by-side on wider screens */
+.microseason-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+}
+
+.microseason-card {
+  position: relative;
+  padding: 2rem 1.75rem 2.25rem;
+  background: var(--bg-tint);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  transition: background 300ms ease;
+}
+.microseason-card:hover {
+  background: color-mix(in srgb, var(--bg-tint) 80%, var(--accent));
+}
+.microseason-card.is-current {
+  background: color-mix(in srgb, var(--bg-tint) 70%, var(--accent));
+}
+
+/* "NOW" indicator */
+.ms-now-pill {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.5rem;
+  letter-spacing: 0.2em;
+  padding: 0.2rem 0.5rem;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  text-transform: uppercase;
+  animation: accent-pulse 2.5s ease-in-out infinite;
+}
+
+.ms-date {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--fg-dim);
+}
+
+.ms-name {
+  font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+  font-family: var(--font-edit);
+  font-weight: 700;
+  font-style: italic;
+  letter-spacing: -0.01em;
+  color: var(--fg);
+  line-height: 1.1;
+}
+
+.ms-subtitle {
+  font-size: 0.7rem;
+  font-family: var(--font-mono);
+  color: var(--accent);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: color 500ms ease;
+}
+
+.ms-heritage {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.25rem;
+}
+.ms-heritage-tag {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  color: var(--fg-dim);
+  border: 1px solid var(--border);
+  padding: 0.15rem 0.45rem;
+  letter-spacing: 0.06em;
+}
+.ms-heritage-tag em {
+  font-style: normal;
+  color: var(--fg);
+}
+
+.ms-indicators {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin-top: 0.5rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border);
+}
+.ms-indicators li {
+  font-size: 0.7rem;
+  color: var(--fg-dim);
+  padding-left: 1rem;
+  position: relative;
+  line-height: 1.4;
+}
+.ms-indicators li::before {
+  content: '·';
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+  transition: color 500ms ease;
+}
+
+.ms-tohu {
+  font-size: 0.72rem;
+  font-style: italic;
+  color: var(--fg);
+  line-height: 1.5;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border);
+}
+
+.ms-farming {
+  font-size: 0.68rem;
+  color: var(--fg-dim);
+  line-height: 1.55;
+  margin-top: auto;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border);
+}
+
 /* ── Section heading ── */
 .section-kicker {
   font-family: var(--font-mono);
