@@ -8,7 +8,6 @@ import { activateSeason }    from './seasons.js';
 import {
   animateLoader,
   initRevealObserver,
-  initBigWordParallax,
   initQuoteReveals,
   loadTyped,
 } from './kinetic.js';
@@ -64,7 +63,6 @@ animateLoader(() => {
   });
 
   initRevealObserver();
-  initBigWordParallax();
   initQuoteReveals();
   wireNav();
   wireHash();

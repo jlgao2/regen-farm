@@ -174,32 +174,54 @@ export function initMagneticLetters() {
 
   let mx = 0, my = 0;
 
+  // Cache split-char elements once; refresh on season switch
+  let chars = [...document.querySelectorAll('.hero-title-wrap .split-char')];
+  document.body.addEventListener('seasonchange', () => {
+    setTimeout(() => {
+      chars = [...document.querySelectorAll('.hero-title-wrap .split-char')];
+    }, 50);
+  });
+
+  // Pause loop when the hero has scrolled out of view
+  let heroVisible = true;
+  let heroObserver = null;
+  function observeHero() {
+    if (heroObserver) heroObserver.disconnect();
+    const hero = document.querySelector('.season-section.is-active .season-hero');
+    if (!hero) return;
+    heroObserver = new IntersectionObserver(([e]) => { heroVisible = e.isIntersecting; });
+    heroObserver.observe(hero);
+  }
+  observeHero();
+  document.body.addEventListener('seasonchange', () => setTimeout(observeHero, 50));
+
   window.addEventListener('mousemove', e => {
     mx = e.clientX;
     my = e.clientY;
   }, { passive: true });
 
   function applyMagnetism() {
-    document.querySelectorAll('.hero-title-wrap .split-char').forEach(char => {
-      const r = char.getBoundingClientRect();
-      const cx = r.left + r.width  / 2;
-      const cy = r.top  + r.height / 2;
-      const dx = mx - cx;
-      const dy = my - cy;
-      const dist = Math.hypot(dx, dy);
+    if (!document.hidden && heroVisible) {
+      chars.forEach(char => {
+        const r = char.getBoundingClientRect();
+        const cx = r.left + r.width  / 2;
+        const cy = r.top  + r.height / 2;
+        const dx = mx - cx;
+        const dy = my - cy;
+        const dist = Math.hypot(dx, dy);
 
-      if (dist < RADIUS) {
-        const pull = (1 - dist / RADIUS) * STRENGTH;
-        char.style.setProperty('--mag-x', `${dx * pull}px`);
-        char.style.setProperty('--mag-y', `${dy * pull}px`);
-        char.classList.add('is-magnetic');
-      } else {
-        char.classList.remove('is-magnetic');
-        char.style.removeProperty('--mag-x');
-        char.style.removeProperty('--mag-y');
-      }
-    });
-
+        if (dist < RADIUS) {
+          const pull = (1 - dist / RADIUS) * STRENGTH;
+          char.style.setProperty('--mag-x', `${dx * pull}px`);
+          char.style.setProperty('--mag-y', `${dy * pull}px`);
+          char.classList.add('is-magnetic');
+        } else {
+          char.classList.remove('is-magnetic');
+          char.style.removeProperty('--mag-x');
+          char.style.removeProperty('--mag-y');
+        }
+      });
+    }
     requestAnimationFrame(applyMagnetism);
   }
 
@@ -259,27 +281,39 @@ export function initProximityWarmth() {
 
   const RADIUS = 200;
   let mx = 0, my = 0;
+  let lastTick = 0;
+
+  // Cache warmth targets once; refresh on season switch (200ms matches shimmer)
+  let warmthEls = [...document.querySelectorAll('.task-description, .hero-intro-block p, .quote-text')];
+  document.body.addEventListener('seasonchange', () => {
+    setTimeout(() => {
+      warmthEls = [...document.querySelectorAll('.task-description, .hero-intro-block p, .quote-text')];
+    }, 200);
+  });
 
   window.addEventListener('mousemove', e => {
     mx = e.clientX;
     my = e.clientY;
   }, { passive: true });
 
-  function tick() {
-    document.querySelectorAll('.task-description, .hero-intro-block p, .quote-text').forEach(el => {
-      const r = el.getBoundingClientRect();
-      // Centre of element
-      const cx = r.left + r.width  / 2;
-      const cy = r.top  + r.height / 2;
-      const dist = Math.hypot(mx - cx, my - cy);
-      const proximity = Math.max(0, 1 - dist / RADIUS);
+  // Cap at ~20 fps — colour shifts are imperceptible above that rate
+  function tick(now) {
+    if (!document.hidden && now - lastTick >= 50) {
+      lastTick = now;
+      warmthEls.forEach(el => {
+        const r = el.getBoundingClientRect();
+        // Centre of element
+        const cx = r.left + r.width  / 2;
+        const cy = r.top  + r.height / 2;
+        const dist = Math.hypot(mx - cx, my - cy);
+        const proximity = Math.max(0, 1 - dist / RADIUS);
 
-      // Warm shift: nudge toward a straw/golden hue
-      el.style.setProperty('--warmth', proximity.toFixed(3));
-    });
-
+        // Warm shift: nudge toward a straw/golden hue
+        el.style.setProperty('--warmth', proximity.toFixed(3));
+      });
+    }
     requestAnimationFrame(tick);
   }
 
-  tick();
+  requestAnimationFrame(tick);
 }

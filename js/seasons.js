@@ -1,6 +1,6 @@
 /* ── Season switching ── */
 
-import { animateHeroIn, initHeroDiverge, typeIntro } from './kinetic.js';
+import { animateHeroIn, initHeroDiverge, initBigWordParallax, typeIntro } from './kinetic.js';
 
 let active = 'autumn';
 
@@ -34,12 +34,13 @@ export function activateSeason(id, opts = {}) {
   // Animations
   if (!instant) {
     animateHeroIn(id);
-    setTimeout(() => initHeroDiverge(id), 200);
+    setTimeout(() => { initHeroDiverge(id); initBigWordParallax(id); }, 200);
     typeIntro(id, false);
   } else {
     animateHeroIn(id, true);   // snap chars visible immediately
     typeIntro(id, true);
     initHeroDiverge(id);
+    initBigWordParallax(id);
   }
 
   // Dispatch for other modules (e.g. observer)

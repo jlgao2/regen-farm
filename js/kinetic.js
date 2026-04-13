@@ -209,13 +209,25 @@ export function initHeroDiverge(seasonId) {
 }
 
 // ── Big word parallax ─────────────────────────────────────────
+// Scoped per-season so only the active season's triggers are live.
+const _bigWordTriggers = {};
 
-export function initBigWordParallax() {
+export function initBigWordParallax(seasonId) {
   if (reduced) return;
 
   waitForGSAP(() => {
-    document.querySelectorAll('.big-word').forEach(word => {
-      gsap.fromTo(word,
+    // Kill any existing triggers for this season before recreating
+    if (_bigWordTriggers[seasonId]) {
+      _bigWordTriggers[seasonId].forEach(t => t?.kill?.());
+      delete _bigWordTriggers[seasonId];
+    }
+
+    const section = document.getElementById(`season-${seasonId}`);
+    if (!section) return;
+
+    const triggers = [];
+    section.querySelectorAll('.big-word').forEach(word => {
+      const t = gsap.fromTo(word,
         { x: '-4vw' },
         {
           x: '4vw',
@@ -228,7 +240,9 @@ export function initBigWordParallax() {
           },
         }
       );
+      if (t.scrollTrigger) triggers.push(t.scrollTrigger);
     });
+    _bigWordTriggers[seasonId] = triggers;
   });
 }
 
