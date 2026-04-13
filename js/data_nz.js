@@ -26,7 +26,7 @@ export const NZ_DELTAS = [
             tools: [
               'Kūmara seed tubers — heritage varieties: Owairaka Red, Toka Toka Gold, Northern Delight, Urenika (purple, for market gardens)',
               'Seedling heat mat (maintains 22–24°C) or low polytunnel with thermal mass',
-              'Soil thermometer with 100mm probe',
+              'Soil thermometer (100 mm probe)',
               'Coarse sandy compost mix for sprouting bed',
               'Raised bed material (timber, earth, or compost mounds)',
             ],
