@@ -58,6 +58,7 @@
   <nav class="site-nav" id="site-nav">
     <a class="nav-logo" href="#">regen.farm</a>
     <ul class="nav-seasons">
+      <li><button class="nav-btn nav-btn--gs" id="nav-gs-btn">START</button></li>
       <li><button class="nav-btn" data-season="autumn">AUTUMN</button></li>
       <li><button class="nav-btn" data-season="winter">WINTER</button></li>
       <li><button class="nav-btn" data-season="spring">SPRING</button></li>
@@ -95,6 +96,143 @@
 
   <!-- Main -->
   <main id="main">
+    <!-- Getting Started (hidden until #getting-started hash) -->
+    <section id="getting-started" class="gs" hidden>
+      <header class="gs-hero">
+        <p class="gs-kicker">Where to begin</p>
+        <h1 class="gs-title">Getting Started</h1>
+        <p class="gs-intro">
+          You don't need everything at once. Start with a few essentials,
+          build your soil biology, and let the seasons guide you.
+        </p>
+      </header>
+
+      <div class="gs-body">
+        <!-- Starter Kit -->
+        <section class="gs-section">
+          <h2 class="gs-heading">Starter Kit</h2>
+          <p class="gs-lead">
+            These are the supplies that come up again and again across tasks.
+            Get these first and you'll be able to work through most of the seasonal calendar.
+          </p>
+
+          <div class="gs-grid">
+            <!-- Tools -->
+            <div class="gs-card">
+              <h3 class="gs-card-label">Hand Tools</h3>
+              <ul class="gs-list">
+                <li>
+                  <strong>Broadfork</strong>
+                  <span>Loosens soil deeply without destroying structure. You'll use this before every planting.</span>
+                </li>
+                <li>
+                  <strong>Soil thermometer</strong>
+                  <span>Tells you when to plant, when to brew compost tea, and when to sow cover crops. 100 mm probe depth.</span>
+                </li>
+                <li>
+                  <strong>Moisture meter</strong>
+                  <span>Takes the guesswork out of watering decisions. A squeeze test works too once you've calibrated your hands.</span>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Amendments -->
+            <div class="gs-card">
+              <h3 class="gs-card-label">Soil Amendments</h3>
+              <ul class="gs-list">
+                <li>
+                  <strong>Hardwood biochar</strong>
+                  <span>A permanent home for soil microbes. Needs "charging" with nutrients before adding to soil &mdash; never apply raw.</span>
+                </li>
+                <li>
+                  <strong>Fungal-dominant compost</strong>
+                  <span>The foundation of everything. Aged 12+ months with visible hyphal threads. Source locally or make your own.</span>
+                </li>
+                <li>
+                  <strong>Blackstrap molasses</strong>
+                  <span>Unsulphured. Feeds beneficial microbes in compost tea brews, EM activation, and soil drenches.</span>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Bio-inoculants -->
+            <div class="gs-card">
+              <h3 class="gs-card-label">Biological Inoculants</h3>
+              <ul class="gs-list">
+                <li>
+                  <strong>Mycorrhizal inoculant (AMF)</strong>
+                  <span>Extends your plants' root networks dramatically. Apply granular form directly in the planting hole.</span>
+                </li>
+                <li>
+                  <strong>EM-1 concentrate</strong>
+                  <span>Beneficial microbe culture for bokashi, foliar sprays, and soil drenches. In NZ, look for EMRO NZ.</span>
+                </li>
+                <li>
+                  <strong>Rhizobium inoculant</strong>
+                  <span>Fixes nitrogen from the air via legume roots. Strain-specific &mdash; match the inoculant to the crop you're sowing.</span>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Composting -->
+            <div class="gs-card">
+              <h3 class="gs-card-label">Composting Setup</h3>
+              <ul class="gs-list">
+                <li>
+                  <strong>Bokashi bins &times; 2</strong>
+                  <span>Ferment kitchen waste into soil amendment. Two bins so one fills while the other ferments.</span>
+                </li>
+                <li>
+                  <strong>Bokashi bran</strong>
+                  <span>EM-inoculated wheat bran that drives the fermentation. Buy it or make your own with EM-1.</span>
+                </li>
+                <li>
+                  <strong>200 L drum or IBC tote</strong>
+                  <span>For charging biochar slurry and brewing compost teas. A food-grade drum is fine.</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Optional extras -->
+          <div class="gs-aside">
+            <h3 class="gs-card-label">Nice to have later</h3>
+            <ul class="gs-list gs-list--inline">
+              <li><strong>Refractometer</strong> &mdash; measures Brix (plant sugar) as a health indicator</li>
+              <li><strong>Microscope (100&ndash;400x)</strong> &mdash; see the biology in your compost tea. Optional but addictive</li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- What to do first -->
+        <section class="gs-section">
+          <h2 class="gs-heading">Start with the season</h2>
+          <p class="gs-lead">
+            Pick the current season and work through the tasks in order.
+            Soil prep comes first, then planting, then composting and cover crops build the system over time.
+          </p>
+          <div class="gs-seasons">
+            <button class="gs-season-btn" data-season="autumn">
+              <span class="gs-season-name">Autumn</span>
+              <span class="gs-season-note">Soil prep, bokashi setup, first cover crops</span>
+            </button>
+            <button class="gs-season-btn" data-season="winter">
+              <span class="gs-season-name">Winter</span>
+              <span class="gs-season-note">Biochar charging, compost tea brewing, tree planting</span>
+            </button>
+            <button class="gs-season-btn" data-season="spring">
+              <span class="gs-season-name">Spring</span>
+              <span class="gs-season-note">Main planting season, inoculant application</span>
+            </button>
+            <button class="gs-season-btn" data-season="summer">
+              <span class="gs-season-name">Summer</span>
+              <span class="gs-season-note">Mulching, water management, foliar feeding</span>
+            </button>
+          </div>
+        </section>
+      </div>
+    </section>
+
     <div id="seasons-root"></div>
   </main>
 

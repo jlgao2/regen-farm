@@ -920,6 +920,145 @@
   color: var(--fg-dim);
 }
 
+/* ── Getting Started ── */
+.gs {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 var(--pad-x);
+}
+.gs-hero {
+  padding-top: calc(var(--nav-h) + 6rem);
+  padding-bottom: 4rem;
+  border-bottom: 1px solid var(--border);
+}
+.gs-kicker {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 1rem;
+}
+.gs-title {
+  font-size: clamp(2.4rem, 6vw, 5rem);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  margin-bottom: 1.5rem;
+}
+.gs-intro {
+  font-size: clamp(0.95rem, 1.6vw, 1.15rem);
+  line-height: 1.75;
+  color: rgba(240, 237, 230, 0.7);
+  max-width: 52ch;
+}
+
+.gs-body { padding: 4rem 0 6rem; }
+.gs-section + .gs-section { margin-top: 5rem; }
+
+.gs-heading {
+  font-size: clamp(1.1rem, 2.2vw, 1.6rem);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.75rem;
+}
+.gs-lead {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  line-height: 1.7;
+  color: rgba(240, 237, 230, 0.6);
+  max-width: 60ch;
+  margin-bottom: 2.5rem;
+}
+
+.gs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+}
+.gs-card {
+  padding: 1.75rem;
+  border: 1px solid var(--border);
+}
+.gs-card-label {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 1.25rem;
+}
+.gs-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.gs-list li {
+  padding: 0.75rem 0;
+  border-top: 1px solid rgba(240, 237, 230, 0.06);
+}
+.gs-list li:first-child { border-top: none; padding-top: 0; }
+.gs-list li strong {
+  display: block;
+  font-family: var(--font-edit);
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--fg);
+  margin-bottom: 0.3rem;
+}
+.gs-list li span {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.65;
+  color: rgba(240, 237, 230, 0.55);
+}
+
+.gs-aside {
+  margin-top: 2rem;
+  padding: 1.25rem 1.5rem;
+  border-left: 2px solid var(--accent);
+}
+.gs-aside .gs-card-label { margin-bottom: 0.75rem; }
+.gs-list--inline li {
+  border-top: none;
+  padding: 0.25rem 0;
+}
+.gs-list--inline li strong { display: inline; margin-right: 0; }
+
+/* Season shortcut buttons */
+.gs-seasons {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1rem;
+}
+.gs-season-btn {
+  display: block;
+  text-align: left;
+  padding: 1.25rem 1.5rem;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: border-color 250ms ease;
+}
+.gs-season-btn:hover { border-color: var(--accent); }
+.gs-season-name {
+  display: block;
+  font-family: var(--font-edit);
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--fg);
+  margin-bottom: 0.3rem;
+}
+.gs-season-note {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  line-height: 1.5;
+  color: var(--fg-dim);
+}
+
 /* ── Responsive ── */
 @media (max-width: 640px) {
   :root { --nav-h: 88px; }

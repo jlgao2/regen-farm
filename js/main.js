@@ -49,11 +49,13 @@ root.appendChild(renderAllSeasons(ENRICHED_SEASONS));
 // ── Determine initial season ──────────────────────────────────
 const validIds = SEASONS.map(s => s.id);
 const hashId   = location.hash.replace('#', '').toLowerCase();
-const initial  = validIds.includes(hashId) ? hashId : 'autumn';
+const startOnGS = hashId === 'getting-started';
+const initial   = validIds.includes(hashId) ? hashId : 'autumn';
 
 // ── Boot sequence ─────────────────────────────────────────────
 animateLoader(() => {
   activateSeason(initial, { instant: true });
+  if (startOnGS) showGettingStarted();
 
   loadTyped(() => {
     const el = document.getElementById(`intro-${initial}`);
@@ -87,9 +89,40 @@ document.body.addEventListener('seasonchange', e => {
   setPlannerSeason(e.detail?.id || 'autumn');
 });
 
+// ── Getting Started ───────────────────────────────────────────
+function showGettingStarted() {
+  const gs = document.getElementById('getting-started');
+  if (!gs) return;
+  document.querySelectorAll('.season-section').forEach(s => s.classList.remove('is-active'));
+  document.querySelectorAll('.nav-btn[data-season]').forEach(b => b.classList.remove('is-active'));
+  gs.hidden = false;
+  const gsBtn = document.getElementById('nav-gs-btn');
+  if (gsBtn) gsBtn.classList.add('is-active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  history.replaceState(null, '', '#getting-started');
+}
+
+function hideGettingStarted() {
+  const gs = document.getElementById('getting-started');
+  if (gs) gs.hidden = true;
+  const gsBtn = document.getElementById('nav-gs-btn');
+  if (gsBtn) gsBtn.classList.remove('is-active');
+}
+
+// Hide getting-started whenever a season activates
+document.body.addEventListener('seasonchange', hideGettingStarted);
+
 // ── Nav wiring ────────────────────────────────────────────────
 function wireNav() {
-  document.querySelectorAll('.nav-btn').forEach(btn => {
+  document.querySelectorAll('.nav-btn[data-season]').forEach(btn => {
+    btn.addEventListener('click', () => activateSeason(btn.dataset.season));
+  });
+
+  const gsBtn = document.getElementById('nav-gs-btn');
+  if (gsBtn) gsBtn.addEventListener('click', showGettingStarted);
+
+  // Season buttons inside getting-started page
+  document.querySelectorAll('.gs-season-btn').forEach(btn => {
     btn.addEventListener('click', () => activateSeason(btn.dataset.season));
   });
 }
@@ -97,6 +130,7 @@ function wireNav() {
 function wireHash() {
   window.addEventListener('hashchange', () => {
     const id = location.hash.replace('#', '').toLowerCase();
+    if (id === 'getting-started') { showGettingStarted(); return; }
     if (validIds.includes(id)) activateSeason(id);
   });
 }
