@@ -20,6 +20,8 @@ export const SEASONS = [
         tasks: [
           {
             title: 'Autumn Mycorrhizal Inoculation of Perennial Beds and Orchard Lines',
+            summary: 'Add beneficial root fungi to your fruit trees and perennial beds while soil is still warm. Place granular inoculant directly in the root zone for best colonisation.',
+            scale: 'both',
             timing: 'Early–mid March (while soil temperature at 100 mm is still above 15°C)',
             duration: '4–6 hours per 500 m² of bed space',
             description: 'This is your single highest-return biological investment of the year. Arbuscular mycorrhizal fungi (AMF) — principally Rhizophagus irregularis, Funneliformis mosseae, and Claroideoglomus etunicatum — colonise roots most aggressively when soil temperatures sit between 12–20°C and soil moisture is rising, which in temperate AU/NZ describes March precisely. Apply granular mycorrhizal inoculant (minimum 200 propagules per gram; source from Mycelium Organics in Victoria, BioGro-certified NZ suppliers like Roots Shoots & Fruits in the Waikato, or Nutri-Tech Solutions in QLD who ship nationally) directly into the root zone at 50–80 g per linear metre of tree drip line, or 30 g per planting hole for perennial beds. On the red-brown duplex soils common across the Western District of Victoria and the Mount Lofty Ranges of SE South Australia (pH typically 5.5–6.5 in surface horizons, heavy clay B-horizon below 20 cm), inoculant placement must be in the A-horizon where root density is highest — never below the clay interface where anaerobic conditions suppress AMF. On the free-draining Templeton and Eyre silt loams of Canterbury, deeper placement (100–150 mm) is acceptable. Avoid applying any phosphorus fertiliser above 20 ppm Olsen P within six weeks of inoculation, as elevated soluble P suppresses AMF colonisation — a finding reinforced by the long-term trials at Lincoln University\'s Bio-Protection Research Centre.',
@@ -34,6 +36,8 @@ export const SEASONS = [
           },
           {
             title: 'Charged Biochar Incorporation into Autumn Garden Beds',
+            summary: 'Soak crushed biochar in worm castings and fermented plant juice for two weeks, then fork it into your beds before heavy rains. This gives soil microbes a permanent home and boosts water retention.',
+            scale: 'farm',
             timing: 'Mid-March to mid-April (before heavy rains establish)',
             duration: '1–2 days for production and charging; 3–4 hours for incorporation per 200 m²',
             description: 'Raw biochar is a biological desert — its vast internal surface area (300–500 m²/g for hardwood chars) will actually adsorb nutrients and microbes from your soil in the short term, creating a temporary fertility deficit. The practice of charging biochar before incorporation is now considered essential, and autumn is the ideal window because you want the charged biochar settled into the soil matrix before winter rains drive leaching on lighter soils. Produce biochar from locally available feedstocks: blue gum (Eucalyptus globulus) prunings in Tasmania and Victoria, radiata pine (Pinus radiata) mill waste in Canterbury and Otago (widely available from Azwood Energy or Pacific Biochar NZ), or mānuka and kānuka branch waste from scrub clearance in Hawke\'s Bay. Pyrolyse at 450–550°C using a top-lit updraft (TLUD) kiln or Kon-Tiki flame-curtain kiln. Charge by soaking crushed biochar (particle size 2–10 mm) for a minimum of 14 days in a slurry of 1 part mature vermicast, 1 part biochar, and enough KNF FPJ (fermented plant juice) diluted 1:500 to saturate. Incorporate at 2–5 kg per m² into the top 150 mm of soil. On heavy Wakanui clay loams, incorporation improves drainage and aeration measurably within one season; on the free-draining Eyre sandy loams, it radically improves cation exchange capacity and water-holding capacity.',
@@ -49,6 +53,8 @@ export const SEASONS = [
           },
           {
             title: 'Fungal-Dominant Compost Extract Application to Orchards, Pastures, and Perennial Systems',
+            summary: 'Brew a cold-steeped extract from aged woody compost and spray it on orchard floors and perennial beds. This shifts your soil biology toward the fungal dominance that perennial plants need.',
+            scale: 'farm',
             timing: 'Late March to late April (targeting the fungal flush as soil cools below 18°C)',
             duration: '4–6 hours for brewing; 2–3 hours for application per hectare',
             description: 'As Elaine Ingham\'s soil food web research has exhaustively demonstrated, the ratio of fungal to bacterial biomass is the master variable governing nutrient cycling in perennial systems. Autumn is when you shift the biology hard toward fungal dominance. Brew a fungal-dominant compost extract (not a true aerated compost tea — the distinction matters) by cold-steeping high-fungal compost in non-chlorinated water at a 1:5 ratio for 24–48 hours, gently agitating rather than vigorously aerating (vigorous aeration favours bacteria). The compost source must be woody, humified, and show visible hyphal threads — aged hardwood chip piles (12+ months) from arborist waste work well across all regions. Add 2% humic acid and 0.5% fish hydrolysate (not emulsion — hydrolysate retains amino acids that feed fungi). Strain through 400-micron mesh and apply at 50–100 L/ha via low-pressure boom or backpack sprayer to orchard floor, pasture, and perennial bed surfaces. Target overcast days or late afternoon to protect UV-sensitive organisms. On the volcanic loams of the Waikato and the basalt-derived soils of Victoria\'s Western District, this extract finds an already mineral-rich substrate and the response in terms of fungal colonisation is rapid — expect visible saprophytic fungal bloom within 10–14 days.',
@@ -64,6 +70,8 @@ export const SEASONS = [
           },
           {
             title: 'Biological Soil Assay and Glomalin Baseline Testing',
+            summary: 'Take soil samples before you add any amendments so you have a true starting point. Test for fungal-to-bacterial ratio and the sticky protein that beneficial root fungi produce.',
+            scale: 'farm',
             timing: 'Early March (before any amendments applied, to establish baseline)',
             duration: '2–3 hours for sampling; 1–2 weeks for lab turnaround',
             description: 'You cannot manage what you do not measure, and the regenerative metrics that matter are biological, not just chemical. In early March, before you apply any amendments, take composite soil samples (0–100 mm and 100–200 mm separately, 15 cores per management zone mixed) for both standard chemical analysis and biological assay. For biology, use either the Soil Food Web School\'s direct microscopy service or the microBIOMETER field kit for rapid fungal:bacterial ratio estimation. Additionally, request a glomalin-related soil protein (GRSP) assay — this glycoprotein, produced exclusively by AMF, is the single best proxy for long-term soil carbon stability and aggregate formation. GRSP is measured as Bradford-reactive protein in citrate extract; Environmental Analysis Laboratory (EAL) at Southern Cross University in Lismore, NSW, can run this, as can Hill Laboratories in Hamilton, NZ, on special request. On red-brown earths in the Wimmera and SE SA, typical GRSP values in conventionally farmed soils are 0.8–1.5 mg/g; regeneratively managed soils can reach 3–5 mg/g. Canterbury\'s Templeton silt loams under long-term pasture often sit at 2–3 mg/g. These numbers become your regeneration scorecard.',
@@ -86,6 +94,8 @@ export const SEASONS = [
         tasks: [
           {
             title: 'Establish Autumn Brassica and Allium Guilds with Companion Plantings for Soil Food Web Support',
+            summary: 'Plant broccoli, onions, and clover together as companion guilds rather than solo rows. The mix keeps root fungi alive and suppresses soil diseases during cool, wet weather.',
+            scale: 'both',
             timing: 'Mid-March to mid-April (earlier in Otago and Tasmanian Midlands; later in warmer Hawke\'s Bay and coastal Victoria)',
             duration: '4–6 hours per 50 m² bed including preparation',
             description: 'Autumn in temperate AU/NZ is prime time for brassicas and alliums, but regenerative planting goes beyond monoculture rows. Establish companion guilds designed to maximise rhizosphere diversity and soil food web interactions. A proven guild for these latitudes: \'Purple Sprouting\' broccoli (cold-hardy, overwinters superbly south of latitude 40°S; source seed from Koanga Institute, Wairoa, NZ, or Diggers Club, Dromana, VIC) interplanted with \'Barletta\' or \'Purplette\' pickling onions (fast-maturing alliums whose root exudates suppress Sclerotinia and Rhizoctonia — significant pathogens on autumn brassicas in cool, moist conditions), underplanted with \'White Dutch\' clover (Trifolium repens) as a living mulch for nitrogen fixation and AMF hosting. Add puha (Sonchus oleraceus) as a deliberate dynamic accumulator; its deep taproot mines calcium and potassium from below the cultivation zone and its latex-rich root exudates feed a distinctive bacterial consortium that suppresses root-knot nematode. On the heavy basalt soils of Warrnambool–Colac (Victoria), raise beds 150–200 mm to prevent waterlogging as autumn rains intensify from April. On Canterbury silt loams, flat planting is fine but ensure 80–100 mm of ramial woodchip mulch to buffer soil temperature as frosts approach.',
@@ -100,6 +110,8 @@ export const SEASONS = [
           },
           {
             title: 'Plant Nitrogen-Fixing Shelter Belt Species Along South/Southwest Wind Corridors',
+            summary: 'Plant rows of tagasaste, wattle, or kowhai along your cold-wind edges. These trees fix nitrogen from the air and protect crops from winter gales.',
+            scale: 'farm',
             timing: 'Mid-April to mid-May (after autumn rains establish consistent soil moisture)',
             duration: '1–2 days per 100 m of shelter belt',
             description: 'Autumn is the optimal planting window for establishing nitrogen-fixing shelter belt species that will protect crops from cold south and southwest winds through winter. In temperate Australia, plant tagasaste (Chamaecytisus palmensis) or native Acacia species such as blackwood (Acacia melanoxylon) and silver wattle (Acacia dealbata) in double-staggered rows at 2 m spacing. In New Zealand, kōwhai (Sophora microphylla) and tree lucerne (tagasaste) are excellent choices. These species fix atmospheric nitrogen via Rhizobium and Bradyrhizobium root nodule associations, contributing 40–150 kg N/ha/year to the surrounding system via leaf litter and root turnover. Plant into well-charged biochar-amended holes to give establishing root systems maximum biological support. Protect young plantings with tree guards where rabbit or wallaby pressure is significant, particularly on the Canterbury Plains and in Tasmanian Midlands pasture systems.',
@@ -122,6 +134,8 @@ export const SEASONS = [
         tasks: [
           {
             title: 'Autumn IMO-3 Production Using Local Forest Litter',
+            summary: 'Capture wild soil microbes from a nearby forest floor using cooked rice, then multiply them with bran and sugar. This creates a powerful homegrown inoculant for compost and garden beds.',
+            scale: 'both',
             timing: 'Early–mid March (while temperatures still support rapid fermentation)',
             duration: '2–3 hours initial setup; 3–4 weeks fermentation cycle',
             description: 'Korean Natural Farming (KNF) Indigenous Micro-Organism (IMO) production is ideally initiated in autumn when the forest floor is rich with fungal activity. Collect IMO-1 by placing steamed rice in a breathable wooden box, covered with breathable paper, and nestled into the leaf litter layer beneath mature eucalyptus forest (in Australia) or native podocarp-broadleaf forest (in NZ) — specifically under mānuka, rimu, or tōtara stands where fungal diversity peaks. After 3–5 days, the rice will be colonised by a dense white mycelium. Mix this 1:1 by weight with raw brown sugar to create IMO-2 (shelf-stable for months). To produce IMO-3, combine IMO-2 with wheat bran at 1:500 dilution, moisten to 65% moisture content, and mound under breathable cover for 5–7 days until the pile reaches 70°C and then cools. This becomes your master inoculant for all autumn compost systems and bokashi bins. Turn bokashi bins fortnightly throughout autumn to maintain anaerobic fermentation conditions and ensure even colonisation.',
@@ -137,6 +151,8 @@ export const SEASONS = [
           },
           {
             title: 'Fortnightly Bokashi Bin Management and Autumn Fermentation Optimisation',
+            summary: 'Turn your bokashi bins every two weeks and drain the liquid for use as a soil drench. As temperatures drop, add extra bran and insulate bins to keep fermentation active.',
+            scale: 'home',
             timing: 'Ongoing through March–May, turned fortnightly',
             duration: '30–45 minutes per turn',
             description: 'Autumn\'s cooling temperatures slow bokashi fermentation, so management adjustments are essential. Ensure bokashi bins are positioned in sheltered locations that maintain at least 15°C ambient temperature — against a north-facing wall is ideal in both AU and NZ. Add an extra tablespoon of bokashi bran (EM-inoculated wheat bran) per layer as temperatures drop below 18°C to compensate for reduced microbial metabolic rates. Turn bins fortnightly to redistribute moisture and microbial activity. The liquid leachate (bokashi juice) should be drained every 3–4 days and diluted 1:100 with water for immediate use as a soil drench on autumn-planted beds — it is rich in lactic acid bacteria and yeasts that suppress soil-borne pathogens during the cool, wet conditions that favour Pythium and Phytophthora. By May, completed bokashi can be trenched directly into fallow beds where it will break down over winter, contributing to the fungal-dominant biology you are building.',
@@ -159,6 +175,8 @@ export const SEASONS = [
         tasks: [
           {
             title: 'Establish Multi-Species Cover Crop Mix on All Bare Ground',
+            summary: 'Sow a mix of rye, clover, radish, and phacelia on every empty bed before frost. Living roots feed soil life all winter and prevent bare ground from eroding.',
+            scale: 'both',
             timing: 'Early–mid April (targeting establishment before first frost)',
             duration: '3–5 hours per 1,000 m² including seed preparation and sowing',
             description: 'No bare soil should enter winter in a regenerative system. By mid-April, all harvested annual beds, fallow paddock strips, and orchard inter-rows should be sown with a multi-species cover crop mix designed for maximum root diversity and soil food web support. A proven autumn mix for temperate AU/NZ: cereal rye (Secale cereale) at 40 kg/ha for biomass and allelopathic weed suppression; crimson clover (Trifolium incarnatum) at 10 kg/ha for nitrogen fixation; tillage radish (Raphanus sativus var. longipinnatus) at 4 kg/ha for deep compaction-breaking (the taproot can penetrate 300+ mm of heavy clay B-horizons on duplex soils); and phacelia (Phacelia tanacetifolia) at 3 kg/ha as a premier mycorrhizal host and beneficial insect attractor. On Canterbury\'s silt loams, add annual ryegrass (Lolium multiflorum) at 15 kg/ha for rapid ground cover before frost. Broadcast seed onto lightly scratched soil surface, roll or tamp to ensure seed-soil contact, and apply 20 mm of fine ramial woodchip as a protective mulch layer. This mix will establish before frost, overwinter as a living root system feeding soil biology, and can be crimp-rolled or slashed in early spring before planting.',
@@ -173,6 +191,8 @@ export const SEASONS = [
           },
           {
             title: 'Oversow Existing Pastures with Legume and Herb Species for Winter Diversity',
+            summary: 'Scatter chicory, plantain, and clover seed into grazed-down pasture to build species diversity. Deep-rooted herbs mine minerals and reduce livestock parasite loads.',
+            scale: 'farm',
             timing: 'Late March to mid-April (after autumn break rains in SE Australia; after first reliable rains in Canterbury)',
             duration: '2–4 hours per hectare using hand broadcaster; faster with seed drill',
             description: 'Regenerative pasture management demands species diversity well beyond the ryegrass-clover binary. Autumn is the window for oversowing existing pastures with deep-rooted herbs and additional legume species that will boost nitrogen cycling, mineral availability, and root-channel diversity through winter. Sow chicory (Cichorium intybus, \'Puna\' or \'Choice\' cultivars) at 2 kg/ha — its taproot reaches 1.5 m and mines calcium, boron, and sulphur. Add plantain (Plantago lanceolata, \'Tonic\' cultivar) at 3 kg/ha for its aucubin content which has anthelmintic properties (reducing internal parasite load in grazing livestock by up to 50% in Lincoln University trials). Include subterranean clover (Trifolium subterraneum) at 5 kg/ha on lighter soils in SE Australia for its self-regenerating, hard-seeded nitrogen fixation. Oversow into existing pasture after a hard graze that opens the sward canopy to light, then exclude stock for 6–8 weeks to allow establishment. This is the Colin Seis \'pasture cropping\' philosophy applied to the autumn context.',
@@ -195,6 +215,8 @@ export const SEASONS = [
         tasks: [
           {
             title: 'Complete Keyline Ripping on Pasture Paddocks for Winter Rain Infiltration',
+            summary: 'Run a deep ripper along contour-based lines to direct rainfall from gullies toward ridges. This can triple your soil infiltration rate and store winter rain where it is needed most.',
+            scale: 'farm',
             timing: 'Mid-March to mid-April (while soil is moist but not saturated)',
             duration: '4–8 hours per hectare depending on terrain and equipment',
             description: 'Keyline design, developed by P.A. Yeomans in the 1950s and now central to regenerative landscape hydrology, uses the natural topography of the land to redistribute rainfall from valleys (where it concentrates and causes erosion) to ridges (where it is needed most). Autumn, when soils are moist enough for the subsoil ripper to penetrate but not so wet that they smear and compact, is the ideal window. Using a Yeomans-pattern subsoil plough or a single-tine ripper set to 300–400 mm depth, rip parallel lines following the Keyline pattern — slightly off-contour, drifting from valley to ridge. On the heavy basalt clays of Victoria\'s Western District, this dramatically improves infiltration rates: research from Vic No-Till Farmers Association has documented infiltration improvements from 8 mm/hr to 25+ mm/hr after a single Keyline pass. On Canterbury\'s silt loams, the effect is less dramatic but still valuable for breaking plough pans at 200–250 mm depth that have developed under decades of conventional tillage. Do not rip when soil is at or near saturation — you will create compaction rather than relieving it. The rip lines will close over winter as biological activity fills the channels with root growth and fungal hyphae, creating permanent macropore pathways.',
@@ -209,6 +231,8 @@ export const SEASONS = [
           },
           {
             title: 'Install or Maintain Swales and Infiltration Basins Before Winter Rains',
+            summary: 'Dig or clean out level ditches on contour so winter rain soaks into the ground instead of running off. Plant the downhill bank with nitrogen-fixing trees for stability.',
+            scale: 'farm',
             timing: 'Late March to mid-April (before consistent heavy rains begin)',
             duration: '1–2 days for new swale construction per 50 m; 3–4 hours for maintenance of existing systems',
             description: 'Swales — level-silled excavations on contour — are the primary passive water harvesting earthwork in regenerative land design. Before winter rains arrive in earnest (typically late April in SE Australia, mid-April in Canterbury), inspect and maintain existing swales: clear any sediment buildup from the channel floor, repair any low points in the berm where overflow has occurred, and ensure spillways are functional and directing overflow to the next swale downslope. For new installations on sloping ground (2–8% grade is ideal for swales), excavate to 300–500 mm depth and 600–1,000 mm width on contour, placing the spoil downslope to form a planted berm. Plant the berm immediately with nitrogen-fixing species (tagasaste, Acacia melanoxylon, or kōwhai) whose roots will stabilise the earthwork through winter. On the heavy clay soils of the Western District, swales are extraordinarily effective — a single 50 m swale can infiltrate 10,000–15,000 litres per rainfall event. On free-draining Canterbury silt loams, swales are less critical for infiltration but valuable for slowing overland flow and reducing topsoil loss during intense winter frontal rainfall.',
@@ -252,6 +276,8 @@ export const SEASONS = [
         tasks: [
           {
             title: 'Charge and Incorporate Fungal-Loaded Biochar into Resting Beds',
+            summary: 'Soak crushed biochar in worm juice and fish extract for two weeks, then fork it into your resting beds. The biochar becomes a long-term home for beneficial soil microbes that will feed your spring crops.',
+            scale: 'both',
             timing: 'Early–mid June, before sustained soil temps drop below 5°C',
             duration: '4–6 hours per 500 m² (preparation over 7–14 days prior)',
             description: 'Source hardwood biochar (ideally from local green-waste pyrolysis — in Victoria, try Pacific Pyrolysis or Rainbow Bee Eater biochar; in NZ, the NZ Biochar Research Centre at Massey University supplies research-grade char). Crush to 2–5 mm particle size. Over 10–14 days, charge the biochar by soaking it in a 50:50 blend of mature vermicast leachate and diluted KNF Fish Amino Acid (FAA). The goal is to saturate the biochar\'s vast internal pore structure (up to 300 m²/g surface area) with microbial inoculant so it functions as a long-term biological housing estate in your soil. Incorporate at 2–4 kg/m² into the top 10–15 cm of resting beds using a broad fork — never a rotary hoe, which shreds hyphal networks. On the heavy basalt-derived clay loams of the Western District (Colac, Camperdown), biochar also improves drainage and reduces waterlogging. On the free-draining Lismore stony silt loams of Canterbury, it improves water-holding capacity — the same amendment, solving opposite problems.',
@@ -268,6 +294,8 @@ export const SEASONS = [
           },
           {
             title: 'Apply Fungal-Dominant Compost Extract to Perennial Systems',
+            summary: 'Brew a cold-steep compost extract and drench it around fruit trees and perennial plantings. Winter favours fungi over bacteria, so this feed helps the fungal networks that deliver nutrients to your plants.',
+            scale: 'both',
             timing: 'June – early July (while soil biological activity is transitioning, not fully dormant)',
             duration: '3–4 hours including brewing (24-hour brew cycle prior)',
             description: 'Winter is the fungal season. As bacterial activity declines below 8°C, saprophytic and mycorrhizal fungi become the dominant decomposers and nutrient cyclers. Support this transition by brewing a fungal-dominant aerated compost extract (ACE) following Dr. Elaine Ingham\'s Soil Food Web methodology. Use mature, fungal-rich compost (look for visible white hyphal threads, a sweet forest-floor smell — never ammonia). Brew at a 1:10 ratio (compost to non-chlorinated water) with fungal foods: finely ground oat flour (2 tablespoons per 20 litres), humic acid (5 ml per 20 litres), and a small amount of fish hydrolysate. Aerate for 18–24 hours at ambient winter temps (this means slower brewing — extend to 24 hrs in Otago/Tasmania). Apply via watering can or low-pressure sprayer to the drip line of fruit trees, established native plantings, and perennial pastures at 10–20 litres per 100 m². On the red-brown earths (Chromosols) typical of the Barossa, Clare Valley, and north-east Victoria, this is particularly effective as these soils are naturally low in organic matter and fungal biomass.',
@@ -283,6 +311,8 @@ export const SEASONS = [
           },
           {
             title: 'Apply EM-1 and Molasses Drench to Compacted Pathways and Headlands',
+            summary: 'Drench compacted gateways and paths with a diluted beneficial-microbe and molasses solution. The microbes soften the biological crust so these dead zones are ready to aerate and plant in spring.',
+            scale: 'farm',
             timing: 'Mid-July, during the wettest window (50–80 mm/month typical for western Victoria, Canterbury, Otago)',
             duration: '1–2 hours per application; repeat fortnightly through July–August',
             description: 'Compacted headlands, gateways, and stock camps are the dead zones of any farm. In winter, when soil moisture is at field capacity on heavy Vertosol clays (e.g. the self-mulching black earths of the Darling Downs margins, or the heavy Temuka clay soils around Ashburton, Canterbury), these areas can be biologically activated using Effective Microorganisms (EM-1). Dilute activated EM (EM-A, which you\'ve fermented from EM-1 concentrate with molasses and warm water over 7 days) at 1:100 with rainwater. Add unsulphured blackstrap molasses at 1 tablespoon per 10 litres as an energy source. Drench compacted areas at 5 litres per m². The lactic acid bacteria and photosynthetic bacteria in EM will begin softening the biological crust and kick-starting decomposition of surface organic matter even at low temperatures. This is a preparation step — come spring, these areas will be ready for direct aeration and seeding rather than mechanical intervention.',
@@ -297,6 +327,8 @@ export const SEASONS = [
           },
           {
             title: 'Establish Indigenous Mycorrhizal Inoculation Zones Using Forest Soil Transplants',
+            summary: 'Collect a thin layer of leaf litter and topsoil from nearby native bush and spread it around your new plantings. This introduces locally adapted fungi that no shop-bought product can match.',
+            scale: 'both',
             timing: 'Late June – July (while native bush litter is moist and fungally active)',
             duration: 'Half-day for collection; 1–2 hours for application',
             description: 'The most biodiverse and locally adapted mycorrhizal inoculant is already growing in your nearest remnant native bush. In New Zealand, collect the top 5 cm of litter and humus from beneath established kānuka (Kunzea ericoides) or mānuka (Leptospermum scoparium) stands — these species are densely colonised by both ericoid and arbuscular mycorrhizae. In south-eastern Australia, collect from beneath Banksia marginata (silver banksia), Allocasuarina verticillata (drooping she-oak), or Eucalyptus ovata (swamp gum) — all strongly mycorrhizal hosts in temperate zones. Collect no more than 5% of litter from any single area (kaitiakitanga — guardianship, not extraction). Gently crumble and spread this living inoculant around newly planted fruit trees, native shelter belts, or into prepared garden beds at 1–2 cm depth. Cover lightly with straw mulch. The fungal hyphae, spores, and associated microarthropods in this material are cold-adapted and locally evolved — no commercial product can match this specificity.',
@@ -319,6 +351,8 @@ export const SEASONS = [
         tasks: [
           {
             title: 'Plant Bare-Root Heritage Fruit Trees in Mycorrhizal-Inoculated Guilds',
+            summary: 'Plant dormant heritage fruit trees surrounded by comfrey, clover, and native groundcovers. Adding fungal inoculant to the planting hole gives roots a head start on building their underground nutrient network.',
+            scale: 'both',
             timing: 'Mid-June to end of July (bare-root season; soil workable but trees fully dormant)',
             duration: '1–2 hours per tree guild (including guild establishment)',
             description: 'Winter is the prime bare-root planting window. Source heritage cultivars adapted to your specific chill-hour profile: for high-chill zones (Otago: 1,000–1,200 hrs; Tasmania/Huon Valley: 800–1,100 hrs), plant apple varieties like \'Sturmer Pippin\' (outstanding NZ heritage — keeps until October), \'Monty\'s Surprise\' (high-anthocyanin NZ heritage apple from the Waikato), or \'Cox\'s Orange Pippin\' (thrives in Canterbury and Hawke\'s Bay). For pears, \'Winter Nelis\' and \'Beurre Bosc\' are superbly cold-adapted. In Victoria and SE South Australia (600–900 chill hours), try \'Gravenstein\', \'Bramley\'s Seedling\', or \'Democrat\' (a rare Tasmanian heritage variety). Source from Woodbridge Fruit Trees (Tasmania), Donovans Nursery (Huon Valley), or Donovans Fruit Tree Nursery (Mapua, Nelson, NZ); in Victoria, try Yalca Fruit Trees or Flemings Nurseries for heritage stock. Plant each tree as the anchor of a permaculture guild: comfrey (Symphytum × uplandicum \'Bocking 14\') as dynamic accumulator, white clover (Trifolium repens) or subterranean clover (\'Mt Barker\' strain) as nitrogen-fixing ground cover, and a native understory — in NZ, Arthropodium cirratum (renga renga lily) tolerates shade and frost; in AU, Microlaena stipoides (weeping grass) provides a native perennial groundcover. Inoculate the planting hole with the charged biochar from Task 1.1 and a tablespoon of AMF granular inoculant placed in direct root contact.',
@@ -335,6 +369,8 @@ export const SEASONS = [
           },
           {
             title: 'Direct-Sow Winter Brassicas and Hardy Greens Using Companion Planting Principles',
+            summary: 'Sow frost-hardy kale, broad beans, and leafy greens alongside garlic and herbs that deter pests. Companion planting reduces aphid pressure without sprays even in cold weather.',
+            scale: 'home',
             timing: 'Early–mid June (before the harshest frosts; in Otago and inland Tasmania, protect with cloches from July)',
             duration: '2–3 hours for bed preparation and sowing per 20 m²',
             description: 'Sow cold-hardy brassicas and leafy greens into biologically prepared beds. Varieties suited to temperate AU/NZ winters include broad beans (\'Aquadulce Claudia\' — frost-tolerant to -8°C), kale (\'Red Russian\', \'Nero di Toscana\'), winter lettuce (\'Winter Density\', \'Arctic King\'), pak choi, and mizuna. Interplant with companion herbs: coriander (slow-bolt varieties) and dill attract beneficial hoverflies even in cool conditions, while garlic cloves planted alongside brassicas deter aphids through allicin off-gassing. Prepare beds with a 2 cm layer of mature compost and a light dusting of wood ash (potassium source) raked in. Sow seed at recommended depths and cover with a thin layer of straw. In frost-prone areas, deploy low tunnel cloches made from 20 mm PVC hoops and clear polythene, ventilated at both ends to prevent damping-off fungal diseases.',
@@ -350,6 +386,8 @@ export const SEASONS = [
           },
           {
             title: 'Plant Bare-Root Native Shelter Belt Species for Long-Term Windbreak and Habitat',
+            summary: 'Plant rows of native trees and shrubs on the windward side of your growing area. A mature shelter belt slows wind for ten times its height, protecting crops and creating wildlife habitat.',
+            scale: 'farm',
             timing: 'June–July (while dormant and soil moist)',
             duration: '1 day per 50 m of shelter belt',
             description: 'Establish native shelter belts using bare-root or tube stock of locally indigenous species. In New Zealand, plant kānuka (Kunzea ericoides), mānuka (Leptospermum scoparium), and pittosporum (Pittosporum tenuifolium) in staggered double rows at 1.5 m spacing. In south-eastern Australia, use Banksia marginata (silver banksia), Allocasuarina verticillata (drooping she-oak), and Acacia melanoxylon (blackwood) as the structural framework, with understory species like Poa labillardierei (common tussock grass) and Bursaria spinosa (sweet bursaria — a critical habitat plant for butterflies). Plant on the windward side of orchards and growing areas, oriented perpendicular to prevailing winter winds (typically from the west/south-west). Mulch heavily with woodchip (100–150 mm depth) and install tree guards where browsing pressure exists.',
@@ -373,6 +411,8 @@ export const SEASONS = [
         tasks: [
           {
             title: 'Establish Bokashi Fermentation Cycles Using Winter Kitchen and Farm Waste',
+            summary: 'Ferment kitchen scraps and garden waste in sealed buckets with beneficial microbes. Unlike a compost heap, bokashi works in cold weather and produces a concentrated soil food you can trench-bury near fruit trees.',
+            scale: 'home',
             timing: 'Ongoing from June through August',
             duration: '15–20 minutes daily; batch processing every 2–3 weeks',
             description: 'Winter generates abundant organic waste — kitchen scraps, pruning debris, spent grain from home brewing, and fallen fruit. Bokashi fermentation allows you to process this material anaerobically even in cold conditions where traditional composting slows dramatically. Layer waste into airtight 20-litre bokashi buckets with bokashi bran (wheat bran inoculated with EM — available from EMNZ or make your own). Press down firmly to exclude air, seal, and ferment for 14–21 days (winter cold extends the cycle). The resulting pre-compost is acidic (pH 3.5–4.0) and rich in lactic acid bacteria. Bury it in 30 cm trenches between garden bed rows or around fruit tree drip lines where soil organisms will rapidly incorporate it. The fermented material breaks down in soil within 2–4 weeks, even in winter, and provides a concentrated microbial food source exactly where roots will be expanding in spring.',
@@ -387,6 +427,8 @@ export const SEASONS = [
           },
           {
             title: 'Prepare IMO-4 Beds Under Cover for Spring Biological Inoculation',
+            summary: 'Mix fermented grain with local topsoil under shelter and let native microbes colonise it over six to eight weeks. This creates the most diverse homegrown soil inoculant you can produce for spring planting.',
+            scale: 'farm',
             timing: 'Late July – August (allows 6–8 weeks of maturation before spring application)',
             duration: '4–6 hours for initial preparation; weekly monitoring thereafter',
             description: 'Korean Natural Farming (KNF) Indigenous Microorganism (IMO) cultivation is a cornerstone of biological farming. Begin preparing IMO-4 (the soil-stage inoculant) in late winter under cover — a shed, lean-to, or well-ventilated polytunnel. Combine IMO-3 (fermented wheat bran) with local topsoil at a 1:1 ratio by volume, maintaining 60–65% moisture content (squeeze test: one or two drops should fall from a compressed handful). Mound the material in a sheltered location on a breathable surface (hessian, old carpet), cover loosely with breathable cloth to prevent drying while allowing air exchange, and allow indigenous soil organisms to colonise over 6–8 weeks. The temperature should rise slightly (to 30–40°C internally) during active colonisation before stabilising. The finished IMO-4 will have a sweet, earthy smell and visible white mycelial threads — it\'s the most diverse biological inoculant you can produce on-farm.',
@@ -410,6 +452,8 @@ export const SEASONS = [
         tasks: [
           {
             title: 'Direct-Sow Winter Cover Crop Mixes Before Mid-June',
+            summary: 'Broadcast a mix of oats, vetch, and lupins to keep soil covered and alive through winter. The legumes fix nitrogen, the cereals add carbon, and together they stop erosion and suppress weeds.',
+            scale: 'both',
             timing: 'Late May – mid-June (soil temperature above 5°C for reliable germination)',
             duration: '3–4 hours per 1,000 m² including seed preparation and sowing',
             description: 'Cover cropping is the single most cost-effective regenerative intervention for winter. Sow a multi-species mix designed for your soil type and climate: on heavier clay loams (Western District Victoria, Canterbury), use oats (Avena sativa — \'Swan\' or \'Possum\' varieties at 80 kg/ha), common vetch (Vicia sativa at 20 kg/ha), and lupins (Lupinus angustifolius \'Mandelup\' at 40 kg/ha). On lighter sandy loams (Waikato, north-east Victoria), add annual ryegrass (Lolium multiflorum at 15 kg/ha) for rapid ground cover and cereal rye (Secale cereale at 30 kg/ha) for its allelopathic weed-suppression. Inoculate legume seed with the appropriate rhizobium inoculant (Group F for vetch, Group G for lupins — available from BASF or Becker Underwood AU/NZ) immediately before sowing. Broadcast by hand or with a chest-mounted seed spreader, then lightly rake or roll to ensure seed-soil contact. The mix provides nitrogen fixation (legumes), carbon biomass (cereals), deep-rooting soil structure improvement (lupins), and ground cover against winter erosion.',
@@ -424,6 +468,8 @@ export const SEASONS = [
           },
           {
             title: 'Undersow Existing Orchards and Vineyards with Nitrogen-Fixing Winter Green Manures',
+            summary: 'Scatter clover and plantain seed between orchard or vineyard rows to cover bare soil over winter. These plants fix nitrogen and break up compacted wheel tracks, reducing or replacing synthetic fertiliser.',
+            scale: 'farm',
             timing: 'Early–mid June',
             duration: '2–3 hours per 500 m² of inter-row area',
             description: 'Orchards and vineyards with bare inter-rows are losing soil, water, and biological potential every winter. Sow a low-growing nitrogen-fixing green manure between rows: subterranean clover (\'Mt Barker\' or \'Woogenellup\' strains — self-regenerating and tolerant of moderate frost) at 10 kg/ha, combined with crimson clover (Trifolium incarnatum) at 8 kg/ha for biomass. In NZ wine regions (Marlborough, Hawke\'s Bay), add plantain (Plantago lanceolata \'Tonic\') at 3 kg/ha — its deep taproot decompacts inter-row wheel tracks and its high mineral content feeds soil biology when slashed. Broadcast after a light scarification of the soil surface with a spring-tine harrow or vigorous raking. These species will fix 50–120 kg N/ha over winter and spring, reducing or eliminating the need for synthetic nitrogen inputs in the following season. Terminate by mowing or rolling before competition with the main crop in spring.',
@@ -446,6 +492,8 @@ export const SEASONS = [
         tasks: [
           {
             title: 'Audit and Repair Swale Systems, Check-Dams, and Contour Banks Before Peak Rainfall',
+            summary: 'Walk every swale and check-dam before heavy rain arrives, repairing breaches and clearing silt. A well-maintained swale soaks thousands of litres into the soil instead of losing it as runoff.',
+            scale: 'farm',
             timing: 'Early–mid June (before peak winter rainfall events)',
             duration: '1–2 days depending on property scale',
             description: 'Winter rainfall is your annual recharge opportunity. Before peak precipitation (July–August across most temperate AU/NZ zones), walk every swale, contour bank, and check-dam on your property. Look for erosion breach points, siltation that has reduced capacity, vegetation die-off on swale lips, and blocked spillways. Repair breaches with compacted clay and reseed with deep-rooted native grasses (Microlaena stipoides in AU, Poa cita in NZ). Clear silt from check-dams and redistribute it onto garden beds — this is nutrient-rich sediment. Ensure all spillways are clear and armoured with rock to prevent scour during high-flow events. On Keyline-designed properties, confirm that the primary ridge lines are directing water from ridges to valleys as intended — P.A. Yeomans\' Keyline geometry should be moving water from drought-prone ridges into moisture-retentive valley floors. A single well-maintained swale on a 1:500 gradient can infiltrate 20,000+ litres during a 30 mm rainfall event, storing it in the soil profile rather than losing it as runoff.',
@@ -461,6 +509,8 @@ export const SEASONS = [
           },
           {
             title: 'Complete Keyline Ripping on Pasture While Soil Is Moist but Not Waterlogged',
+            summary: 'Rip deep lines across pasture following the contour pattern to break compaction and move rainfall from ridges into valleys. Timing matters: soil should be moist but not soggy for the best result.',
+            scale: 'farm',
             timing: 'June – early July (soil at field capacity but not saturated; typically 2–3 days after rainfall)',
             duration: '1–2 days per hectare depending on terrain and equipment',
             description: 'Keyline ripping is the most powerful mechanical intervention for redistributing water across the landscape. Using a Yeomans Keyline plow (or a single-tine ripper set to 30–40 cm depth), rip along the Keyline pattern — parallel to the key contour line but with a slight off-contour gradient that moves water from ridges toward valleys. This creates deep, non-inverting aeration channels that break through compaction pans, encourage root penetration to depth, and dramatically increase the soil\'s water-holding capacity. Timing is critical: soil must be moist enough for the tine to penetrate easily (reducing tractor fuel and compaction) but not so wet that it smears and re-compacts. The ideal window is typically 2–3 days after a 15–25 mm rainfall event, when the soil profile is at field capacity but free water has drained. On the basalt plains of western Victoria, this often means a narrow June window before the water table rises too high. In Canterbury, the free-draining soils offer a wider working window.',
@@ -504,6 +554,8 @@ export const SEASONS = [
         tasks: [
           {
             title: 'Fungal-Dominant Compost Extract Application to Perennial Systems',
+            summary: 'Brew a compost tea rich in beneficial fungi and spray it around fruit trees and perennials to wake up the underground fungal networks that feed your plants through spring.',
+            scale: 'both',
             timing: 'Early–mid September (once soil temps reach 8–10°C at 100mm; typically first week of Sept in coastal Victoria/Hawke\'s Bay, late Sept in Otago/Canterbury high country)',
             duration: '4–6 hours for brewing (24-hour brew cycle), plus 2–3 hours for application per hectare',
             description: 'As perennial fruit trees, vines, and pasture grasses initiate spring root flush, this is the critical window to inoculate the rhizosphere with fungal-dominant biology. Using Elaine Ingham\'s actively aerated compost tea (AACT) protocol, brew a fungal-dominant extract from well-made thermal compost (C:N ratio 25–30:1, aged 12+ months, showing visible fungal hyphal colonisation). On the red-brown earths and basalt-derived soils of western Victoria, and on the volcanic loams of the Waikato and Bay of Plenty, this extract feeds existing mycorrhizal networks that were semi-dormant through winter. The goal is not to "add" fungi to soil — it is to provide a food pulse that accelerates the colonisation of new feeder roots by existing arbuscular mycorrhizal fungi (AMF), particularly Rhizophagus irregularis and Funneliformis mosseae, the dominant AMF species in temperate Australasian soils. Apply at 50–100L per hectare via low-pressure boom or backpack sprayer directly to the soil surface, ideally in late afternoon or on overcast days to avoid UV degradation.',
@@ -518,6 +570,8 @@ export const SEASONS = [
           },
           {
             title: 'Biochar Charging and Banding with KNF Indigenous Microorganism (IMO-4) Inoculant',
+            summary: 'Soak biochar in a locally cultured microbe mix so it feeds soil life instead of stealing nitrogen, then band it into your planting rows before spring sowing.',
+            scale: 'both',
             timing: 'Mid-September to mid-October (2–3 weeks before transplanting or direct-sowing spring crops)',
             duration: 'IMO-4 preparation requires 15–25 days lead time; charging biochar takes 48–72 hours; banding application takes 3–5 hours per hectare',
             description: 'Raw biochar applied to soil is biologically inert and can temporarily immobilise nitrogen — a critical mistake in spring when plants need available N for rapid growth. The solution is to charge biochar before application using KNF Indigenous Microorganisms at Stage 4 (IMO-4), creating a biologically active, nutrient-loaded soil amendment. Source biochar from hardwood feedstock pyrolysed at 500–600°C (ideal CEC of 40–80 cmol/kg). Mix biochar at 1:1 by volume with IMO-4 (your Stage 4 soil-cultured indigenous microorganisms, mixed with soil from the actual field where it will be applied, and fermented with brown rice, molasses, and local soil over the preceding weeks). Add 5% worm castings and 2% kelp meal (Bull Kelp, Durvillaea, harvested sustainably from NZ coasts or sourced from Natrakelp AU). Allow the charged biochar to incubate in a covered pile at ambient temperature for 48–72 hours, keeping moisture at 50–60%. Band this into the top 50–100mm of soil along planting rows using a single-tine ripper or wheel hoe — never incorporate deeply, as AMF colonise the top 150mm most densely. Apply at 2–5 tonnes per hectare.',
@@ -534,6 +588,8 @@ export const SEASONS = [
           },
           {
             title: 'Glomalin Stimulation via Targeted Mycorrhizal Inoculation at Transplanting',
+            summary: 'Add beneficial root fungi directly into each planting hole at transplanting time to build the biological glue that holds soil together and stores carbon.',
+            scale: 'both',
             timing: 'October (when soil temps are reliably 12°C+ and spring transplanting begins)',
             duration: '30–60 minutes per 100 transplants; initial inoculant preparation adds 1–2 hours',
             description: 'Glomalin — the glycoprotein produced by arbuscular mycorrhizal fungi — is the single most important biological glue holding soil aggregates together, and it stores 30–40% of total soil carbon in many Australian and New Zealand temperate soils. Spring transplanting is the ideal moment to inoculate root zones directly with AMF propagules, because new transplant roots are highly receptive to colonisation in the first 48–72 hours after planting. Use a granular mycorrhizal inoculant containing Rhizophagus irregularis at a minimum of 200 propagules per gram. Apply 5–10g directly into the planting hole, in contact with roots, for each transplant. For direct-sown crops, mix inoculant with seed at sowing. Critically, do not apply soluble phosphorus fertiliser (including superphosphate) at transplanting — P levels above 40mg/kg Olsen P suppress AMF colonisation. Many temperate AU/NZ pastoral soils have been over-fertilised with super for decades; on these soils, AMF inoculation combined with phosphorus drawdown via cover crops is a multi-year restoration strategy.',
@@ -547,6 +603,8 @@ export const SEASONS = [
           },
           {
             title: 'Effective Microorganism (EM-1) Soil Drench for Cold-Soil Biological Kickstart',
+            summary: 'Ferment and dilute a broad-spectrum beneficial microbe concentrate, then drench cold clay soils in early spring to jumpstart biological activity before fungi wake up.',
+            scale: 'both',
             timing: 'Early September (especially on heavier clay soils and in colder zones — Otago, Central Plateau, Tasmanian Midlands, Upper Murray)',
             duration: '1–2 hours per hectare for dilution and application',
             description: 'In the colder temperate zones — where soil temperatures at 100mm may still be 5–7°C in early September — the native soil microbiome is sluggish. An EM-1 (Effective Microorganisms) soil drench provides a broad-spectrum inoculation of lactic acid bacteria, photosynthetic bacteria, and yeasts that are active at lower temperatures than most soil fungi. Activate EM-1 concentrate by fermenting 1 part EM-1 concentrate with 1 part unsulphured molasses and 20 parts unchlorinated water at 25–35°C for 7–10 days (pH should drop below 3.8). Apply activated EM (AEM) at 1:100 dilution via watering can, drip system, or knapsack sprayer at 500L diluted solution per hectare. This is particularly effective on the heavy Wakanui silt loams and Temuka clay loams of Canterbury, and the grey-brown podzolics of the Tasmanian Midlands, which compact over winter and benefit from the lactic acid bacteria\'s role in breaking down residual organic matter and improving aggregate stability. Apply on an overcast day or late afternoon. This drench complements, but does not replace, the fungal-dominant AACT — think of EM as the bacterial kickstart and AACT as the fungal deepening.',
@@ -570,6 +628,8 @@ export const SEASONS = [
         tasks: [
           {
             title: 'Establish Perennial Polyculture Guilds with Temperate AU/NZ Heritage Cultivars',
+            summary: 'Plant a heritage fruit tree surrounded by nitrogen-fixing shrubs, nutrient-mining herbs, and living ground cover to create a self-supporting perennial food system.',
+            scale: 'both',
             timing: 'Mid-October to mid-November (after last frost date: typically early October in coastal VIC/Hawke\'s Bay, late October in Canterbury/Otago lowlands, early November in Tasmanian highlands)',
             duration: '1–2 full days for design and layout; 4–8 hours planting per 50m² guild',
             description: 'Spring is the premier planting window for establishing perennial food-forest guilds in temperate AU/NZ. Design guilds around a central fruit tree appropriate to your zone: in the warmer temperate areas (Hawke\'s Bay, northern Canterbury, western VIC), use heritage apple cultivars like \'Sturmer Pippin\' (an outstanding NZ-adapted keeper), \'Cox\'s Orange Pippin\', or \'Monty\'s Surprise\' (discovered in the Waikato, high in antioxidants, blight-resistant). In cooler zones (Otago, Tasmanian Midlands), choose cold-hardy pears like \'Winter Nelis\' or \'Doyenné du Comice\', or NZ-bred plums like \'Omega\'. Surround each tree with a guild layer: nitrogen-fixing sub-canopy of tagasaste (Chamaecytisus proliferus) or NZ-native kōwhai (Sophora microphylla); a dynamic accumulator layer of comfrey \'Bocking 14\' (deep phosphorus and potassium miner) and chicory; and a living ground cover of white clover and native violets. Inoculate each planting hole with AMF granules as described in Task 1.3. Plant into charged biochar-amended soil for maximum root establishment.',
@@ -586,6 +646,8 @@ export const SEASONS = [
           },
           {
             title: 'Direct-Sow Spring Vegetable Crops into No-Till Beds with Rhizobial Inoculation',
+            summary: 'Sow peas, beans, beetroot, and leafy greens into undisturbed mulched beds, coating legume seeds with beneficial bacteria first so they fix their own nitrogen.',
+            scale: 'both',
             timing: 'October–November (once soil temps are reliably above 12°C at 50mm depth)',
             duration: '3–5 hours per 100m² of bed space',
             description: 'Direct-sow spring vegetables — including peas, broad beans (late sowing for summer harvest), beetroot, silverbeet, lettuce, and brassicas — into no-till beds prepared with crimped cover crop residue or compost mulch. For all legume seed (peas, beans), inoculate with strain-specific rhizobia before sowing: use Group E inoculant for peas and lentils, Group F for broad beans (available from BASF NoBiological AU or Becker Underwood NZ). Coat seed lightly with a slurry of rhizobial inoculant and 1% gum arabic solution, allow to dry in shade for 30 minutes, and sow immediately. Sow into furrows opened with a hand hoe through the mulch layer, spacing per crop requirements. On the Lismore silt loams of Canterbury and sandy loams of coastal Victoria, ensure seeds have firm soil contact beneath mulch for consistent germination. Water gently with EM-1 dilution (1:500) at sowing to stimulate soil biology around establishing roots.',
@@ -609,6 +671,8 @@ export const SEASONS = [
         tasks: [
           {
             title: 'Build Fungal-Dominant Windrow Compost for Autumn Application',
+            summary: 'Layer coarse woody chips with spring grass clippings into a long pile and let fungi colonise it over six months, creating your best soil amendment for next autumn.',
+            scale: 'both',
             timing: 'September–October (to allow 6–8 months maturation before next autumn)',
             duration: '1–2 days for initial build; 30 minutes weekly for monitoring',
             description: 'Spring\'s flush of green biomass — grass clippings, cover crop residues, prunings — provides the perfect nitrogen-rich ingredient to balance high-carbon woody materials in a fungal-dominant compost windrow. Build windrows at a C:N ratio of 25–30:1, using coarsely chipped woody prunings (50–60% by volume), spring grass clippings and green cover crop residues (30%), and a thin layer of mature compost or forest floor litter as fungal inoculant (10%). Build windrows 1.2–1.5m high and 2–2.5m wide for optimal thermal mass in temperate conditions. Moisten to 55–65% and cover with breathable compost fleece or old wool carpet to retain moisture and warmth. Turn only 2–3 times over the first month to maintain fungal hyphal networks — excessive turning favours bacterial dominance. After the thermophilic phase (55–65°C for 3+ days), allow the windrow to cure undisturbed for 6–12 months. This slow-cured, woody compost will be your fungal inoculant source for next year\'s AACT brewing and soil amendment.',
@@ -624,6 +688,8 @@ export const SEASONS = [
           },
           {
             title: 'Ferment Spring-Growth KNF Inputs (FPJ and LAB) for Season-Long Use',
+            summary: 'Harvest fast-growing spring plant tips and ferment them with sugar into a concentrated liquid feed, plus culture lactic acid bacteria from rice water and milk for year-round use.',
+            scale: 'both',
             timing: 'September–October (using vigorous spring growth material)',
             duration: '30–60 minutes collection and preparation; 7–14 days fermentation',
             description: 'Spring\'s rapid plant growth provides the ideal material for KNF Fermented Plant Juice (FPJ) — a potent, enzyme-rich liquid fertiliser. Harvest the growing tips of vigorous spring plants before sunrise when sugar content is highest: comfrey, mugwort (Artemisia verlotorum — abundant in NZ and SE Australia), horsetail (Equisetum — rich in silica for plant disease resistance), and nettle. Chop coarsely, weigh, and mix with an equal weight of raw brown sugar or jaggery in a clay or glass vessel. Press down firmly, cover with breathable cloth, and ferment in a cool dark place for 7–14 days. Strain the liquid — this is your FPJ concentrate. Simultaneously, prepare Lactic Acid Bacteria (LAB) serum by collecting rice-wash water, fermenting until a curd forms, then mixing the whey with 10 parts milk and fermenting until the solids separate. The clear LAB serum stores for months refrigerated. Both FPJ and LAB are foundational KNF inputs applied throughout the growing season at 1:500–1:1000 dilution as foliar sprays or soil drenches.',
@@ -649,6 +715,8 @@ export const SEASONS = [
         tasks: [
           {
             title: 'Establish Multi-Species Spring Cover Crop Mixes on Bare Ground',
+            summary: 'Broadcast a diverse blend of clovers, radish, oats, buckwheat, and pollinator plants onto any bare soil to prevent erosion, fix nitrogen, and build organic matter.',
+            scale: 'both',
             timing: 'September–early October (before October drying begins; soil temps above 8°C)',
             duration: '2–4 hours per hectare for sowing; seed preparation adds 1 hour',
             description: 'Any bare ground heading into the spring-summer transition is a lost opportunity — and a pathway to erosion, nutrient leaching, and weed dominance. Establish a diverse spring cover crop mix as soon as soil is workable. For temperate AU/NZ, use a minimum 6-species blend: crimson clover (Trifolium incarnatum) and sub-clover (T. subterraneum) for nitrogen fixation, tillage radish (Raphanus sativus) for deep compaction relief, phacelia (Phacelia tanacetifolia) for pollinator support and mycorrhizal hosting, oats (Avena sativa) for quick biomass, and buckwheat (Fagopyrum esculentum) for phosphorus scavenging and rapid ground cover. Sow at combined rates of 40–60 kg/ha broadcast or drilled. On the heavy clay soils of the Western District (VIC) and Southland (NZ), include tillage radish at higher rates (5–8 kg/ha) to break plough pans. On the free-draining Canterbury and Bellarine soils, emphasise clovers and phacelia for organic matter building. Inoculate clover seed with appropriate rhizobia (Group B for sub-clover, Group C for crimson clover). Roll or lightly press seed after broadcasting to ensure soil contact.',
@@ -663,6 +731,8 @@ export const SEASONS = [
           },
           {
             title: 'Roller-Crimp Winter Cover Crops for No-Till Mulch Transition',
+            summary: 'Flatten flowering winter cover crops with a roller instead of mowing or tilling to create a weed-suppressing mulch mat that keeps soil moist into summer.',
+            scale: 'farm',
             timing: 'Mid-October to early November (when winter cover crops reach 50%+ flowering — typically cereal rye, winter oats, vetch)',
             duration: '2–3 hours per hectare with tractor-mounted roller-crimper; hand-crimping with flail adds significant time',
             description: 'If you established winter cover crops (cereal rye, winter oats, hairy vetch, winter peas), spring is the termination window. Rather than mowing, spraying, or incorporating (all of which destroy soil fungal networks), use a roller-crimper to lay the cover crop flat as an in-situ mulch mat. Timing is critical: crimp when the cover crop is at 50% or greater flowering — at this stage the plants are past the point of regrowth, and the high-carbon stems create a persistent mulch layer. Cereal rye should be at anthesis (pollen shedding), and vetch should have its first pods forming. The crimped mat suppresses spring weeds, conserves soil moisture heading into summer, feeds soil biology as it decomposes, and provides a perfect planting surface for transplants. On the red-brown earths of western Victoria and the silt loams of Canterbury, this technique can reduce irrigation needs by 30–40% in the following summer by maintaining soil moisture under the mulch layer. Transplant directly through the crimped residue using a dibber or transplant wheel.',
@@ -683,6 +753,8 @@ export const SEASONS = [
         tasks: [
           {
             title: 'Complete Keyline Ripping on Pasture Paddocks for Water Pattern Distribution',
+            summary: 'Deep-rip pasture along a surveyed off-contour pattern while soil is moist to spread rainfall across ridges instead of letting it concentrate in gullies.',
+            scale: 'farm',
             timing: 'September–October (while soil is moist but not saturated — typically 60–80% field capacity)',
             duration: '4–8 hours per hectare depending on terrain complexity',
             description: 'Spring is the optimal window for Keyline ripping — P.A. Yeomans\' water-harvesting pattern designed to move water from valleys to ridges across the landscape. The soil must be moist enough to shatter cleanly (not dust) but not so wet that it smears (not mud). Using a Yeomans-style Keyline plough or a single-tine ripper set to 300–400mm depth, rip parallel lines following the Keyline pattern — lines that run slightly off-contour, drifting from the valley toward the ridge. This subtle off-contour pattern causes rainfall runoff to spread laterally across the paddock rather than concentrating in gullies. On the undulating basalt country of western Victoria (Corangamite, Colac Otway) and the rolling hill country of Hawke\'s Bay and Wairarapa, Keyline ripping dramatically improves water infiltration ahead of the summer dry. The deep rip also aerates compacted subsoils and provides channels for root penetration. Space rip lines at 1.5–2m intervals. Follow up immediately by broadcasting a diverse pasture seed mix (including deep-rooted species like chicory, plantain, and tall fescue) into the rip lines, as the disturbed soil provides ideal germination conditions.',
@@ -697,6 +769,8 @@ export const SEASONS = [
           },
           {
             title: 'Install or Recharge Swale Systems and Check Dam Sequences for Summer Water Storage',
+            summary: 'Clear sediment from existing on-contour infiltration trenches or dig new ones, and build rock check dams in drainage lines to capture spring rain for summer use.',
+            scale: 'farm',
             timing: 'September–early October (while groundwater is high and rainfall still regular)',
             duration: '1–3 days for new swale construction per 100m length; 2–4 hours for maintenance of existing systems',
             description: 'Before the spring rains taper off, ensure your landscape\'s water-harvesting earthworks are functional and maximised. Swales — level-silled infiltration trenches on contour — capture overland flow and infiltrate it into the soil profile, recharging subsoil moisture and supporting downslope trees and pasture through summer. For existing swales, clear any sediment buildup from the channel, repair eroded spillways, and plant the downslope berm with deep-rooted perennials (tagasaste, comfrey, tree lucerne) if not already established. For new installations on slopes of 5–15%, excavate swales at 2–4m width and 300–500mm depth on true contour using a laser level. Space swales at 10–20m intervals on steeper slopes, wider on gentler terrain. On the free-draining soils of Canterbury and the sandy loams of the Bellarine Peninsula, swales are particularly critical for capturing every drop of spring rain and storing it in the subsoil for summer. Install leaky check dams (using local rock or logs) in any ephemeral drainage lines to slow water velocity and encourage infiltration upstream. Mulch all newly disturbed soil around earthworks with straw or woodchip to prevent erosion.',
@@ -741,6 +815,8 @@ export const SEASONS = [
         tasks: [
           {
             title: 'Apply Charged Biochar–Mycorrhizal Inoculant Blend to Perennial Systems',
+            summary: 'Soak biochar in a microbial brew for two days, then spread it around fruit trees and perennials. Pre-charging prevents the biochar from locking up nitrogen in your soil.',
+            scale: 'both',
             timing: 'Early December (1–15 Dec), before soil temperatures exceed 30°C at 10cm depth',
             duration: '4–6 hours per hectare (preparation: 2 days prior for charging)',
             description: 'Combine fine-grade biochar (ideally sourced from local green waste pyrolysis — companies like Earth Systems in Castlemaine, VIC, or Waikato Biochar Co-op produce suitable 1–3mm particle-size product) with a mycorrhizal inoculant containing Rhizophagus irregularis and Funneliformis mosseae (available from Mycorhiza Australia or Roots, Shoots & Fruits NZ). Charge the biochar for 48 hours by soaking it in a 1:500 dilution of activated EM-1 (Effective Microorganisms from EMRO NZ or EM Agriton Australia) blended with dilute vermicast tea and 2% unsulphured molasses. This pre-charges the biochar\'s vast cation exchange sites with beneficial microbes rather than allowing raw biochar to temporarily immobilise nitrogen — a critical error in low-organic-matter red-brown earths (typically 1.2–2.5% OM). Apply at 2–4 tonnes per hectare via top-dressing around perennial rootzones, lightly incorporating into the top 30mm, then immediately mulching over.',
@@ -758,6 +834,8 @@ export const SEASONS = [
           },
           {
             title: 'Foliar-Drench Application of KNF Oriental Herbal Nutrient (OHN) for Heat-Stress Resilience',
+            summary: 'Spray a fermented herbal extract of garlic, ginger, and cinnamon on leaves and soil every two weeks during heatwaves. It triggers natural plant defences against heat stress.',
+            scale: 'both',
             timing: 'Late December through January, applied in the cool of evening (after 6pm) every 10–14 days during heatwave periods',
             duration: '1–2 hours per application for a 1-hectare mixed market garden; 30 minutes preparation',
             description: 'KNF\'s Oriental Herbal Nutrient combines fermented extracts of garlic, ginger, liquorice root, cinnamon, and angelica — powerful plant-defence elicitors rich in saponins, allicin, and gingerols. In temperate AU/NZ conditions, where summer heat shock can collapse soil fungal networks and stress plant immune systems simultaneously, OHN applied at 1:1000 dilution as both a foliar spray and soil drench stimulates the plant\'s systemic acquired resistance (SAR) pathway while providing antimicrobial protection to leaf surfaces. Prepare OHN in advance during spring (it keeps for 12+ months) using raw cane sugar or NZ bush honey as the fermentation medium. This is particularly effective on the shallow, drought-prone soils over limestone in the Coonawarra/Padthaway region of SE South Australia and the rain-shadow zones of Hawke\'s Bay where January soil moisture drops below permanent wilting point for extended periods.',
@@ -772,6 +850,8 @@ export const SEASONS = [
           },
           {
             title: 'Glomalin-Boosting Liquid Humate Deep-Root Drench for Perennial Pastures',
+            summary: 'Drench pastures with a liquid humic acid and kelp mix after rain to feed beneficial soil fungi. These fungi produce a sticky protein that holds soil together and stores carbon.',
+            scale: 'farm',
             timing: 'Early to mid-December, ideally 2–3 days after a soaking rain event (>15mm)',
             duration: '3–4 hours per 10 hectares via boom spray or fertigation line',
             description: 'Glomalin — the glycoprotein produced by arbuscular mycorrhizal fungi (AMF) — is the primary long-term stable carbon compound in soil, responsible for aggregate stability and water-holding capacity. Research by Sara Wright (USDA) and extended by Australian work from the Wimmera and Western Districts demonstrates that glomalin concentrations in temperate Australian soils are frequently below 2mg/g — well below the 4–8mg/g seen in undisturbed native grasslands. To stimulate AMF activity and glomalin production during the peak growing season, apply a concentrated liquid humate (12% humic acid minimum, such as Nutri-Tech Solutions "Soluble Humus" or BioAg\'s "Soil & Seed") at 10–20L/ha, tank-mixed with 1L/ha of liquid kelp (Ecklonia radiata sourced, such as Seasol or AgriSea NZ) and 2L/ha of fulvic acid. The humic-fulvic combination acts as a chelation bridge, increasing micronutrient availability to AMF, which in turn expands hyphal networks and glomalin deposition. Apply to perennial pastures that have NOT been recently disturbed by cultivation — AMF networks take 8–12 weeks to re-establish after mechanical disruption.',
@@ -795,6 +875,8 @@ export const SEASONS = [
         tasks: [
           {
             title: 'Establish Three Sisters / Subtropical Companion Guild — AU/NZ Adapted',
+            summary: 'Plant corn, climbing beans, and pumpkin together so each supports the others. The corn gives beans a trellis, beans fix nitrogen, and pumpkin leaves shade the soil.',
+            scale: 'both',
             timing: 'Mid-December (after last risk of cool snaps; soil temps stabilised above 18°C at 10cm)',
             duration: '1 full day for a 50m² guild planting; ongoing management 30min/week',
             description: 'Adapt the Haudenosaunee Three Sisters guild for temperate AU/NZ conditions using locally proven cultivars. Plant sweetcorn \'Dorinny\' or \'Dorado\' (available from Eden Seeds QLD or Koanga Institute NZ) at 40cm spacing in blocks of 4x4 minimum for wind pollination. Two weeks after corn emergence, direct sow climbing beans — \'Lazy Housewife\' or \'Blue Lake\' — at the base of each corn stalk. Simultaneously, plant pumpkin \'Crown\' or \'Delica\' (widely adapted kabocha types available from Kings Seeds NZ or Diggers Club VIC) in every second inter-row, allowing their broad leaves to shade the soil as living mulch. On the friable volcanic loams of the Waikato fringe or the krasnozem soils of the Otway Ranges, this guild thrives with minimal irrigation. On the heavier clay-loams of Canterbury or the red-brown earths of the Barossa, add generous compost and ensure drainage. Interplant with Tagetes minuta (Mexican marigold) at guild margins — it\'s a potent nematode suppressant and mycorrhizal host.',
@@ -812,6 +894,8 @@ export const SEASONS = [
           },
           {
             title: 'Establish Native Shelterbelts with Mycorrhizal-Inoculated Plantings for Farmscape Biodiversity',
+            summary: 'Plant double rows of native trees dipped in a fungal root inoculant to form windbreaks. They cut water loss from nearby pastures and create habitat for pest-eating insects and birds.',
+            scale: 'farm',
             timing: 'Early December, timed with reliable soil moisture',
             duration: '1–2 days per 200m shelterbelt row',
             description: 'Plant locally sourced native shelterbelt species — such as Pittosporum tenuifolium, Coprosma robusta, and Leptospermum scoparium in NZ, or Allocasuarina verticillata, Banksia marginata, and Acacia melanoxylon in SE Australia — into prepared planting holes inoculated with site-appropriate ectomycorrhizal and endomycorrhizal fungi. Dip bare-root or tube-stock roots into a slurry of mycorrhizal inoculant, humic acid, and clay before planting. Space trees at 1.5–2m intervals in double-staggered rows to create wind-filtering shelterbelts that reduce evapotranspiration across adjacent pastures by 15–30%. Mulch each planting with 100mm of ramial chipped wood from local arborist waste. These shelterbelts also provide critical habitat corridors for beneficial insects, native birds, and predatory invertebrates that underpin integrated pest management.',
@@ -828,6 +912,8 @@ export const SEASONS = [
           },
           {
             title: 'Transplant Summer Companion Guilds: Basil–Tomato–Marigold Polyculture',
+            summary: 'Interplant tomatoes with basil and marigolds in prepared beds. Basil repels aphids and whitefly, while marigold roots suppress harmful nematodes in the soil.',
+            scale: 'home',
             timing: 'Early to mid-December once night temperatures reliably above 12°C',
             duration: '3–4 hours per 20m bed',
             description: 'Establish classic companion polycultures in prepared beds that have received biochar-compost amendments. Transplant indeterminate tomato varieties at 60cm spacing, interplanted with sweet basil (Genovese or Greek) at 30cm intervals and French marigolds (Tagetes patula) at row ends and mid-points. The basil\'s volatile compounds repel aphids and whitefly while attracting pollinators; marigolds exude alpha-terthienyl from their roots, suppressing root-knot nematodes. Drench transplants with dilute seaweed solution (1:500 Seasol or AgriSea) at planting to stimulate root establishment and mycorrhizal colonisation. Mulch immediately to 75mm with pea straw.',
@@ -852,6 +938,8 @@ export const SEASONS = [
         tasks: [
           {
             title: 'Fungal-Dominant Compost Extract Brewing and Application to Orchard Floors',
+            summary: 'Brew an aerated compost tea rich in fungal life and apply it to orchard soil every two weeks. This keeps the soil biology fungal-dominant, which is what fruit trees need to thrive.',
+            scale: 'both',
             timing: 'Fortnightly from December through February, applied early morning (before 9am)',
             duration: '24-hour brew cycle; 2–3 hours for application per hectare of orchard',
             description: 'Following Elaine Ingham\'s Soil Food Web methodology precisely, brew a fungal-dominant actively aerated compost tea (AACT) using high-quality thermal compost that has been verified (ideally via microscopy) to contain abundant fungal hyphae, particularly ascomycetes and visible hyphal fragments. The brew recipe per 20L: 400g fungal-dominant compost in a mesh bag, 20ml humic acid concentrate, 20ml liquid fish hydrolysate (not emulsion — hydrolysate preserves amino acids), and 10g oat flour or finely ground rolled oats (the complex carbohydrates selectively feed fungi over bacteria). Brew for 24 hours at 18–22°C with vigorous aeration via a 40L/min air pump. Apply within 4 hours of completing the brew. In temperate AU/NZ orchards — particularly on the basalt-derived krasnozem soils of Tasmania\'s Huon Valley, the volcanic loams of Gippsland, or the alluvial soils of Central Otago — this practice maintains the fungal-to-bacterial ratio (target F:B of 2:1 to 5:1 for tree crops) through summer heat that otherwise crashes fungal populations.',
@@ -870,6 +958,8 @@ export const SEASONS = [
           },
           {
             title: 'Ferment KNF Fish Amino Acid (FAA) from Local Baitfish or Carp',
+            summary: 'Chop fresh fish and ferment it with equal-weight sugar for about ten days to make a potent liquid fertiliser. It supplies nitrogen, phosphorus, and growth-promoting amino acids all season.',
+            scale: 'both',
             timing: 'Early December; fermentation takes 7–10 days in summer heat',
             duration: '1–2 hours preparation; 10 minutes daily monitoring for 10 days',
             description: 'Source fresh local fish — invasive European carp from Murray-Darling systems are ideal in Australia, or baitfish offcuts from NZ coastal fisheries. Chop or mince fish (including heads, guts, and bones for maximum amino acid and phosphorus content) and mix 1:1 by weight with raw cane sugar or NZ bush honey in a clay crock or food-grade bucket. Cover with breathable cloth and stir daily. In AU/NZ summer temperatures (25–35°C ambient), fermentation completes in 7–10 days — much faster than in cooler climates. The resulting Fish Amino Acid is a rich source of plant-available nitrogen, phosphorus, and growth-promoting amino acids including tryptophan (an auxin precursor). Strain and store in glass or plastic containers; FAA keeps for 12+ months. Apply at 1:1000 dilution as a soil drench or foliar feed throughout summer to support fruiting crops and maintain soil microbial biomass nitrogen.',
@@ -894,6 +984,8 @@ export const SEASONS = [
         tasks: [
           {
             title: 'Sow Summer Cover Crop Mixes into Harvested Grain Stubble',
+            summary: 'Drill a mix of millet, cowpeas, sunflower, and daikon radish into grain stubble right after harvest. Living roots protect the soil from summer heat and fix nitrogen for the next crop.',
+            scale: 'farm',
             timing: 'By mid-December, immediately following grain harvest',
             duration: '3–4 hours per 10 hectares with seed drill or broadcast spreader',
             description: 'No bare ground should enter January. Immediately after cereal grain harvest (wheat, barley, or oat stubble across the grain belts of SA, western Vic, and Canterbury), direct-drill or broadcast a multi-species summer cover crop mix designed to maintain living roots, fix nitrogen, and armour the soil surface. A proven temperate AU/NZ summer mix: millet (Japanese or pearl) at 10kg/ha for rapid biomass and carbon exudation, cowpeas or lablab at 15kg/ha for nitrogen fixation and deep taprooting, sunflower at 3kg/ha for deep phosphorus scavenging and pollinator support, and tillage radish (daikon type) at 2kg/ha for breaking compaction layers and scavenging subsoil nutrients. Roll or crimp stubble first to create seed-soil contact if broadcasting. On lighter soils, a light irrigation or reliable December rainfall is needed for establishment — on the heavier soils of the Wimmera or Southland, residual moisture is often sufficient.',
@@ -909,6 +1001,8 @@ export const SEASONS = [
           },
           {
             title: 'Establish Living Mulch Understory in Orchards and Vineyards',
+            summary: 'Broadcast a mix of clover, chicory, and plantain under fruit trees and vines. These low-growing plants shade the soil, fix nitrogen, and keep beneficial fungi fed through summer.',
+            scale: 'both',
             timing: 'Early December, once soil temperatures are consistently above 15°C',
             duration: '2–3 hours per hectare for broadcasting and light incorporation',
             description: 'Broadcast a low-growing living mulch mix into orchard and vineyard inter-rows and under-vine/under-tree zones. Use a blend of subterranean clover (Trifolium subterraneum — self-regenerating annual legume perfectly adapted to temperate AU/NZ), white clover (T. repens) for perennial ground cover, and chicory (Cichorium intybus) for deep taprooting and mineral accumulation. In NZ, plantain (Plantago lanceolata) can be added for its proven anti-parasitic and mineral-accumulating properties. This living mulch maintains photosynthetically active root systems through summer, continuously feeding mycorrhizal networks and shading the soil surface to reduce temperatures by 5–8°C compared to bare inter-rows. Mow or graze lightly (using poultry or sheep in mob rotations) to prevent competition with main crop canopy while maintaining active root growth.',
@@ -933,6 +1027,8 @@ export const SEASONS = [
         tasks: [
           {
             title: 'Check and Clear Keyline Ripping Channels and Swale Spillways Before First Major Storm',
+            summary: 'Walk all water-harvesting channels and swale overflows to clear sediment and debris before summer storms hit. A blocked spillway can cause serious erosion in a single downpour.',
+            scale: 'farm',
             timing: 'Early December, before the first significant summer storm event',
             duration: '1 full day for a 20-hectare property',
             description: 'Summer storms in temperate AU/NZ can deliver 20–50mm in a single event — water that, on degraded landscapes, runs off within hours. Keyline design (developed by P.A. Yeomans in Australia) and swale systems are the primary earthworks for passive water harvesting on regenerative properties. Walk all Keyline rip lines, checking that channels are clear of accumulated sediment and organic debris that may impede lateral water movement from ridges into valleys. Inspect swale spillways and overflow points for erosion or blockage — a failed spillway during a 50mm summer downpour can cause catastrophic erosion. Clear any debris, re-shape damaged lips with a mattock, and ensure overflow channels are directed to planted infiltration zones or dams. On properties with Yeomans-pattern Keyline layouts (common in the Western Districts of Victoria, Blue Mountains NSW, and Canterbury foothills), verify that the Keyline plow furrows still achieve their designed off-contour drift — typically 1:400 to 1:800 grade — to spread water from valleys to ridges.',
@@ -948,6 +1044,8 @@ export const SEASONS = [
           },
           {
             title: 'Mulch All Exposed Soil to Minimum 75mm Depth — No Bare Ground Enters January',
+            summary: 'Cover every bare patch with at least 75mm of straw, wood chip, or sugarcane mulch before the heat sets in. Unshaded soil can hit 60 degrees and kill the fungi living near the surface.',
+            scale: 'both',
             timing: 'Late November through mid-December; complete before sustained heat arrives',
             duration: '4–6 hours per 1000m² of garden beds; 1–2 days for broadacre perennial systems',
             description: 'Bare soil in an Australian or New Zealand summer is a biological emergency. Unshaded soil surface temperatures can exceed 60°C on dark basalt soils, killing mycorrhizal hyphae in the top 50mm and volatilising soil nitrogen. Apply a minimum 75mm (ideally 100mm) layer of organic mulch to all exposed soil surfaces — garden beds, orchard floors, around perennial plantings, and any fallow zones. Use locally available materials: pea straw and barley straw in grain-growing regions (verify no aminopyralid herbicide contamination — do a bioassay with tomato seedlings first), ramial chipped wood from local arborists for perennial systems (branches under 7cm diameter provide the ideal fungal-feeding lignin-to-cellulose ratio), or sugarcane mulch in warmer zones. For broadacre pastures where mulching is impractical, ensure minimum 70% groundcover through standing dry matter, living cover crops, or managed grazing residuals. Monitor soil temperatures at 5cm depth — they should remain below 35°C under mulch even on 40°C+ ambient days.',

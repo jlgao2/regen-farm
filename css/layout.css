@@ -686,6 +686,72 @@
 }
 .chip--timing { border-color: var(--accent); color: var(--accent); }
 
+/* ── Task summary (plain-language, always visible) ── */
+.task-summary {
+  font-size: 0.88rem;
+  line-height: 1.65;
+  color: rgba(240, 237, 230, 0.75);
+  max-width: 58ch;
+  margin-bottom: 0.5rem;
+}
+
+/* ── Expandable detail section ── */
+.task-detail {
+  margin-top: 0.25rem;
+}
+.task-detail-toggle {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  cursor: pointer;
+  list-style: none;
+  padding: 0.4rem 0;
+  transition: color 200ms ease;
+}
+.task-detail-toggle::-webkit-details-marker { display: none; }
+.task-detail-toggle::before {
+  content: '▸ ';
+  display: inline-block;
+  transition: transform 200ms ease;
+}
+.task-detail[open] .task-detail-toggle::before {
+  transform: rotate(90deg);
+}
+.task-detail[open] .task-detail-toggle { margin-bottom: 0.75rem; }
+
+/* ── Scale chip ── */
+.chip--scale {
+  font-size: 0.58rem;
+  letter-spacing: 0.12em;
+}
+.chip--scale-home { border-color: #5aaa72; color: #5aaa72; }
+.chip--scale-farm { border-color: #c8722a; color: #c8722a; }
+.chip--scale-both { border-color: var(--fg-dim); color: var(--fg-dim); }
+
+/* ── Scale filter ── */
+.scale-filter-wrap {
+  display: flex;
+  justify-content: flex-end;
+  padding: 1rem 0 0.5rem;
+}
+.scale-filter-btn {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fg-dim);
+  padding: 0.3rem 0.7rem;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: color 200ms ease, border-color 200ms ease;
+}
+.scale-filter-btn:hover { color: var(--fg); border-color: var(--fg-dim); }
+
+/* Hide farm tasks when filter is active */
+.scale-filter-home .task-row[data-scale="farm"] { display: none; }
+
 .task-desc {
   font-size: 0.88rem;
   line-height: 1.75;
@@ -918,6 +984,91 @@
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--fg-dim);
+}
+
+/* ── What's On Now ── */
+.whats-on {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 2.5rem var(--pad-x) 3rem;
+  border-bottom: 1px solid var(--border);
+}
+.whats-on-micro {
+  margin-bottom: 2rem;
+}
+.whats-on-micro-pill {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--bg);
+  background: var(--accent);
+  padding: 0.15rem 0.5rem;
+  margin-right: 0.6rem;
+  vertical-align: middle;
+}
+.whats-on-micro-name {
+  font-family: var(--font-edit);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--fg);
+  vertical-align: middle;
+}
+.whats-on-micro-note {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  line-height: 1.6;
+  color: rgba(240, 237, 230, 0.6);
+  max-width: 60ch;
+  margin-top: 0.5rem;
+}
+.whats-on-heading {
+  font-size: clamp(1rem, 2vw, 1.3rem);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 1.25rem;
+}
+.whats-on-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+.whats-on-card {
+  padding: 1.25rem 1.5rem;
+  border: 1px solid var(--border);
+  transition: border-color 250ms ease;
+}
+.whats-on-card:hover { border-color: rgba(240, 237, 230, 0.25); }
+.whats-on-cat {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.4rem;
+}
+.whats-on-title {
+  font-size: 0.92rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  margin-bottom: 0.5rem;
+}
+.whats-on-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-bottom: 0.6rem;
+}
+.whats-on-summary {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  line-height: 1.6;
+  color: rgba(240, 237, 230, 0.55);
 }
 
 /* ── Getting Started ── */

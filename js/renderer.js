@@ -9,16 +9,120 @@ export function renderAllSeasons(seasons) {
 }
 
 function renderSeason(s) {
+  const storedScale = typeof localStorage !== 'undefined' && localStorage.getItem('scale-filter');
+  const defaultHome = storedScale !== null ? storedScale === 'home' : true;
   const section = el('section', {
-    class: `season-section${s.id === 'autumn' ? ' is-active' : ''}`,
+    class: `season-section${defaultHome ? ' scale-filter-home' : ''}`,
     id: `season-${s.id}`,
     'data-season': s.id,
   });
   section.appendChild(renderHero(s));
+  const whatsOn = renderWhatsOn(s);
+  if (whatsOn) section.appendChild(whatsOn);
   section.appendChild(renderMarqueeDivider(s));
   section.appendChild(renderMicroseasons(s.id));
   section.appendChild(renderBody(s));
   section.appendChild(renderQuote(s));
+  return section;
+}
+
+// ── What's On Now ────────────────────────────────────────────
+const MONTH_NAMES = {
+  january:1, february:2, march:3, april:4, may:5, june:6,
+  july:7, august:8, september:9, october:10, november:11, december:12,
+  jan:1, feb:2, mar:3, apr:4, jun:6, jul:7, aug:8,
+  sep:9, sept:9, oct:10, nov:11, dec:12,
+};
+
+function timingIncludesMonth(timing, month) {
+  if (!timing) return false;
+  const lower = timing.toLowerCase();
+  const found = [];
+  for (const [name, num] of Object.entries(MONTH_NAMES)) {
+    if (new RegExp(`\\b${name}\\b`).test(lower)) found.push(num);
+  }
+  if (!found.length) return false;
+  const min = Math.min(...found);
+  const max = Math.max(...found);
+  return month >= min && month <= max;
+}
+
+function renderWhatsOn(s) {
+  const now = new Date();
+  const currentMonth = now.getMonth() + 1;
+  const micro = getCurrentMicroseason();
+
+  // Collect tasks whose timing window includes this month
+  const relevant = [];
+  for (const cat of s.categories) {
+    for (const task of cat.tasks) {
+      if (task.scale === 'farm') continue; // skip farm-scale by default
+      if (timingIncludesMonth(task.timing, currentMonth)) {
+        relevant.push({ task, cat });
+      }
+    }
+  }
+
+  if (!relevant.length && !micro) return null;
+
+  const section = el('div', { class: 'whats-on' });
+
+  // Microseason context
+  if (micro) {
+    const microEl = el('div', { class: 'whats-on-micro' });
+    const pill = el('span', { class: 'whats-on-micro-pill' });
+    pill.textContent = 'Now';
+    const name = el('span', { class: 'whats-on-micro-name' });
+    name.textContent = `${micro.name} — ${micro.subtitle}`;
+    microEl.append(pill, name);
+    if (micro.farming) {
+      const note = el('p', { class: 'whats-on-micro-note' });
+      note.textContent = micro.farming;
+      microEl.appendChild(note);
+    }
+    section.appendChild(microEl);
+  }
+
+  if (relevant.length) {
+    const heading = el('h2', { class: 'whats-on-heading' });
+    heading.textContent = 'This month';
+
+    const grid = el('div', { class: 'whats-on-grid' });
+    for (const { task, cat } of relevant.slice(0, 6)) {
+      const card = el('div', { class: 'whats-on-card' });
+
+      const catLabel = el('span', { class: 'whats-on-cat' });
+      catLabel.textContent = cat.title;
+
+      const title = el('h3', { class: 'whats-on-title' });
+      title.textContent = task.title;
+
+      const meta = el('div', { class: 'whats-on-meta' });
+      if (task.timing) {
+        const t = el('span', { class: 'chip chip--timing' });
+        t.textContent = task.timing;
+        meta.appendChild(t);
+      }
+      if (task.duration) {
+        const d = el('span', { class: 'chip' });
+        d.textContent = task.duration;
+        meta.appendChild(d);
+      }
+
+      card.append(catLabel, title, meta);
+
+      if (task.summary) {
+        const sum = el('p', { class: 'whats-on-summary' });
+        sum.textContent = task.summary;
+        card.appendChild(sum);
+      }
+
+      grid.appendChild(card);
+    }
+
+    section.append(heading, grid);
+  }
+
   return section;
 }
 
@@ -216,6 +320,23 @@ function renderBody(s) {
   bigWrap.appendChild(big);
   body.appendChild(bigWrap);
 
+  // Scale filter toggle
+  const filterWrap = el('div', { class: 'scale-filter-wrap' });
+  const filterBtn = el('button', { class: 'scale-filter-btn', type: 'button' });
+  const stored = typeof localStorage !== 'undefined' && localStorage.getItem('scale-filter');
+  const startFiltered = stored !== null ? stored === 'home' : true; // default: home
+  filterBtn.textContent = startFiltered ? 'Home garden' : 'All tasks';
+  filterBtn.addEventListener('click', () => {
+    const isHome = filterBtn.textContent === 'Home garden';
+    filterBtn.textContent = isHome ? 'All tasks' : 'Home garden';
+    // Toggle filter class on all category lists within this season section
+    const section = body.closest('.season-section') || body;
+    section.classList.toggle('scale-filter-home', !isHome);
+    try { localStorage.setItem('scale-filter', isHome ? 'all' : 'home'); } catch {}
+  });
+  filterWrap.appendChild(filterBtn);
+  body.appendChild(filterWrap);
+
   // Categories — pass seasonId so images are season-specific
   const list = el('div', { class: 'categories-list' });
   s.categories.forEach((cat, i) => list.appendChild(renderCategory(cat, i, s.id)));
@@ -300,7 +421,11 @@ function loadCategoryImg(img) {
 
 function renderTask(task, index, seasonId, cat) {
   const taskId = `${seasonId}-${cat?.id || 'task'}-${index}`;
-  const row = el('div', { class: 'task-row', 'data-task-id': taskId });
+  const row = el('div', {
+    class: 'task-row',
+    'data-task-id': taskId,
+    'data-scale': task.scale || 'both',
+  });
 
   // ── Plan pill button ──────────────────────────────────────────
   const planPill = el('button', {
@@ -364,28 +489,58 @@ function renderTask(task, index, seasonId, cat) {
     c.textContent = task.duration;
     chips.appendChild(c);
   }
-
-  const desc = el('p', { class: 'task-desc' });
-  desc.textContent = task.description || task.desc || '';
-
-  content.append(title, chips, desc);
-
-  if (task.tools?.length) {
-    const tools = el('div', { class: 'task-tools' });
-    task.tools.forEach(t => {
-      const chip = el('span', { class: 'tool-chip' });
-      chip.textContent = t;
-      tools.appendChild(chip);
-    });
-    content.appendChild(tools);
+  if (task.scale) {
+    const scaleLabel = task.scale === 'farm' ? 'Farm' : task.scale === 'home' ? 'Home garden' : 'Any scale';
+    const c = el('span', { class: `chip chip--scale chip--scale-${task.scale}` });
+    c.textContent = scaleLabel;
+    chips.appendChild(c);
   }
 
-  if (task.tip) {
-    const tip = el('div', { class: 'task-tip' });
-    const tipLabel = el('span', { class: 'task-tip-label' });
-    tipLabel.textContent = 'Field note';
-    tip.append(tipLabel, document.createTextNode(task.tip));
-    content.appendChild(tip);
+  content.append(title, chips);
+
+  // Summary (plain-language, shown by default)
+  if (task.summary) {
+    const summary = el('p', { class: 'task-summary' });
+    summary.textContent = task.summary;
+    content.appendChild(summary);
+  }
+
+  // Full detail behind expandable toggle
+  const descText = task.description || task.desc || '';
+  const hasTools = task.tools?.length > 0;
+  const hasTip = !!task.tip;
+
+  if (descText || hasTools || hasTip) {
+    const details = el('details', { class: 'task-detail' });
+    const toggle = el('summary', { class: 'task-detail-toggle' });
+    toggle.textContent = 'Read more';
+    details.appendChild(toggle);
+
+    if (descText) {
+      const desc = el('p', { class: 'task-desc' });
+      desc.textContent = descText;
+      details.appendChild(desc);
+    }
+
+    if (hasTools) {
+      const tools = el('div', { class: 'task-tools' });
+      task.tools.forEach(t => {
+        const chip = el('span', { class: 'tool-chip' });
+        chip.textContent = t;
+        tools.appendChild(chip);
+      });
+      details.appendChild(tools);
+    }
+
+    if (hasTip) {
+      const tip = el('div', { class: 'task-tip' });
+      const tipLabel = el('span', { class: 'task-tip-label' });
+      tipLabel.textContent = 'Field note';
+      tip.append(tipLabel, document.createTextNode(task.tip));
+      details.appendChild(tip);
+    }
+
+    content.appendChild(details);
   }
 
   content.appendChild(planPill);

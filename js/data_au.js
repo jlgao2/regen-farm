@@ -21,6 +21,8 @@ export const AU_DELTAS = [
         tasks: [
           {
             title:    'Establish and Maintain Firebreaks Before Total Fire Ban Season',
+            summary:  'Clear and mow firebreaks around all buildings before the fire ban deadline. Keeping breaks as short grazed pasture meets legal requirements while avoiding bare soil.',
+            scale:    'farm',
             timing:   'Oct–Nov (complete by 1 Dec; CFA/RFS legal deadline varies by state and council)',
             duration: '1–2 days initial establishment; half-day annual maintenance',
             description: 'In temperate SE Australia, summer fire risk is a non-negotiable farm reality that precedes every other warm-season task in importance. By 1 November each year, rural properties in Victoria (CFA zones) and NSW (RFS) require maintained firebreaks to legal standard — typically a 3-metre-wide cleared zone around all structures, with ember-resilient zones extending 20–30 metres. On a regenerative farm, breaks need not be bare earth: maintain them as short-mown perennial pasture (wallaby grass or microlaena in cooler tablelands; couch or kikuyu in coastal zones) grazed short by sheep or geese through spring before stock removal ahead of fire season. Key tasks: (1) inspect all break widths against your local council fire overlay — maps available through your state CFA/RFS portal; (2) slash and remove accumulated biomass from last growing season; (3) clear debris from gutters, against downpipes, and under decks on all structures; (4) check and replace ember guards on subfloor and roof vents; (5) confirm all property access tracks can accommodate a wide tanker (5.5 m minimum clearance); (6) record GPS coordinates of all water sources — dam, tank, trough — and share with your local brigade. Under the rural stewardship lens: rotationally grazing perennial break pasture through spring achieves legal compliance through biological management, reducing fuel load without mechanical input. Remove stock before any extreme fire weather forecast (FDI above 50).',
@@ -35,6 +37,8 @@ export const AU_DELTAS = [
           },
           {
             title:    'Review, Update and Rehearse Your Bushfire Survival Plan',
+            summary:  'Walk through your written bushfire plan with everyone on the property before November. Set clear trigger points for when to leave so the decision is already made before a fire starts.',
+            scale:    'both',
             timing:   'October (before Nov 1 Total Fire Ban commencement)',
             duration: '3–4 hours for plan review and household rehearsal; 30 min livestock protocol walk-through',
             description: 'Every property in a fire-prone AU zone must have a current Bushfire Survival Plan. The critical shift in regenerative farm planning is recognising that livestock complicate shelter-in-place scenarios that might otherwise be viable for dwellings alone. Establish clear trigger points for action: (1) "Leave Early" trigger — activate when Fire Danger Index exceeds 50 AND any fire is burning within 20 km of your property; (2) identify earliest-possible livestock trailer loading sequence and confirm trailer is hitched and ready from 1 November; (3) designate an offsite assembly point for animals with pre-arranged agreements from a neighbour or local agistment; (4) identify which stock you cannot evacuate and establish a clear written protocol for release to self-survival. Review the plan with all household members and anyone working on the property. File a digital copy with your nearest relative. The NSW Rural Fire Service and CFA both offer free farm property inspections — book one in September before the season begins.',
@@ -61,6 +65,8 @@ export const AU_DELTAS = [
           {
             inject: { position: 'last' },
             title:    'Pre-Season Fire Risk Assessment and Fuel Load Audit',
+            summary:  'Walk every paddock edge and treeline in spring to find and reduce built-up dead grass and leaf litter before fire season. Grazing rank pasture down is the best biological fuel control.',
+            scale:    'farm',
             timing:   'September–October (before fire season window opens Nov–Dec)',
             duration: '2–3 hours for property walk-through and documentation',
             description: 'Before the main warm-season planting push, complete a fuel load audit across the whole property. Walk every paddock edge and treeline: identify and document accumulated dead vegetation, grass seed heads that haven\'t been grazed, accumulated leaf litter under shelter belts, and any equipment or materials left near structures. In practice: slash or graze down grass fuel loads in paddocks adjacent to buildings; ensure all hay and straw stored in sheds rather than against walls; check that all slashers and brushcutters are spark-arrester compliant (required in many AU fire districts). This spring walk also serves a positive regenerative purpose — mapping fuel load across seasons gives you a baseline for carbon estimation under the Australian Carbon Credit Unit (ACCU) methodology for rangeland and pasture projects.',
@@ -86,6 +92,8 @@ export const AU_DELTAS = [
           {
             inject: { position: 'last' },
             title:    'Phosphorus Management on Ancient Australian Soils',
+            summary:  'Check your soil phosphorus level before adding any fertiliser this autumn. Old Australian soils often have plenty of locked-up phosphorus that compost and soil microbes can unlock without more inputs.',
+            scale:    'both',
             timing:   'March–April (before any autumn fertiliser applications)',
             duration: '1–2 hours: soil test review and input planning session',
             description: 'SE Australian soils are among the oldest on Earth — red-brown earths, yellow chromosols, and grey vertosols of the Western District, Riverina, and SE SA have been leaching for 60–100 million years. The result is that phosphorus (P) is simultaneously deficient in plant-available forms AND over-accumulated as insoluble iron- and aluminium-bound P in the soil profile from decades of superphosphate application. The critical number is Olsen P: above 30 ppm, soluble P actively suppresses mycorrhizal fungi colonisation. In temperate SE AU pasture systems, Olsen P above 20–25 ppm in the surface horizon is the practical threshold above which autumn AMF inoculation will be largely wasted. Before any autumn soil input decision, run a fresh Olsen P test (October or March at latest). If Olsen P > 20 ppm: skip P-containing inputs entirely this season; instead invest in biological P-solubilisation — apply trichoderma-based biostimulants, increase soil organic matter through compost, and allow the existing P reserve to be made plant-available by microbial activity rather than adding more. On the red duplex soils with heavy clay B-horizons at 200–300 mm, P applied below the clay interface is effectively lost — apply only into the surface A-horizon where biological activity is concentrated.',

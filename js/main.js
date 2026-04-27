@@ -50,7 +50,16 @@ root.appendChild(renderAllSeasons(ENRICHED_SEASONS));
 const validIds = SEASONS.map(s => s.id);
 const hashId   = location.hash.replace('#', '').toLowerCase();
 const startOnGS = hashId === 'getting-started';
-const initial   = validIds.includes(hashId) ? hashId : 'autumn';
+
+// Southern Hemisphere: Mar–May autumn, Jun–Aug winter, Sep–Nov spring, Dec–Feb summer
+function detectSeason() {
+  const m = new Date().getMonth(); // 0-indexed
+  if (m >= 2 && m <= 4) return 'autumn';
+  if (m >= 5 && m <= 7) return 'winter';
+  if (m >= 8 && m <= 10) return 'spring';
+  return 'summer';
+}
+const initial = validIds.includes(hashId) ? hashId : detectSeason();
 
 // ── Boot sequence ─────────────────────────────────────────────
 animateLoader(() => {
