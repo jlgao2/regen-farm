@@ -330,3 +330,50 @@ export const CATEGORY_IMAGES = {
     imageQuery: 'drought+stressed+soil+cracking+wilting,water+retention+mulch+summer+heat+management',
   },
 };
+
+/* ── TOOL DISPLAY NAMES ──────────────────────────────────────
+   Short, jargon-free names for the most common supplies.
+   Full canonical string remains available via title attribute.
+   ──────────────────────────────────────────────────────────── */
+
+export const TOOL_DISPLAY = {
+  'Granular endomycorrhizal inoculant (multi-species blend, ≥200 propagules/g)': 'Mycorrhizal powder',
+  'Soil thermometer (100 mm probe)': 'Soil thermometer',
+  'Fungal-dominant woody compost (12+ months aged, visible hyphal threads)': 'Aged fungal compost',
+  '200 L drum or IBC tote for charging slurry': '200 L drum or IBC tote',
+  'Broadfork (Meadow Creature or equivalent)': 'Broadfork',
+  'Refractometer (for monitoring Brix — optional)': 'Refractometer (optional)',
+  'Moisture meter or squeeze test': 'Moisture meter',
+  'Hardwood biochar (500–600°C pyrolysis), screened to <10 mm': 'Biochar (hardwood, crushed)',
+  'Microscope (100–400x) for biological quality verification (optional)': 'Microscope (optional)',
+  'EM-1 concentrate (EMRO NZ; EM Agriton or Teraganix in AU)': 'Beneficial microbe concentrate',
+  'Unsulphured blackstrap molasses': 'Blackstrap molasses',
+  'Rhizobium inoculant for legume species (strain-specific per crop)': 'Legume inoculant',
+  'Charged biochar (50 g per planting hole)': 'Charged biochar',
+  'Bokashi bins (minimum two for rotation — one filling while one ferments)': 'Bokashi bins × 2',
+  'Bokashi bran (EM-inoculated wheat bran)': 'Bokashi bran',
+  'Soil moisture probe to confirm adequate germination moisture': 'Soil moisture probe',
+  'Actively aerated compost tea (AACT) brewer (commercial or DIY — 20 L minimum with air pump)': 'Compost tea brewer',
+  'Tree guards and stakes': 'Tree guards and stakes',
+  'Backpack sprayer or low-pressure boom (nozzle aperture >400 microns to avoid shearing hyphae)': 'Backpack sprayer (wide nozzle)',
+  'microBIOMETER kit (optional, for immediate field results)': 'Soil biology test kit (optional)',
+  'Kon-Tiki kiln or TLUD drum kiln': 'Biochar kiln',
+  'Vermicast, KNF FPJ, water': 'Worm castings, plant tea, water',
+  'Humic acid liquid, fish hydrolysate': 'Humic acid and fish extract',
+  'Yeomans-pattern subsoil plough or single-tine ripper': 'Subsoil ripper',
+  'IMO-3 fermented wheat bran (prepared from IMO-1 and IMO-2 in previous seasons)': 'Fermented bran (from prior seasons)',
+  'Roller-crimper (tractor-mounted or walk-behind; AU suppliers: Agroecology Design; NZ: custom fabrication or import)': 'Roller-crimper',
+  'Mycorrhizal inoculant (ecto- and endo- blend for native trees)': 'Mycorrhizal inoculant (native tree blend)',
+  'Legume-specific rhizobial inoculant (Group E for peas, Group F for broad beans)': 'Legume inoculant (peas/broad beans)',
+  'Seed inoculant (Group I rhizobium for cowpeas)': 'Cowpea inoculant',
+  'Low-pressure diaphragm pump sprayer (no ball valves — they shear hyphae)': 'Low-pressure sprayer',
+  'IMO-4 (prepared on-farm per KNF protocol — requires 15–25 days lead time from IMO-1 collection)': 'Fermented soil inoculant',
+  'Pre-fermented OHN stock solution (minimum 3 months matured)': 'Herbal nutrient solution',
+  'Non-chlorinated water (tank water ideal; if town supply, off-gas for 24 hrs)': 'Non-chlorinated water',
+  '20–100 litre ACE brewer with aquarium pump and air stones (or commercial unit from Soil Food Web Institute NZ, Palmerston North)': 'Compost extract brewer',
+  '200 L food-grade drum or dedicated extract brewer': '200 L drum or extract brewer',
+  'Oat flour (rolled oats ground fine), liquid humic acid, fish hydrolysate': 'Oat flour, humic acid, fish extract',
+  'Lab submission forms (EAL, Hill Labs, or Soil Food Web practitioner)': 'Lab submission forms',
+  'Cold-hardy seed varieties from heritage seed suppliers (Koanga Institute NZ, Diggers Club AU, Phoenix Seeds Tasmania)': 'Heritage seed varieties',
+  'Cover crop seed mix (sourced from Heritage Seeds AU or Luisetti Seeds NZ)': 'Cover crop seed mix',
+};

@@ -1,6 +1,7 @@
 /* ── Renderer — builds DOM from data, no side effects ── */
 
 import { MICROSEASONS, getCurrentMicroseason } from './microseasons.js';
+import { TOOL_DISPLAY } from './data_enrich.js';
 
 export function renderAllSeasons(seasons) {
   const frag = document.createDocumentFragment();
@@ -525,8 +526,10 @@ function renderTask(task, index, seasonId, cat) {
     if (hasTools) {
       const tools = el('div', { class: 'task-tools' });
       task.tools.forEach(t => {
+        const short = TOOL_DISPLAY[t];
         const chip = el('span', { class: 'tool-chip' });
-        chip.textContent = t;
+        chip.textContent = short || t;
+        if (short) chip.title = t;  // full name on hover
         tools.appendChild(chip);
       });
       details.appendChild(tools);
